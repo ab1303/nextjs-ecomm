@@ -14,7 +14,7 @@
     "format": "prettier -w src",
     "release": "standard-version",
     "push-release": "git push --follow-tags origin main",
-    "postbuild": "next-sitemap",
+    "postbuild": "cross-env next-sitemap --config next-sitemap.js",
     "prepare": "husky install"
   },
   "dependencies": {
@@ -33,6 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "autoprefixer": "^10.4.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-next": "^11.1.2",
     "eslint-config-prettier": "^8.3.0",

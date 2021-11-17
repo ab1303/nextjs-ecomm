@@ -1,5 +1,21 @@
 import mongoose from 'mongoose';
 
+export interface Product {
+  _id: number;
+  title: string;
+  price: number;
+  description: string;
+  content: string;
+  // TODO:
+  // images: Array;
+  category: string;
+  checked: boolean;
+  inStock: number;
+  sold: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const productSchema = new mongoose.Schema(
   {
     title: {

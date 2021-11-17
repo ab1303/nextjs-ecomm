@@ -1,5 +1,24 @@
 import mongoose from 'mongoose';
 
+import { User } from './userModel';
+
+export interface Order {
+  _id: number;
+  user: User;
+  address: string;
+  mobile: string;
+  // TODO:
+  // cart: Array;
+  total: number;
+  paymentId: string;
+  method: string;
+  delivered: boolean;
+  paid: boolean;
+  dateOfPayment: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const orderSchema = new mongoose.Schema(
   {
     user: {

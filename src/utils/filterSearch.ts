@@ -1,17 +1,11 @@
+import { NextRouter } from 'next/router';
+
 type FilterSearchParams = {
-  router: {
-    pathname: unknown;
-    query: {
-      category: string;
-      page: unknown;
-      search: unknown;
-      sort: unknown;
-    };
-  };
-  page: unknown;
-  category: string;
-  sort: unknown;
-  search: unknown;
+  router: NextRouter;
+  page: string | string[] | undefined;
+  category: string | string[] | undefined;
+  search: string | string[] | undefined;
+  sort: string | string[] | undefined;
 };
 
 const filterSearch = ({
@@ -21,7 +15,7 @@ const filterSearch = ({
   sort,
   search,
 }: FilterSearchParams) => {
-  // const path = router.pathname;
+  const path = router.pathname;
   const query = router.query;
 
   if (category) query.category = category;
@@ -29,11 +23,10 @@ const filterSearch = ({
   if (search) query.search = search;
   if (sort) query.sort = sort;
 
-  // TODO: Fix later
-  //   router.push({
-  //     pathname: path,
-  //     query: query,
-  //   });
+  router.push({
+    pathname: path,
+    query: query,
+  });
 };
 
 export default filterSearch;

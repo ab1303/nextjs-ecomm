@@ -1,5 +1,12 @@
 import mongoose from 'mongoose';
 
+export interface Category {
+  _id: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 const CategoriesSchema = new mongoose.Schema(
   {
     name: {

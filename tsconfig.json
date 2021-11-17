@@ -17,14 +17,15 @@
     "paths": {
       "@/*": ["*"],
       "@/components/*": ["components/*"],
-      "@/features/*": ["features/*"],
-      "@/types/*": ["types/*"],
-      "@/models/*": ["models/*"],
-      "@/data/*": ["data/*"],
-      "@/styles/*": ["styles/*"],
       "@/config/*": ["config/*"],
-      "@/context/*": ["context/*"],
-      "@/helpers/*": ["helpers/*"]
+      "@/data/*": ["data/*"],
+      "@/features/*": ["features/*"],
+      "@/helpers/*": ["helpers/*"],
+      "@/models/*": ["models/*"],
+      "@/store/*": ["store/*"],
+      "@/styles/*": ["styles/*"],
+      "@/types/*": ["types/*"],
+      "@/utils/*": ["utils/*"]
     },
     "incremental": true
   },

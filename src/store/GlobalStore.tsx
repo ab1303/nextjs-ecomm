@@ -13,6 +13,7 @@ import { getData } from '@/utils/fetchData';
 
 import ActionMap from './actionMap';
 
+import { ModalItem, Notify } from '@/types';
 import { CartItem } from '@/types/CartItem';
 
 export enum AuthEvent {
@@ -50,11 +51,6 @@ type Auth = {
   user: User;
 };
 
-type Notify = {
-  error?: string;
-  success?: string;
-};
-
 export type GlobalState = {
   notify?: Notify;
   auth?: Auth;
@@ -62,6 +58,7 @@ export type GlobalState = {
   orders: Order[];
   users: User[];
   categories: Category[];
+  modal: ModalItem[];
 };
 
 type Messages = {
@@ -86,6 +83,9 @@ type Messages = {
   };
   [CartEvent.ADD]: {
     cart: CartItem[];
+  };
+  [ModalEvent.ADD]: {
+    modal: ModalItem[];
   };
 };
 
@@ -114,27 +114,32 @@ const globalStateReducer = (
     case CategoriesEvent.ADD:
       return {
         ...state,
-        categories: { ...action.payload.categories },
+        categories: [...action.payload.categories],
       };
     case CartEvent.ADD:
       return {
         ...state,
-        cart: { ...action.payload.cart },
+        cart: [...action.payload.cart],
       };
     case OrdersEvent.ADD:
       return {
         ...state,
-        orders: { ...action.payload.orders },
+        orders: [...action.payload.orders],
       };
     case UsersEvent.ADD:
       return {
         ...state,
-        users: { ...action.payload.users },
+        users: [...action.payload.users],
       };
     case NotificationEvent.NOTIFY:
       return {
         ...state,
         notify: { ...action.payload.notify },
+      };
+    case ModalEvent.ADD:
+      return {
+        ...state,
+        modal: [...action.payload.modal],
       };
   }
 };
@@ -150,6 +155,9 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(globalStateReducer, {
+    modal: [],
+    notify: {},
+    auth: undefined,
     cart: [],
     orders: [],
     users: [],

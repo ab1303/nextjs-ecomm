@@ -2,10 +2,10 @@ import { NextRouter } from 'next/router';
 
 type FilterSearchParams = {
   router: NextRouter;
-  page: string | string[] | undefined;
-  category: string | string[] | undefined;
-  search: string | string[] | undefined;
-  sort: string | string[] | undefined;
+  page?: string | string[];
+  category?: string | string[];
+  search?: string | string[];
+  sort?: string | string[];
 };
 
 const filterSearch = ({

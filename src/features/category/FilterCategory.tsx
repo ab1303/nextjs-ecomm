@@ -1,15 +1,13 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-import { GlobalState } from '@/store/GlobalStore';
+import { Category } from '@/models/categoriesModel';
 import filterSearch from '@/utils/filterSearch';
 
-const Filter = ({ state }: { state: GlobalState }) => {
+const Filter = ({ categories }: { categories: Category[] }) => {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState('');
   const [category, setCategory] = useState('');
-
-  const { categories } = state;
 
   const router = useRouter();
 

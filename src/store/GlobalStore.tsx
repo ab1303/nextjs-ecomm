@@ -207,7 +207,10 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
     );
 
     if (__next__cart01__devat)
-      dispatch({ type: CartEvent.ADD, payload: __next__cart01__devat });
+      dispatch({
+        type: CartEvent.ADD,
+        payload: { cart: __next__cart01__devat },
+      });
   }, []);
 
   useEffect(() => {

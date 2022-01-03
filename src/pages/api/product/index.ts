@@ -63,11 +63,18 @@ class APIfeatures {
 
   paginating() {
     const page = !Array.isArray(this.queryString.page)
-      ? +this.queryString.page * 1
+      ? this.queryString.page
+        ? +this.queryString.page * 1
+        : 1
       : 1;
-    const limit = !Array.isArray(this.queryString.limit)
-      ? +this.queryString.page * 1
-      : 6;
+
+    const limit =
+      !Array.isArray(this.queryString.limit) || !this.queryString.limit
+        ? this.queryString.limit
+          ? +this.queryString.limit * 1
+          : 6
+        : 6;
+
     const skip = (page - 1) * limit;
     this.query = this.query.skip(skip).limit(limit);
     return this;

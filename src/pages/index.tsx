@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
+import Hero from '@/components/layout/Hero';
+
 import FilterCategory from '@/features/category/FilterCategory';
 import ProductItem from '@/features/product/ProductItem';
 import { Product } from '@/models/productModel';
@@ -71,11 +73,29 @@ export default function HomePage(props: ProductResponse) {
     filterSearch({ router, page: `${page + 1}` });
   };
 
+  const data = {
+    hero: {
+      appType: 'Food app',
+      tagLine: 'Why stay hungry when you can order from Bella Onojie',
+      description: 'Download the bella onoje’s food app now on',
+      mainActionText: 'Playstore',
+      extraActionText: 'App Store',
+    },
+  };
+
   return (
     <div className='home_page'>
       <Head>
         <title>Home Page</title>
       </Head>
+
+      <Hero
+        appType={data.hero.appType}
+        tagLine={data.hero.tagLine}
+        description={data.hero.description}
+        mainActionText={data.hero.mainActionText}
+        extraActionText={data.hero.extraActionText}
+      />
 
       {state.categories && <FilterCategory categories={state.categories} />}
 

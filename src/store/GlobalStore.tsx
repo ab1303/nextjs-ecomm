@@ -203,7 +203,7 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
 
   useEffect(() => {
     const __next__cart01__devat = JSON.parse(
-      localStorage.getItem('__next__cart01__devat') || ''
+      localStorage.getItem('__next__cart01__devat') || '[]'
     );
 
     if (__next__cart01__devat)

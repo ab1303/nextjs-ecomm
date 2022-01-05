@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { fontFamily } = require('tailwindcss/defaultTheme');
+const colors = require('tailwindcss/colors');
 
 function withOpacity(variableName) {
   return ({ opacityValue }) => {
@@ -16,18 +17,44 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    colors: {
+      orange: colors.orange,
+      gray: colors.gray,
+      blue: colors.blueGray,
+      white: colors.white,
+    },
+    screens: {
+      sm: '300px',
+      lg: '700px',
+    },
     extend: {
+      backgroundImage: (theme) => ({
+        hero: "url('/images/hero.png')",
+        action: "url('/images/action.png')",
+      }),
       fontFamily: {
         primary: ['Inter', ...fontFamily.sans],
       },
-      colors: {
-        primary: {
-          // Customize it on globals.css :root
-          400: withOpacity('--tw-clr-primary-400'),
-          500: withOpacity('--tw-clr-primary-500'),
-        },
-        dark: '#222222',
-      },
+      // textColor: {
+      //   skin: {
+      //     base: 'var(--color-text-base)',
+      //     muted: 'var(--color-text-muted)',
+      //     inverted: 'var(--color-text-inverted)',
+      //   },
+      // },
+      // backgroundColor: {
+      //   skin: {
+      //     fill: 'var(--color-fill)',
+      //     'button-accent': 'var(color-button-accent)',
+      //     'color-button-accent-hover': 'var(color-button-accent-hover)',
+      //     'color-button-muted': 'var(color-button-muted)',
+      //   },
+      // },
+      // gradientColorStops: {
+      //   skin: {
+      //     hue: 'var(--color-fill)',
+      //   },
+      // },
       keyframes: {
         flicker: {
           '0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100%': {

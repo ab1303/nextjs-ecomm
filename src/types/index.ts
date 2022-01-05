@@ -9,3 +9,8 @@ export type ModalItem = {
   title: string;
   type: string;
 };
+
+export type Photo = {
+  filename: string;
+  url: string;
+};

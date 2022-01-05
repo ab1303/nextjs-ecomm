@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
+import ImageGallery from '@/components/ImageGallrey';
 import Hero from '@/components/layout/Hero';
 
 import FilterCategory from '@/features/category/FilterCategory';
@@ -76,17 +77,17 @@ export default function HomePage(props: ProductResponse) {
   const data = {
     hero: {
       appType: 'Food app',
-      tagLine: 'Why stay hungry when you can order from Bella Onojie',
-      description: 'Download the bella onoje’s food app now on',
-      mainActionText: 'Playstore',
-      extraActionText: 'App Store',
+      tagLine: 'Why stay hungry when you can order',
+      description: 'Your favorite restaurants to order from',
+      mainActionText: 'Sign in',
+      extraActionText: 'Sign up',
     },
   };
 
   return (
     <div className='home_page'>
       <Head>
-        <title>Home Page</title>
+        <title>Food Order</title>
       </Head>
 
       <Hero
@@ -97,7 +98,10 @@ export default function HomePage(props: ProductResponse) {
         extraActionText={data.hero.extraActionText}
       />
 
-      {state.categories && <FilterCategory categories={state.categories} />}
+      <ImageGallery />
+
+      {/* TODO : Cleanup */}
+      {/* {state.categories && <FilterCategory categories={state.categories} />}
 
       {auth && auth.user && auth.user.role === 'admin' && (
         <div
@@ -149,7 +153,7 @@ export default function HomePage(props: ProductResponse) {
         >
           Load more
         </button>
-      )}
+      )} */}
     </div>
   );
 }

@@ -1,23 +1,24 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 
+import UnstyledLink from '@/components/links/UnstyledLink';
+
 const Register = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
+  // const [username, setUsername] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [password, setPassword] = useState('');
+  // const [passwordConfirm, setPasswordConfirm] = useState('');
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    if (password !== passwordConfirm) {
-      console.log('Passwords do not match!');
-      return;
-    }
+  //   if (password !== passwordConfirm) {
+  //     console.log('Passwords do not match!');
+  //     return;
+  //   }
 
-    console.log('call registration');
-  };
+  //   console.log('call registration');
+  // };
 
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center px-6 lg:px-8'>
@@ -36,12 +37,12 @@ const Register = () => {
           </h2>
           <p className='mt-2 text-center text-sm text-gray-600 max-w'>
             Already registered? &nbsp;
-            <a
-              href='#'
+            <UnstyledLink
+              href='/account/login'
               className='font-medium text-orange-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500'
             >
               Sign in
-            </a>
+            </UnstyledLink>
           </p>
         </div>
 

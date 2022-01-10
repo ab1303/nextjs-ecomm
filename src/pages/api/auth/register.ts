@@ -17,9 +17,9 @@ const registerHandler = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const register = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name, email, password, cf_password } = req.body;
+    const { firstName, lastName, email, password, passwordConfirm } = req.body;
 
-    const errMsg = valid(name, email, password, cf_password);
+    const errMsg = valid(firstName, lastName, email, password, passwordConfirm);
     if (errMsg) return res.status(400).json({ err: errMsg });
 
     const user = await Users.findOne({ email });
@@ -29,10 +29,10 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
     const passwordHash = await bcrypt.hash(password, 12);
 
     const newUser = new Users({
-      name,
+      firstName,
+      lastName,
       email,
       password: passwordHash,
-      cf_password,
     });
 
     await newUser.save();

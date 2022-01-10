@@ -1,10 +1,12 @@
 const valid = (
-  name: string,
+  firstName: string,
+  lastName: string,
   email: string,
   password: string,
   cf_password: string
 ) => {
-  if (!name || !email || !password) return 'Please add all fields.';
+  if (!firstName || !lastName || !email || !password)
+    return 'Please add all fields.';
 
   if (!validateEmail(email)) return 'Invalid emails.';
 

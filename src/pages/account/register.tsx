@@ -3,22 +3,32 @@ import { FormEvent, useState } from 'react';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 
+import { postData } from '@/utils/fetchData';
+
 const Register = () => {
-  // const [username, setUsername] = useState('');
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
-  // const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
+    if (password !== passwordConfirm) {
+      console.log('Passwords do not match!');
+      return;
+    }
 
-  //   if (password !== passwordConfirm) {
-  //     console.log('Passwords do not match!');
-  //     return;
-  //   }
+    const res = await postData('auth/register', {
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordConfirm,
+    });
 
-  //   console.log('call registration');
-  // };
+    console.log('registration result', res);
+  };
 
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center px-6 lg:px-8'>
@@ -48,7 +58,7 @@ const Register = () => {
 
         <div className='mt-8'>
           <div className='bg-white py-8 px-6 shadow rounded-lg sm:px-10'>
-            <form className='mb-0 space-y-6' action='#' method='POST'>
+            <form className='mb-0 space-y-6' onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor='firstname'
@@ -64,6 +74,8 @@ const Register = () => {
                     autoComplete='text'
                     required
                     className=''
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                   />
                 </div>
               </div>
@@ -83,6 +95,8 @@ const Register = () => {
                     autoComplete='text'
                     required
                     className=''
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                   />
                 </div>
               </div>
@@ -102,6 +116,8 @@ const Register = () => {
                     autoComplete='email'
                     required
                     className=''
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
               </div>
@@ -121,6 +137,29 @@ const Register = () => {
                     autoComplete='current-password'
                     required
                     className=''
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label
+                  htmlFor='passwordConfirm'
+                  className='block text-sm font-medium text-gray-700'
+                >
+                  Confirm Password
+                </label>
+                <div className='mt-1'>
+                  <input
+                    id='passwordConfirm'
+                    name='passwordConfirm'
+                    type='password'
+                    autoComplete='current-password'
+                    required
+                    className=''
+                    value={passwordConfirm}
+                    onChange={(e) => setPasswordConfirm(e.target.value)}
                   />
                 </div>
               </div>

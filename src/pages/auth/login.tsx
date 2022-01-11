@@ -1,9 +1,41 @@
 import Image from 'next/image';
-import { FormEvent, useState } from 'react';
+import { useRouter } from 'next/router';
+import { signIn, SignInResponse } from 'next-auth/react';
+import { FormEvent, useRef } from 'react';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 
 const Login = () => {
+  const router = useRouter();
+
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (emailInputRef.current == null || passwordInputRef.current == null)
+      return;
+
+    const enteredEmail = emailInputRef.current.value;
+    const enteredPassword = passwordInputRef.current.value;
+
+    const result: SignInResponse | undefined = await signIn<'credentials'>(
+      'credentials',
+      {
+        redirect: false,
+        email: enteredEmail,
+        password: enteredPassword,
+      }
+    );
+
+    if (!!result && !result.error) {
+      // set some auth state
+      console.log('result', result);
+      router.replace('/account');
+    }
+  }
+
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col justify-center px-6 lg:px-8'>
       <div className='sm:mx-auto sm:w-full sm:max-w-md'>
@@ -22,7 +54,7 @@ const Login = () => {
           <p className='mt-2 text-center text-sm text-gray-600 max-w'>
             New to Food App? &nbsp;
             <UnstyledLink
-              href='/account/register'
+              href='/auth/register'
               className='font-medium text-orange-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500'
             >
               Sign up
@@ -32,7 +64,7 @@ const Login = () => {
 
         <div className='mt-8'>
           <div className='bg-white py-8 px-6 shadow rounded-lg sm:px-10'>
-            <form className='mb-0 space-y-6' action='#' method='POST'>
+            <form className='mb-0 space-y-6' onSubmit={handleSubmit}>
               <div>
                 <label
                   htmlFor='email'
@@ -48,6 +80,7 @@ const Login = () => {
                     autoComplete='email'
                     required
                     className=''
+                    ref={emailInputRef}
                   />
                 </div>
               </div>
@@ -67,6 +100,7 @@ const Login = () => {
                     autoComplete='current-password'
                     required
                     className=''
+                    ref={passwordInputRef}
                   />
                 </div>
               </div>

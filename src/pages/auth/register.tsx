@@ -15,7 +15,7 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== passwordConfirm) {
-      console.log('Passwords do not match!');
+      //TODO toastify
       return;
     }
 
@@ -27,7 +27,7 @@ const Register = () => {
       passwordConfirm,
     });
 
-    console.log('registration result', res);
+    //TODO toastify on error
   };
 
   return (
@@ -48,7 +48,7 @@ const Register = () => {
           <p className='mt-2 text-center text-sm text-gray-600 max-w'>
             Already registered? &nbsp;
             <UnstyledLink
-              href='/account/login'
+              href='/auth/login'
               className='font-medium text-orange-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500'
             >
               Sign in
@@ -59,48 +59,49 @@ const Register = () => {
         <div className='mt-8'>
           <div className='bg-white py-8 px-6 shadow rounded-lg sm:px-10'>
             <form className='mb-0 space-y-6' onSubmit={handleSubmit}>
-              <div>
-                <label
-                  htmlFor='firstname'
-                  className='block text-sm font-medium text-gray-700'
-                >
-                  First Name
-                </label>
-                <div className='mt-1'>
-                  <input
-                    id='firstname'
-                    name='firstname'
-                    type='text'
-                    autoComplete='text'
-                    required
-                    className=''
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                  />
+              <div className='flex'>
+                <div>
+                  <label
+                    htmlFor='firstname'
+                    className='block text-sm font-medium text-gray-700'
+                  >
+                    First Name
+                  </label>
+                  <div className='mt-1'>
+                    <input
+                      id='firstname'
+                      name='firstname'
+                      type='text'
+                      autoComplete='text'
+                      required
+                      className=''
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className='ml-3'>
+                  <label
+                    htmlFor='lastname'
+                    className='block text-sm font-medium text-gray-700'
+                  >
+                    Last Name
+                  </label>
+                  <div className='mt-1'>
+                    <input
+                      id='lastname'
+                      name='lastname'
+                      type='text'
+                      autoComplete='text'
+                      required
+                      className=''
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
-
-              <div>
-                <label
-                  htmlFor='lastname'
-                  className='block text-sm font-medium text-gray-700'
-                >
-                  Last Name
-                </label>
-                <div className='mt-1'>
-                  <input
-                    id='lastname'
-                    name='lastname'
-                    type='text'
-                    autoComplete='text'
-                    required
-                    className=''
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                </div>
-              </div>
-
               <div>
                 <label
                   htmlFor='email'

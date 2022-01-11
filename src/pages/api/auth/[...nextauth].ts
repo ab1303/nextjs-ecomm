@@ -1,7 +1,8 @@
+import bcrypt from 'bcryptjs';
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-import Users from '@/models/userModel';
+import Users, { User } from '@/models/userModel';
 import connectDB from '@/utils/connectDB';
 
 connectDB();
@@ -14,24 +15,37 @@ export default NextAuth({
         email: {},
         password: {},
       },
-      authorize: async (credentials, req) => {
+      authorize: async (credentials) => {
         try {
-          console.log('credentials', credentials);
-
           if (!credentials) return null;
 
-          const user = await Users.findById(credentials.email);
+          const user: User | undefined = await Users.findOne({
+            email: credentials.email,
+          });
 
-          console.log('found user', user);
+          if (!user) {
+            throw new Error('No user found!');
+          }
+
+          const isValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
+
+          if (!isValid) {
+            throw new Error('Could not log you in!');
+          }
+
+          return { email: user.email };
         } catch (err: any) {
           return { err: err.message };
         }
-
-        return null;
       },
     }),
   ],
-  // pages: {},
+  pages: {
+    signIn: '/auth/login',
+  },
   secret: process.env.ACCESS_TOKEN_SECRET,
   session: {
     strategy: 'jwt',

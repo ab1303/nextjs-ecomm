@@ -1,78 +1,78 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import ImageGallery from '@/components/ImageGallrey';
 import Hero from '@/components/layout/Hero';
 
-import FilterCategory from '@/features/category/FilterCategory';
-import ProductItem from '@/features/product/ProductItem';
+// import FilterCategory from '@/features/category/FilterCategory';
+// import ProductItem from '@/features/product/ProductItem';
 import { Product } from '@/models/productModel';
-import {
-  ModalEvent,
-  useGlobalDispatch,
-  useGlobalState,
-} from '@/store/GlobalStore';
+// import {
+//   ModalEvent,
+//   useGlobalDispatch,
+//   useGlobalState,
+// } from '@/store/GlobalStore';
 import { getData } from '@/utils/fetchData';
-import filterSearch from '@/utils/filterSearch';
+// import filterSearch from '@/utils/filterSearch';
 
-import { ModalItem } from '@/types';
+// import { ModalItem } from '@/types';
 
-export default function HomePage(props: ProductResponse) {
-  const [products, setProducts] = useState<Product[]>(props.products);
+export default function LandingPage(props: ProductResponse) {
+  // const [products, setProducts] = useState<Product[]>(props.products);
 
-  const [isCheck, setIsCheck] = useState(false);
-  const [page, setPage] = useState(1);
+  // const [isCheck, setIsCheck] = useState(false);
+  // const [page, setPage] = useState(1);
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  const state = useGlobalState();
-  const { auth } = state;
-  const dispatch = useGlobalDispatch();
+  // const state = useGlobalState();
+  // const { auth } = state;
+  // const dispatch = useGlobalDispatch();
 
-  useEffect(() => {
-    setProducts(props.products);
-  }, [props.products]);
+  // useEffect(() => {
+  //   setProducts(props.products);
+  // }, [props.products]);
 
-  useEffect(() => {
-    if (Object.keys(router.query).length === 0) setPage(1);
-  }, [router.query]);
+  // useEffect(() => {
+  //   if (Object.keys(router.query).length === 0) setPage(1);
+  // }, [router.query]);
 
-  const handleCheck = (id: number) => {
-    products.forEach((product) => {
-      if (product._id === id) product.checked = !product.checked;
-    });
-    setProducts([...products]);
-  };
+  // const handleCheck = (id: number) => {
+  //   products.forEach((product) => {
+  //     if (product._id === id) product.checked = !product.checked;
+  //   });
+  //   setProducts([...products]);
+  // };
 
-  const handleCheckALL = () => {
-    products.forEach((product) => (product.checked = !isCheck));
-    setProducts([...products]);
-    setIsCheck(!isCheck);
-  };
+  // const handleCheckALL = () => {
+  //   products.forEach((product) => (product.checked = !isCheck));
+  //   setProducts([...products]);
+  //   setIsCheck(!isCheck);
+  // };
 
-  const handleDeleteAll = () => {
-    const deleteArr: Array<ModalItem> = [];
-    products.forEach((product) => {
-      if (product.checked) {
-        deleteArr.push({
-          data: '',
-          id: product._id,
-          title: 'Delete all selected products?',
-          type: 'DELETE_PRODUCT',
-        });
-      }
-    });
+  // const handleDeleteAll = () => {
+  //   const deleteArr: Array<ModalItem> = [];
+  //   products.forEach((product) => {
+  //     if (product.checked) {
+  //       deleteArr.push({
+  //         data: '',
+  //         id: product._id,
+  //         title: 'Delete all selected products?',
+  //         type: 'DELETE_PRODUCT',
+  //       });
+  //     }
+  //   });
 
-    dispatch({ type: ModalEvent.ADD, payload: { modal: deleteArr } });
-  };
+  //   dispatch({ type: ModalEvent.ADD, payload: { modal: deleteArr } });
+  // };
 
-  const handleLoadmore = () => {
-    setPage(page + 1);
-    filterSearch({ router, page: `${page + 1}` });
-  };
+  // const handleLoadmore = () => {
+  //   setPage(page + 1);
+  //   filterSearch({ router, page: `${page + 1}` });
+  // };
 
   const data = {
     hero: {

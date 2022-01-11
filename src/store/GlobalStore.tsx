@@ -167,22 +167,23 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
   const { cart, auth } = state;
 
   useEffect(() => {
-    getData('categories').then((res) => {
-      if (res.err)
-        return dispatch({
-          type: NotificationEvent.NOTIFY,
-          payload: {
-            notify: { error: res.err },
-          },
-        });
+    // TODO: Clean up
+    // getData('categories').then((res) => {
+    //   if (res.err)
+    //     return dispatch({
+    //       type: NotificationEvent.NOTIFY,
+    //       payload: {
+    //         notify: { error: res.err },
+    //       },
+    //     });
 
-      dispatch({
-        type: CategoriesEvent.ADD,
-        payload: {
-          categories: res.categories,
-        },
-      });
-    });
+    //   dispatch({
+    //     type: CategoriesEvent.ADD,
+    //     payload: {
+    //       categories: res.categories,
+    //     },
+    //   });
+    // });
 
     const firstLogin = localStorage.getItem('firstLogin');
     if (firstLogin) {

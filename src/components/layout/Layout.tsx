@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   // Put Header or Footer Here
   return (
     <div className='box-border'>
-      <Header></Header>
+      {/* <Header></Header> */}
       <div className='flex flex-col'>
         {/* <Navbar logo='/images/logo.png' /> */}
         {children}

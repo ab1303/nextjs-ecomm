@@ -1,26 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
-function useOutsideAlerter(
-  ref: React.RefObject<HTMLDivElement>,
-  setOpenNav: React.Dispatch<React.SetStateAction<boolean>>
-) {
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        setOpenNav(false);
-      }
-    }
-
-    // Bind the event listener
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      // Unbind the event listener on clean up
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref, setOpenNav]);
-}
+import useOutsideAlerter from '@/hooks/useOutsideAlerter';
 
 type NavbarProps = {
   logo: string;
@@ -30,7 +12,12 @@ const Navbar = ({ logo }: NavbarProps) => {
   const [openNav, setOpenNav] = useState(false);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  useOutsideAlerter(wrapperRef, setOpenNav);
+  useOutsideAlerter(wrapperRef, handleCloseNav);
+
+  function handleCloseNav(event: MouseEvent) {
+    event.preventDefault();
+    setOpenNav(false);
+  }
 
   return (
     <div className='flex flex-row items-center justify-between h-28'>

@@ -85,7 +85,7 @@ export default function LandingPage(props: ProductResponse) {
   };
 
   return (
-    <div className='home_page'>
+    <div>
       <Head>
         <title>Food Order</title>
       </Head>

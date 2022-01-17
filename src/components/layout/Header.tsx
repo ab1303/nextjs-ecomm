@@ -17,8 +17,8 @@ export default function Header() {
 
   return (
     <div>
-      <header className='sticky top-0 z-10 bg-white'>
-        <div className='flex justify-between h-14 bg-orange-700'>
+      <header className='sticky top-0 z-10 border-2 border-gray-200'>
+        <div className='flex justify-between h-10'>
           <button className='p-2' onClick={() => setShowSideNav(true)}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -33,7 +33,7 @@ export default function Header() {
           <span className='flex-grow flex items-center justify-center font-extrabold font-serif text-xl text-orange-500 '>
             Food App
           </span>
-          <div className='flex border-2 items-center relative bg-orange-200'>
+          <div className='flex items-center relative'>
             <a
               className='text-gray-500 hover:text-gray-700 focus:text-gray-700 mr-4'
               href='#'

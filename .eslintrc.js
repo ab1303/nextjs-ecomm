@@ -13,9 +13,13 @@ module.exports = {
     'prettier',
   ],
   rules: {
-    'no-unused-vars': 'off',
+    'no-useless-escape': 'off',
     'no-console': 'warn',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@next/next/no-document-import-in-page': 'off',
 
     // Sort
     'simple-import-sort/exports': 'warn',

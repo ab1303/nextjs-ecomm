@@ -2,17 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Customize these variable */
-  /* https://github.com/adamwathan/tailwind-css-variable-text-opacity-demo */
-  --tw-clr-primary-400: 0, 224, 243;
-  --tw-clr-primary-500: 0, 196, 253;
-
-  --clr-primary-400: rgb(var(--tw-clr-primary-400)); /* #00e0f3 */
-  --clr-primary-500: rgb(var(--tw-clr-primary-500)); /* #00c4fd */
-}
+/* :root {
+    --color-text-base: #ffffff;
+    --color-text-muted: 228,228,231;
+    --color-text-inverted: 
+    --color-fill: 
+    --color-button-accent: 
+    --color-button-accent-hover: 
+    --color-button-muted: 
+  } */
 
 @layer base {
+  [type='text'],
+  [type='email'],
+  [type='url'],
+  [type='password'],
+  [type='number'],
+  [type='date'],
+  [type='datetime-local'],
+  [type='month'],
+  [type='search'],
+  [type='tel'],
+  [type='time'],
+  [type='week'],
+  [multiple],
+  textarea,
+  select {
+    @apply w-full border-gray-300 rounded-lg shadow-sm focus:border-orange-500 focus:ring-orange-500;
+  }
+  [type='checkbox'],
+  [type='radio'] {
+    @apply border-gray-300 rounded text-orange-600 focus:ring-orange-500;
+  }
+
   /* inter var - latin */
   @font-face {
     font-family: 'Inter';
@@ -30,7 +52,7 @@
   }
 
   /* Write your own custom base styles here */
-  h1 {
+  /* h1 {
     @apply text-2xl font-bold md:text-4xl font-primary;
   }
 
@@ -51,17 +73,14 @@
   }
 
   .layout {
-    /* 750px */
-    /* max-width: 43.75rem; */
-
-    /* 1100px */
     max-width: 68.75rem;
     @apply w-11/12 mx-auto;
   }
 
   .bg-dark a.custom-link {
-    @apply border-gray-200 hover:border-gray-200/0;
+    @apply border-gray-200 hover:border-gray-200/0; 
   }
+  */
 
   /* Class to adjust with sticky footer */
   .min-h-main {
@@ -69,7 +88,7 @@
   }
 }
 
-@layer utilities {
+/* @layer utilities {
   .animated-underline {
     background-image: linear-gradient(#33333300, #33333300),
       linear-gradient(to right, var(--clr-primary-400), var(--clr-primary-500));
@@ -83,4 +102,16 @@
   .animated-underline:focus-visible {
     background-size: 0 2px, 100% 2px;
   }
-}
+} */
+
+/* ----------- Loading ------------- */
+@import url('./loading.css');
+
+/* ----------- Products ------------- */
+@import url('./product.css');
+
+/* ----------- Profile ------------- */
+@import url('./profile.css');
+
+/* ----------- Products Manager ------------- */
+@import url('./products_manager.css');

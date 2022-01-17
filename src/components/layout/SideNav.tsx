@@ -1,49 +1,9 @@
 import clsx from 'clsx';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { Children, cloneElement, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import useOutsideAlerter from '@/hooks/useOutsideAlerter';
 
-type SideNavLinkProps = {
-  href: string;
-  name: string;
-  children: React.ReactElement;
-};
-
-function SideNavLink({ href, name, children }: SideNavLinkProps) {
-  const router = useRouter();
-
-  const childrenWithProps = Children.map(children, (child) => {
-    return cloneElement(child, {
-      className: clsx(
-        child.props.className,
-        'w-5 h-5 mx-5',
-        router.asPath === href
-          ? 'fill-current text-orange-600'
-          : 'text-gray-600'
-      ),
-    });
-  });
-
-  return (
-    <li className='h-14 rounded-sm border-b-2 hover:bg-gray-100'>
-      <Link href={href}>
-        <a className='flex justify-start items-center h-full space-x-3'>
-          {childrenWithProps}
-          <span
-            className={clsx(
-              'text-lg font-bold',
-              router.asPath === href ? 'text-orange-600' : 'text-gray-600'
-            )}
-          >
-            {name}
-          </span>
-        </a>
-      </Link>
-    </li>
-  );
-}
+import SideNavLink from './SideNavLink';
 
 type SideNavProps = {
   showSideNav: boolean;
@@ -96,20 +56,29 @@ export default function SideNav({
             />
           </svg>
         </button>
-        <h2 className='m-3'>Side Nav Text</h2>
+        <h2 className='m-3'></h2>
       </div>
-      <ul className='pt-2 pb-4 text-sm'>
+      <ul className='flex flex-col text-sm'>
         <SideNavLink name='Home' href='/account'>
           <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
             <path d='M469.666,216.45,271.078,33.749a34,34,0,0,0-47.062.98L41.373,217.373,32,226.745V496H208V328h96V496H480V225.958ZM248.038,56.771c.282,0,.108.061-.013.18C247.9,56.832,247.756,56.771,248.038,56.771ZM448,464H336V328a32,32,0,0,0-32-32H208a32,32,0,0,0-32,32V464H64V240L248.038,57.356c.013-.012.014-.023.024-.035L448,240Z'></path>
           </svg>
         </SideNavLink>
 
-        <SideNavLink name='Orders' href='/orders'>
-          <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'>
-            <path d='M203.247,386.414,208,381.185V355.4L130.125,191H93.875L16,355.4v27.042l4.234,4.595a124.347,124.347,0,0,0,91.224,39.982h.42A124.343,124.343,0,0,0,203.247,386.414ZM176,368.608a90.924,90.924,0,0,1-64.231,26.413h-.33A90.907,90.907,0,0,1,48,369.667V362.6l64-135.112L176,362.6Z'></path>
-            <path d='M418.125,191h-36.25L304,355.4v27.042l4.234,4.595a124.347,124.347,0,0,0,91.224,39.982h.42a124.343,124.343,0,0,0,91.369-40.607L496,381.185V355.4ZM464,368.608a90.924,90.924,0,0,1-64.231,26.413h-.33A90.907,90.907,0,0,1,336,369.667V362.6l64-135.112L464,362.6Z'></path>
-            <path d='M272,196.659A56.223,56.223,0,0,0,309.659,159H416V127H309.659a55.991,55.991,0,0,0-107.318,0H96v32H202.341A56.223,56.223,0,0,0,240,196.659V463H136v32H376V463H272ZM232,143a24,24,0,1,1,24,24A24,24,0,0,1,232,143Z'></path>
+        <SideNavLink name='Profile' href='/profile'>
+          <svg
+            xmlns='http://www.w3.org/2000/svg'
+            className='h-6 w-6'
+            fill='none'
+            viewBox='0 0 24 24'
+            stroke='currentColor'
+          >
+            <path
+              strokeLinecap='round'
+              strokeLinejoin='round'
+              strokeWidth={2}
+              d='M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z'
+            />
           </svg>
         </SideNavLink>
 
@@ -126,7 +95,11 @@ export default function SideNav({
           </svg>
         </SideNavLink>
 
-        <SideNavLink name='Logout' href='/'>
+        <SideNavLink
+          name='Logout'
+          href='/'
+          className='last:mt-auto bottom-0 border-b-0 '
+        >
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'

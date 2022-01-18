@@ -1,5 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import { signOut, SignOutResponse } from 'next-auth/react';
 import { useEffect, useRef, useState } from 'react';
 
 import useOutsideAlerter from '@/hooks/useOutsideAlerter';
@@ -15,6 +17,7 @@ export default function SideNav({
   showSideNav,
   notifyCloseSideNav,
 }: SideNavProps) {
+  const router = useRouter();
   const [openNav, setOpenNav] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   useOutsideAlerter(wrapperRef, handleCloseSideNav);
@@ -27,6 +30,12 @@ export default function SideNav({
     event.preventDefault();
     setOpenNav(false);
     if (notifyCloseSideNav) notifyCloseSideNav();
+  }
+
+  async function handleSignOut() {
+    await signOut({
+      callbackUrl: '/',
+    });
   }
 
   return (
@@ -89,12 +98,17 @@ export default function SideNav({
           </svg>
         </SideNavLink>
 
-        <SideNavLink name='Logout' href='/'>
+        <button
+          type='button'
+          className='flex justify-start items-center h-14 w-full space-x-3 border-b-2 hover:bg-gray-100  hover:border-orange-300'
+          onClick={handleSignOut}
+        >
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'
             stroke='currentColor'
+            className='w-5 h-5 mx-5 text-gray-600'
           >
             <path
               strokeLinecap='round'
@@ -103,11 +117,12 @@ export default function SideNav({
               d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'
             />
           </svg>
-        </SideNavLink>
+          <span className='text-lg font-bold text-gray-600'>Logout</span>
+        </button>
 
         <li>
           <Disclosure>
-            <Disclosure.Button className='flex justify-start items-center h-14 w-full space-x-3 hover:bg-gray-100 border-t-2'>
+            <Disclosure.Button className='flex justify-start items-center h-14 w-full space-x-3 border-b-2 hover:bg-gray-100 hover:border-orange-300'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 viewBox='0 0 512 512'

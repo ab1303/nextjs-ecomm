@@ -15,6 +15,10 @@ function withOpacity(variableName) {
 module.exports = {
   mode: 'jit',
   purge: ['./src/**/*.{js,jsx,ts,tsx}'],
+  content: [
+    './src/**/*.{html,js}',
+    './node_modules/tw-elements/dist/js/**/*.js',
+  ],
   darkMode: false, // or 'media' or 'class'
   theme: {
     colors: {
@@ -76,5 +80,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [require('@tailwindcss/forms'), require('tw-elements/dist/plugin')],
 };

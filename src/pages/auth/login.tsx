@@ -29,10 +29,8 @@ const Login = () => {
       }
     );
 
-    if (!!result && !result.error) {
-      // set some auth state
-      console.log('result', result);
-      router.replace('/account');
+    if (!!result && result.ok) {
+      router.push('/home');
     }
   }
 

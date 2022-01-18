@@ -1,19 +1,10 @@
-import { useSession } from 'next-auth/react';
 import * as React from 'react';
 import { useState } from 'react';
 
 import SideNav from './SideNav';
 
 export default function Header() {
-  const { data: session, status } = useSession({ required: true });
-
   const [showSideNav, setShowSideNav] = useState(false);
-
-  const isUser = !!session?.user;
-
-  if (!isUser) {
-    return null;
-  }
 
   return (
     <div>

@@ -56,7 +56,7 @@ export default function SideNavLink({
   return (
     <li
       className={clsx(
-        'flex justify-between items-center h-14 rounded-sm hover:bg-gray-100',
+        'flex justify-between items-center h-14 rounded-sm hover:bg-gray-100 hover:border-orange-300',
         className
       )}
     >

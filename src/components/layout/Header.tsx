@@ -1,9 +1,14 @@
+import { User } from 'next-auth';
 import * as React from 'react';
 import { useState } from 'react';
 
 import SideNav from './SideNav';
 
-export default function Header() {
+type HeaderProps = {
+  user: User;
+};
+
+export default function Header({ user }: HeaderProps) {
   const [showSideNav, setShowSideNav] = useState(false);
 
   return (
@@ -50,6 +55,7 @@ export default function Header() {
       </header>
 
       <SideNav
+        userRole={user.role}
         showSideNav={showSideNav}
         notifyCloseSideNav={() => setShowSideNav(false)}
       />

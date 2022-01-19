@@ -36,13 +36,32 @@ export default NextAuth({
             throw new Error('Could not log you in!');
           }
 
-          return { email: user.email };
+          return {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+          };
         } catch (err: any) {
           return { err: err.message };
         }
       },
     }),
   ],
+  callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (token.user) {
+        session.user = token.user;
+      }
+      return session;
+    },
+  },
   pages: {
     signIn: '/auth/login',
   },

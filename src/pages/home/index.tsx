@@ -1,18 +1,19 @@
-import { useSession } from 'next-auth/react';
-import { ReactElement } from 'react';
+import { User } from 'next-auth';
+import React, { ReactElement } from 'react';
 
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 
-export default function HomePage() {
-  const { data: session, status } = useSession({ required: true });
+type HomePageProps = {
+  user: User;
+};
 
-  const isUser = !!session?.user;
-
-  if (!isUser) {
-    return null;
-  }
-
-  return <div> Authorized Home Page</div>;
+export default function HomePage({ user }: HomePageProps) {
+  return (
+    <div>
+      {' '}
+      Authorized Home Page for {user.firstName} - {user.lastName}
+    </div>
+  );
 }
 
 HomePage.getLayout = function getLayout(page: ReactElement) {

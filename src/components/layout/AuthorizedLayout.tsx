@@ -12,7 +12,7 @@ import Loading from '../Loading';
 export default function AuthorizedLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactElement;
 }) {
   const { data: session, status } = useSession({ required: true });
 
@@ -20,13 +20,16 @@ export default function AuthorizedLayout({
   if (status === 'loading' || !isUser) return <Loading />;
 
   // Put Header or Footer Here
+  const childrenWithUserProp = React.cloneElement(children, {
+    user: session.user,
+  });
   return (
     <div className='box-border'>
       <Header user={session.user}></Header>
 
       <div className='flex flex-col'>
         {/* <Navbar logo='/images/logo.png' /> */}
-        {children}
+        {childrenWithUserProp}
       </div>
     </div>
   );

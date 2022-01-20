@@ -29,7 +29,9 @@ export default function SideNav({
   }, [showSideNav]);
 
   function handleCloseSideNav(event: MouseEvent) {
-    event.preventDefault();
+    // Note event.preventDefault was causing other mouse events to be ignored
+    // when nav was on page
+    // event.preventDefault();
     setOpenNav(false);
     if (notifyCloseSideNav) notifyCloseSideNav();
   }

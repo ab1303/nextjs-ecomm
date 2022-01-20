@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
@@ -6,6 +7,8 @@ import UnstyledLink from '@/components/links/UnstyledLink';
 import { postData } from '@/utils/fetchData';
 
 const Register = () => {
+  const router = useRouter();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -16,6 +19,7 @@ const Register = () => {
 
     if (password !== passwordConfirm) {
       //TODO toastify
+      alert('password does not match confirm password');
       return;
     }
 
@@ -27,6 +31,8 @@ const Register = () => {
       passwordConfirm,
     });
 
+    alert(res.msg);
+    router.push('/auth/login');
     //TODO toastify on error
   };
 

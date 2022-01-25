@@ -1,35 +1,128 @@
 import clsx from 'clsx';
-import { ReactElement, useState } from 'react';
+import { GetServerSidePropsContext } from 'next';
+import Script from 'next/script';
+import { ReactElement, useCallback } from 'react';
 import React from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { Options, SingleValue } from 'react-select';
+import AsyncSelect from 'react-select/async';
+import { useDebouncedCallback } from 'use-debounce';
+import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete';
 
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
-
-// TODO: This is going to be a SSR page with list of restaurants
 
 type RestaurantFormData = {
   restaurant: string;
   address: string;
-  city: string;
+  street_address: string;
+  suburb: string;
+  postcode: string;
   state: string;
 };
 
-export default function RestaurantsPage() {
+type RestaurantsPageProps = {
+  apiKey: string;
+};
+
+const debounce = 300;
+const minLengthAutocomplete = 3;
+const selectProps = {
+  isClearable: true,
+};
+
+export default function RestaurantsPage({ apiKey }: RestaurantsPageProps) {
+  const {
+    init: initialiseGoogleMap,
+    value,
+    suggestions: { status, data },
+    setValue: addressAutoCompleteSetValue,
+  } = usePlacesAutocomplete({
+    requestOptions: {
+      componentRestrictions: {
+        country: 'AU',
+      },
+    },
+    initOnMount: false,
+  });
+
+  const fetchSuggestions = useDebouncedCallback(
+    useCallback(
+      (
+        value: string,
+        cb: (options: Options<{ label: string }>) => void
+      ): void => {
+        if (value.length < minLengthAutocomplete) return cb([]);
+
+        addressAutoCompleteSetValue(value);
+        cb(
+          (data || []).map((suggestion) => ({
+            label: suggestion.description,
+            value: suggestion,
+          }))
+        );
+      },
+      [data, addressAutoCompleteSetValue]
+    ),
+    debounce
+  );
+
   const formMethods = useForm<RestaurantFormData>({
     mode: 'onBlur',
     defaultValues: {
       restaurant: '',
       address: '',
-      city: '',
+      street_address: '',
+      suburb: '',
+      postcode: '',
       state: '',
     },
   });
 
   const {
     register,
+    control,
+    setValue: formFieldSetValue,
     formState: { errors },
     handleSubmit,
   } = formMethods;
+
+  const handleSelect = (selectedOption: SingleValue<{ label: string }>) => {
+    // Get latitude and longitude via utility functions
+    getGeocode({ address: selectedOption?.label })
+      .then((results) => {
+        const addressComponents = results[0].address_components;
+        const streetAddressNumber = addressComponents.find((c) =>
+          c.types.includes('street_number')
+        )?.long_name;
+
+        const streetAddress = addressComponents.find((c) =>
+          c.types.includes('route')
+        )?.long_name;
+
+        const suburb = addressComponents.find((c) =>
+          c.types.includes('locality')
+        )?.long_name;
+
+        const state = addressComponents.find((c) =>
+          c.types.includes('administrative_area_level_1')
+        )?.long_name;
+
+        const postalcode = addressComponents.find((c) =>
+          c.types.includes('postal_code')
+        )?.long_name;
+
+        formFieldSetValue(
+          'street_address',
+          `${streetAddressNumber || ''} ${streetAddress}`
+        );
+        formFieldSetValue('suburb', suburb || '');
+        formFieldSetValue('postcode', postalcode || '');
+        formFieldSetValue('state', state || '');
+      })
+      .catch((error) => {
+        console.log('😱 Error: ', error);
+      });
+  };
 
   const submitHandler = (formData: RestaurantFormData) => {
     console.log('Restaurant Form Data:', JSON.stringify(formData, null, 2));
@@ -37,6 +130,13 @@ export default function RestaurantsPage() {
 
   return (
     <div className='min-h-screen bg-gray-100 flex flex-col px-6 lg:px-8'>
+      <Script
+        id='google-places'
+        src={`https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`}
+        onLoad={() => {
+          initialiseGoogleMap();
+        }}
+      />
       <div className='container min-w-full mx-auto'>
         <div className='mx-auto w-3/4'>
           <div>
@@ -74,6 +174,7 @@ export default function RestaurantsPage() {
                       />
                     </div>
                   </div>
+
                   <div>
                     <label
                       htmlFor='address'
@@ -82,36 +183,80 @@ export default function RestaurantsPage() {
                       Address
                     </label>
                     <div className='mt-1'>
+                      <Controller
+                        name='address'
+                        control={control}
+                        render={({ field: { onChange } }) => (
+                          <AsyncSelect
+                            {...selectProps}
+                            loadOptions={fetchSuggestions}
+                            getOptionValue={({ label }) => label}
+                            onChange={(option) => {
+                              handleSelect(option);
+                              onChange(option?.label);
+                            }}
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label
+                      htmlFor='street_address'
+                      className='block text-sm font-medium text-gray-700'
+                    >
+                      Street Address
+                    </label>
+                    <div className='mt-1'>
                       <input
                         type='text'
                         className={clsx(
-                          errors.address && 'text-orange-700 border-orange-700'
+                          errors.state && 'text-orange-700 border-orange-700'
                         )}
-                        {...register('address', { required: true })}
+                        {...register('street_address', { required: true })}
                       />
                     </div>
                   </div>
                   <div className='flex'>
-                    <div className='w-1/2'>
+                    <div className='w-1/2 '>
                       <label
-                        htmlFor='city'
+                        htmlFor='suburb'
                         className='block text-sm font-medium text-gray-700'
                       >
-                        City
+                        Suburb
                       </label>
                       <div className='mt-1'>
                         <input
                           type='text'
-                          id='city'
                           className={clsx(
-                            errors.city && 'text-orange-700 border-orange-700'
+                            errors.suburb && 'text-orange-700 border-orange-700'
                           )}
-                          {...register('city', { required: true })}
+                          {...register('suburb', { required: true })}
                         />
                       </div>
                     </div>
-
                     <div className='w-1/2 ml-3'>
+                      <label
+                        htmlFor='postcode'
+                        className='block text-sm font-medium text-gray-700'
+                      >
+                        Post Code
+                      </label>
+                      <div className='mt-1'>
+                        <input
+                          type='text'
+                          id='postcode'
+                          className={clsx(
+                            errors.postcode &&
+                              'text-orange-700 border-orange-700'
+                          )}
+                          {...register('postcode', { required: true })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className='flex'>
+                    <div className='w-1/2 '>
                       <label
                         htmlFor='state'
                         className='block text-sm font-medium text-gray-700'
@@ -146,6 +291,15 @@ export default function RestaurantsPage() {
       </div>
     </div>
   );
+}
+
+export async function getServerSideProps({ _ }: GetServerSidePropsContext) {
+  // server side rendering
+  return {
+    props: {
+      apiKey: process.env.GOOGLE_API_KEY!,
+    },
+  };
 }
 
 RestaurantsPage.getLayout = function getLayout(page: ReactElement) {

@@ -1,7 +1,5 @@
 import clsx from 'clsx';
-import { GetServerSidePropsContext } from 'next';
-import { ReactElement } from 'react';
-import React from 'react';
+import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
@@ -10,16 +8,16 @@ import AddressComponent from '@/features/Address';
 
 import { RestaurantFormData } from '@/types';
 
-type CreateRestaurantFormData = RestaurantFormData;
+type EditRestaurantFormData = RestaurantFormData;
 
-type CreateRestaurantPageProps = {
+type EditRestaurantPageProps = {
   apiKey: string;
 };
 
-export default function CreateRestaurantPage({
+export default function EditRestaurantsPage({
   apiKey,
-}: CreateRestaurantPageProps) {
-  const formMethods = useForm<CreateRestaurantFormData>({
+}: EditRestaurantPageProps) {
+  const formMethods = useForm<EditRestaurantFormData>({
     mode: 'onBlur',
     defaultValues: {
       restaurant: '',
@@ -39,7 +37,7 @@ export default function CreateRestaurantPage({
     handleSubmit,
   } = formMethods;
 
-  const submitHandler = (formData: RestaurantFormData) => {
+  const submitHandler = (formData: EditRestaurantFormData) => {
     console.log('Restaurant Form Data:', JSON.stringify(formData, null, 2));
   };
 
@@ -50,13 +48,13 @@ export default function CreateRestaurantPage({
           <div>
             <div className='h-20'></div>
             <h2 className='text-center text-3xl font-extrabold text-gray-900'>
-              New Restaurant
+              Edit Restaurant
             </h2>
           </div>
 
-          <div className='grid grid-cols-4 gap-4 bg-gray-400'>
+          <div className='grid grid-cols-6 gap-4 bg-gray-400'>
             <div className='col-span-1 border-2'></div>
-            <div className='col-span-3 border-2 bg-white mt-8 py-8 px-6 shadow rounded-lg sm:px-10'>
+            <div className='col-span-4 border-2 bg-white mt-8 py-8 px-6 shadow rounded-lg sm:px-10'>
               <FormProvider {...formMethods}>
                 <form
                   className='mb-0 space-y-6'
@@ -96,6 +94,7 @@ export default function CreateRestaurantPage({
                 </form>
               </FormProvider>
             </div>
+            <div className='col-span-1 border-2'></div>
           </div>
         </div>
       </div>
@@ -103,7 +102,7 @@ export default function CreateRestaurantPage({
   );
 }
 
-export async function getServerSideProps({ _ }: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   // server side rendering
   return {
     props: {
@@ -112,6 +111,6 @@ export async function getServerSideProps({ _ }: GetServerSidePropsContext) {
   };
 }
 
-CreateRestaurantPage.getLayout = function getLayout(page: ReactElement) {
+EditRestaurantsPage.getLayout = function getLayout(page: React.ReactElement) {
   return <AuthorizedLayout>{page}</AuthorizedLayout>;
 };

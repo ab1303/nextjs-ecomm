@@ -54,10 +54,20 @@ const getRestaurants = async (req: NextApiRequest, res: NextApiResponse) => {
 
 const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const newRestaurant1 = new Restaurants({
-      name: 'Domino Sydney',
+    const { restaurantName, address } = req.body;
+
+    // TODO: Search if restaurant already exists with same name and addressLine
+
+    const newRestaurant = new Restaurants({
+      name: restaurantName,
       image: '/images/restaurant/domino-sydney.jpg',
-      address: 'North Sydney',
+      address: {
+        addressLine: address.addressLine,
+        streetAddress: address.street_address,
+        suburb: address.suburb,
+        postcode: address.postcode,
+        state: address.state,
+      },
       cuisine: 'Western',
       contact: 'domino@domino.com',
       menu: [
@@ -70,25 +80,7 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
         },
       ],
     });
-    await newRestaurant1.save();
-
-    const newRestaurant2 = new Restaurants({
-      name: 'Darling Kebabs',
-      image: '/images/restaurant/darling-kebabs.jpg',
-      address: 'Sydney',
-      cuisine: 'Middle Eastern',
-      contact: 'kebabs@kebab.com',
-      menu: [
-        {
-          title: 'Kebabs',
-          image: 'kebabs.jpg',
-          description: 'Chicken Kebab',
-          category: 'Lunch',
-          price: 50,
-        },
-      ],
-    });
-    await newRestaurant2.save();
+    await newRestaurant.save();
 
     res.json({ msg: 'Success! Created a new restaurant' });
   } catch (err: any) {

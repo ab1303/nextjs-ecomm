@@ -9,7 +9,7 @@ import React, {
 import { Category } from '@/models/categoriesModel';
 import { Order } from '@/models/orderModel';
 import { User } from '@/models/userModel';
-import { getData } from '@/utils/fetchData';
+import { getData } from '@/utils/fetchHttpClient';
 
 import ActionMap from './actionMap';
 

@@ -7,6 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 
 import AddressComponent from '@/features/Address';
+import { postData } from '@/utils/fetchHttpClient';
 
 import { RestaurantFormData } from '@/types';
 
@@ -39,8 +40,12 @@ export default function CreateRestaurantPage({
     handleSubmit,
   } = formMethods;
 
-  const submitHandler = (formData: RestaurantFormData) => {
-    console.log('Restaurant Form Data:', JSON.stringify(formData, null, 2));
+  const submitHandler = async (formData: RestaurantFormData) => {
+    // TODO: Toastify with success and error results
+    const result = await postData('restaurant', {
+      restaurantName: formData.restaurant,
+      address: formData.address,
+    });
   };
 
   return (
@@ -103,7 +108,7 @@ export default function CreateRestaurantPage({
   );
 }
 
-export async function getServerSideProps({ _ }: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   // server side rendering
   return {
     props: {

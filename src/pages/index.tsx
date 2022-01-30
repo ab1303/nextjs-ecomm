@@ -18,7 +18,7 @@ import { Product } from '@/models/productModel';
 //   useGlobalDispatch,
 //   useGlobalState,
 // } from '@/store/GlobalStore';
-import { getData } from '@/utils/fetchData';
+import { getData } from '@/utils/fetchHttpClient';
 // import filterSearch from '@/utils/filterSearch';
 
 // import { ModalItem } from '@/types';

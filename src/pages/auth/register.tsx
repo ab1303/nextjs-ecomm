@@ -4,7 +4,7 @@ import { FormEvent, useState } from 'react';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 
-import { postData } from '@/utils/fetchData';
+import { postData } from '@/utils/fetchHttpClient';
 
 const Register = () => {
   const router = useRouter();

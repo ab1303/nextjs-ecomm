@@ -5,6 +5,8 @@ import Users from '@/models/userModel';
 import connectDB from '@/utils/connectDB';
 import valid from '@/utils/valid';
 
+import { Notify } from '@/types';
+
 connectDB();
 
 const registerHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -15,16 +17,16 @@ const registerHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const register = async (req: NextApiRequest, res: NextApiResponse) => {
+const register = async (req: NextApiRequest, res: NextApiResponse<Notify>) => {
   try {
     const { firstName, lastName, email, password, passwordConfirm } = req.body;
 
     const errMsg = valid(firstName, lastName, email, password, passwordConfirm);
-    if (errMsg) return res.status(400).json({ err: errMsg });
+    if (errMsg) return res.status(400).json({ error: errMsg });
 
     const user = await Users.findOne({ email });
     if (user)
-      return res.status(400).json({ err: 'This email already exists.' });
+      return res.status(400).json({ error: 'This email already exists.' });
 
     const passwordHash = await bcrypt.hash(password, 12);
 
@@ -36,9 +38,9 @@ const register = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     await newUser.save();
-    res.json({ msg: 'Register Success!' });
+    res.json({ success: 'Registration Successful!' });
   } catch (err: any) {
-    return res.status(500).json({ err: err.message });
+    return res.status(500).json({ error: err.message || err });
   }
 };
 

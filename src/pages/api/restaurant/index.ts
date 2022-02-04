@@ -4,6 +4,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Restaurants from '@/models/restaurantModel';
 import connectDB from '@/utils/connectDB';
 
+import { Notify } from '@/types';
+
 connectDB();
 
 export default async function handleRestaurantRequest(
@@ -52,11 +54,14 @@ const getRestaurants = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
+const createRestaurant = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Notify>
+) => {
   try {
     const { restaurantName, address } = req.body;
 
-    // TODO: Search if restaurant already exists with same name and addressLine
+    // TODO: Search if restaurant already exists with same name and (addressLine,contact)
 
     const newRestaurant = new Restaurants({
       name: restaurantName,
@@ -82,8 +87,8 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     await newRestaurant.save();
 
-    res.json({ msg: 'Success! Created a new restaurant' });
+    res.json({ success: 'Success! Created a new restaurant' });
   } catch (err: any) {
-    return res.status(500).json({ err: err.message });
+    return res.status(500).json({ error: err.message || err });
   }
 };

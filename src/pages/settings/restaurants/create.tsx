@@ -1,15 +1,16 @@
 import clsx from 'clsx';
-import { GetServerSidePropsContext } from 'next';
+import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 
 import AddressComponent from '@/features/Address';
 import { postData } from '@/utils/fetchHttpClient';
 
-import { RestaurantFormData } from '@/types';
+import { Notify, RestaurantFormData } from '@/types';
 
 type CreateRestaurantFormData = RestaurantFormData;
 
@@ -20,6 +21,7 @@ type CreateRestaurantPageProps = {
 export default function CreateRestaurantPage({
   apiKey,
 }: CreateRestaurantPageProps) {
+  const router = useRouter();
   const formMethods = useForm<CreateRestaurantFormData>({
     mode: 'onBlur',
     defaultValues: {
@@ -41,11 +43,19 @@ export default function CreateRestaurantPage({
   } = formMethods;
 
   const submitHandler = async (formData: RestaurantFormData) => {
-    // TODO: Toastify with success and error results
-    const result = await postData('restaurant', {
-      restaurantName: formData.restaurant,
-      address: formData.address,
-    });
+    try {
+      const result: { ok: boolean } & Notify = await postData('restaurant', {
+        restaurantName: formData.restaurant,
+        address: formData.address,
+      });
+
+      if (!result.ok) toast.error(result.error);
+
+      toast.success(result.success || 'Restaurant created!');
+      // router.replace('/settings/restaurants');
+    } catch (e: any) {
+      toast.error(e.error);
+    }
   };
 
   return (

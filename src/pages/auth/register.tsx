@@ -1,10 +1,13 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import { toast } from 'react-toastify';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 
 import { postData } from '@/utils/fetchHttpClient';
+
+import { Notify } from '@/types';
 
 const Register = () => {
   const router = useRouter();
@@ -18,22 +21,26 @@ const Register = () => {
     e.preventDefault();
 
     if (password !== passwordConfirm) {
-      //TODO toastify
-      alert('password does not match confirm password');
+      toast.error('password does not match confirm password');
       return;
     }
 
-    const res = await postData('auth/register', {
-      firstName,
-      lastName,
-      email,
-      password,
-      passwordConfirm,
-    });
+    try {
+      const result: { ok: boolean } & Notify = await postData('auth/register', {
+        firstName,
+        lastName,
+        email,
+        password,
+        passwordConfirm,
+      });
 
-    alert(res.msg);
-    router.push('/auth/login');
-    //TODO toastify on error
+      if (!result.ok) toast.error(result.error);
+
+      toast.success(result.success || 'Registration successful!');
+      router.push('/auth/login');
+    } catch (err: any) {
+      toast.error(err);
+    }
   };
 
   return (

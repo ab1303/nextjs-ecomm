@@ -33,6 +33,7 @@
     "react-hook-form": "^7.24.1",
     "react-icons": "^4.3.1",
     "react-select": "^5.2.2",
+    "react-toastify": "^8.1.0",
     "tw-elements": "^1.0.0-alpha8",
     "use-debounce": "^7.0.1",
     "use-places-autocomplete": "^1.11.0"

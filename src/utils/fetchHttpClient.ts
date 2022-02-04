@@ -26,7 +26,11 @@ export const postData = async (url: string, post: unknown, token?: string) => {
   });
 
   const data = await res.json();
-  return data;
+
+  return {
+    ok: res.ok,
+    ...data,
+  };
 };
 
 export const putData = async (url: string, post: unknown, token: string) => {

@@ -1,11 +1,14 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { getSession, useSession } from 'next-auth/react';
 // import { useRouter } from 'next/router';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
 
 import ImageGallery from '@/components/ImageGallery';
 import Hero from '@/components/layout/Hero';
+import Loading from '@/components/Loading';
+import PageLoading from '@/components/PageLoading';
 
 // import FilterCategory from '@/features/category/FilterCategory';
 // import ProductItem from '@/features/product/ProductItem';
@@ -74,6 +77,9 @@ export default function LandingPage(props: RestaurantResponse) {
   //   filterSearch({ router, page: `${page + 1}` });
   // };
 
+  const router = useRouter();
+  const { status } = useSession();
+
   const data = {
     hero: {
       appType: 'Food app',
@@ -83,6 +89,15 @@ export default function LandingPage(props: RestaurantResponse) {
       extraActionText: 'Sign up',
     },
   };
+
+  if (status === 'loading') {
+    return <PageLoading />;
+  }
+
+  if (status === 'authenticated') {
+    router.replace('/home');
+    return null;
+  }
 
   const categories = groupBy(props.restaurants, (r) => r.category);
   const restaurantList = [];

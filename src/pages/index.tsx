@@ -4,12 +4,12 @@ import Head from 'next/head';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 
-import ImageGallery from '@/components/ImageGallrey';
+import ImageGallery from '@/components/ImageGallery';
 import Hero from '@/components/layout/Hero';
 
 // import FilterCategory from '@/features/category/FilterCategory';
 // import ProductItem from '@/features/product/ProductItem';
-import { Product } from '@/models/productModel';
+import { Restaurant } from '@/models/restaurantModel';
 // import {
 //   ModalEvent,
 //   useGlobalDispatch,
@@ -17,10 +17,10 @@ import { Product } from '@/models/productModel';
 // } from '@/store/GlobalStore';
 import { getData } from '@/utils/fetchData';
 // import filterSearch from '@/utils/filterSearch';
-
 // import { ModalItem } from '@/types';
+import { groupBy } from '@/utils/groupBy';
 
-export default function LandingPage(props: ProductResponse) {
+export default function LandingPage(props: RestaurantResponse) {
   // const [products, setProducts] = useState<Product[]>(props.products);
 
   // const [isCheck, setIsCheck] = useState(false);
@@ -84,6 +84,17 @@ export default function LandingPage(props: ProductResponse) {
     },
   };
 
+  const categories = groupBy(props.restaurants, (r) => r.category);
+  const restaurantList = [];
+
+  for (const key in categories) {
+    if (Object.prototype.hasOwnProperty.call(categories, key)) {
+      restaurantList.push(
+        <ImageGallery key={key} category={key} restaurants={categories[key]} />
+      );
+    }
+  }
+
   return (
     <div>
       <Head>
@@ -98,14 +109,14 @@ export default function LandingPage(props: ProductResponse) {
         extraActionText={data.hero.extraActionText}
       />
 
-      <ImageGallery />
+      {restaurantList}
 
       {/* TODO : Cleanup */}
       {/* {state.categories && <FilterCategory categories={state.categories} />}
 
       {auth && auth.user && auth.user.role === 'admin' && (
         <div
-          className='delete_all btn btn-danger mt-2'
+          className='mt-2 delete_all btn btn-danger'
           style={{ marginBottom: '-10px' }}
         >
           <input
@@ -120,7 +131,7 @@ export default function LandingPage(props: ProductResponse) {
           />
 
           <button
-            className='btn btn-danger ml-2'
+            className='ml-2 btn btn-danger'
             data-toggle='modal'
             data-target='#exampleModal'
             onClick={handleDeleteAll}
@@ -148,7 +159,7 @@ export default function LandingPage(props: ProductResponse) {
         ''
       ) : (
         <button
-          className='btn btn-outline-info d-block mx-auto mb-4'
+          className='mx-auto mb-4 btn btn-outline-info d-block'
           onClick={handleLoadmore}
         >
           Load more
@@ -158,26 +169,21 @@ export default function LandingPage(props: ProductResponse) {
   );
 }
 
-type ProductResponse = {
-  products: Product[];
+type RestaurantResponse = {
+  restaurants: Restaurant[];
   result: number;
 };
 
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   const page = query.page || 1;
-  const category = query.category || 'all';
-  const sort = query.sort || '';
-  const search = query.search || 'all';
 
-  const res: ProductResponse = await getData(
-    `product?limit=${
-      +page * 6
-    }&category=${category}&sort=${sort}&title=${search}`
+  const res: RestaurantResponse = await getData(
+    `restaurant?limit=${+page * 6}`
   );
   // server side rendering
   return {
     props: {
-      products: res.products,
+      restaurants: res.restaurants,
       result: res.result,
     }, // will be passed to the page component as props
   };

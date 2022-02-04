@@ -16,6 +16,8 @@ export interface Restaurant {
   address: string;
   cuisine: string;
   contact: string;
+  category: string;
+  deliveryFee: number;
   menu: Menu[];
 }
 
@@ -40,6 +42,14 @@ const restaurantSchema = new mongoose.Schema({
   },
   contact: {
     type: String,
+    required: true,
+  },
+  category: {
+    type: String,
+    required: true,
+  },
+  deliveryFee: {
+    type: Number,
     required: true,
   },
   menu: [

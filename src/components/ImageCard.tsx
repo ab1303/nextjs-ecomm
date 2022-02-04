@@ -4,12 +4,13 @@ import { Photo } from '@/types';
 
 type ImageCardProps = {
   photo: Photo;
+  deliveryFee: number;
 };
 
-const ImageCard = ({ photo }: ImageCardProps) => {
+const ImageCard = ({ photo, deliveryFee }: ImageCardProps) => {
   return (
-    <div className='max-w-sm rounded overflow-hidden shadow-lg'>
-      <div className='h-64 w-96 relative'>
+    <div className='max-w-sm overflow-hidden rounded shadow-lg'>
+      <div className='relative h-64 w-96'>
         <Image
           layout='fill'
           objectFit='cover'
@@ -19,7 +20,7 @@ const ImageCard = ({ photo }: ImageCardProps) => {
       </div>
 
       <div className='px-6 py-4'>
-        <div className='font-bold text-gray-500 text-lg mb-2'>
+        <div className='mb-2 text-lg font-bold text-gray-500'>
           {photo.filename}
         </div>
       </div>

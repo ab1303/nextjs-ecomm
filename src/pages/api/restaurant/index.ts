@@ -34,6 +34,25 @@ class APIfeatures {
     this.query = query;
     this.queryString = queryString;
   }
+
+  paginating() {
+    const page = !Array.isArray(this.queryString.page)
+      ? this.queryString.page
+        ? +this.queryString.page * 1
+        : 1
+      : 1;
+
+    const limit =
+      !Array.isArray(this.queryString.limit) || !this.queryString.limit
+        ? this.queryString.limit
+          ? +this.queryString.limit * 1
+          : 6
+        : 6;
+
+    const skip = (page - 1) * limit;
+    this.query = this.query.skip(skip).limit(limit);
+    return this;
+  }
 }
 
 const getRestaurants = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -56,10 +75,12 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const newRestaurant1 = new Restaurants({
       name: 'Domino Sydney',
-      image: '/images/restaurant/domino-sydney.jpg',
+      image: '/images/restaurants/domino-sydney.jpg',
       address: 'North Sydney',
       cuisine: 'Western',
       contact: 'domino@domino.com',
+      category: 'Try Something New',
+      deliveryFee: 2.0,
       menu: [
         {
           title: 'Pizza',
@@ -74,10 +95,12 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const newRestaurant2 = new Restaurants({
       name: 'Darling Kebabs',
-      image: '/images/restaurant/darling-kebabs.jpg',
+      image: '/images/restaurants/darling-kebabs.jpg',
       address: 'Sydney',
       cuisine: 'Middle Eastern',
       contact: 'kebabs@kebab.com',
+      category: 'Try Something New',
+      deliveryFee: 1.5,
       menu: [
         {
           title: 'Kebabs',
@@ -92,10 +115,12 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const newRestaurant3 = new Restaurants({
       name: 'Burger Hood',
-      image: '/images/restaurant/burger-hood.jpg',
+      image: '/images/restaurants/burger-hood.jpg',
       address: 'Sydney Central',
       cuisine: 'Western',
       contact: 'burger@burgers.com',
+      category: 'Try Something New',
+      deliveryFee: 1.5,
       menu: [
         {
           title: 'Burger',
@@ -110,10 +135,12 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const newRestaurant4 = new Restaurants({
       name: 'Thai Tharee',
-      image: '/images/restaurant/thai-tharee-darlinghurst.jpg',
+      image: '/images/restaurants/thai-tharee-darlinghurst.jpg',
       address: 'Sydney Darlinghurst',
       cuisine: 'Asian',
       contact: 'thai@tharee.com',
+      category: 'Try Something New',
+      deliveryFee: 1.5,
       menu: [
         {
           title: 'Curry Rice',
@@ -128,10 +155,12 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const newRestaurant5 = new Restaurants({
       name: 'Its Time For Thai',
-      image: '/images/restaurant/its-time-for-thai-haymarket.jpg',
+      image: '/images/restaurants/its-time-for-thai-haymarket.jpg',
       address: 'Sydney Haymarket',
       cuisine: 'Asian',
       contact: 'thai@itstime.com',
+      category: 'Try Something New',
+      deliveryFee: 1.5,
       menu: [
         {
           title: 'Curry Rice',
@@ -146,10 +175,12 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const newRestaurant6 = new Restaurants({
       name: 'Metro Pita Kebab Ultimo',
-      image: '/images/restaurant/metro-pita-kebab-ultimo.jpg',
+      image: '/images/restaurants/metro-pita-kebab-ultimo.jpg',
       address: 'Sydney',
       cuisine: 'Middle Eastern',
       contact: 'pita@kebab.com',
+      category: 'Try Something New',
+      deliveryFee: 1.5,
       menu: [
         {
           title: 'Kebab',
@@ -164,10 +195,12 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const newRestaurant7 = new Restaurants({
       name: 'Newstar Takeaway',
-      image: '/images/restaurant/newstar-takeaway.jpg',
+      image: '/images/restaurants/newstar-takeaway.jpg',
       address: 'Sydney',
       cuisine: 'Western',
       contact: 'star@takeaway.com',
+      category: 'Try Something New',
+      deliveryFee: 1.5,
       menu: [
         {
           title: 'Toast',
@@ -182,10 +215,12 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const newRestaurant8 = new Restaurants({
       name: 'The Pharaoh Bbq',
-      image: '/images/restaurant/the-pharaoh-bbq.jpg',
+      image: '/images/restaurants/the-pharaoh-bbq.jpg',
       address: 'Sydney',
       cuisine: 'Middle Eastern',
       contact: 'pita@kebab.com',
+      category: 'Try Something New',
+      deliveryFee: 1.5,
       menu: [
         {
           title: 'Bbq Platter',
@@ -200,10 +235,12 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const newRestaurant9 = new Restaurants({
       name: 'Una Restaurant',
-      image: '/images/restaurant/una-restaurant-darlinghurst.jpg',
+      image: '/images/restaurants/una-restaurant-darlinghurst.jpg',
       address: 'Sydney Darlinghurst',
       cuisine: 'Asian',
       contact: 'una@restaurant.com',
+      category: 'Try Something New',
+      deliveryFee: 1.5,
       menu: [
         {
           title: 'Noodles',
@@ -216,7 +253,7 @@ const createRestaurant = async (req: NextApiRequest, res: NextApiResponse) => {
     });
     await newRestaurant9.save();
 
-    res.json({ msg: 'Success! Created a new restaurant' });
+    res.json({ msg: 'Success! created a new restaurants' });
   } catch (err: any) {
     return res.status(500).json({ err: err.message });
   }

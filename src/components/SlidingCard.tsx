@@ -1,11 +1,22 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRef } from 'react';
 
 import { CardData } from '@/types/enum';
 interface SlidingCardsProps {
   cardData: CardData[];
 }
 const SlidingCards = (props: SlidingCardsProps) => {
+  const scrollDiv = useRef<HTMLDivElement>(null);
+  const next = useRef<HTMLDivElement>(null);
+  const prev = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (scrollDiv.current) scrollDiv.current.scrollLeft += 40;
+  };
+  const scrollRight = () => {
+    if (scrollDiv.current) scrollDiv.current.scrollLeft -= 40;
+  };
   const getCardsLayout = () => {
     return props.cardData.map((card) => {
       return (
@@ -37,9 +48,36 @@ const SlidingCards = (props: SlidingCardsProps) => {
     <div className='mx-4 my-8 '>
       <div
         id='scrollContainer'
-        className='flex flex-no-wrap items-start overflow-hidden scrolling-touch hover:overflow-x-auto'
+        ref={scrollDiv}
+        className='flex flex-no-wrap items-start overflow-hidden scrolling-touch'
       >
         {getCardsLayout()}
+        <button
+          onClick={scrollLeft}
+          className='absolute flex items-center justify-start w-1/2 h-64 p-0 text-center border-0 left-8 top--64 carousel-control-prev hover:outline-none hover:no-underline focus:outline-none focus:no-underline'
+          type='button'
+          data-bs-target='#carouselExampleCaptions'
+          data-bs-slide='prev'
+        >
+          <span
+            className='inline-block bg-no-repeat carousel-control-prev-icon'
+            aria-hidden='true'
+          ></span>
+          <span className='visually-hidden'>Previous</span>
+        </button>
+        <button
+          onClick={scrollRight}
+          className='absolute flex items-center justify-end w-1/2 h-64 p-0 text-center border-0 right-8 top--64 carousel-control-next hover:outline-none hover:no-underline focus:outline-none focus:no-underline'
+          type='button'
+          data-bs-target='#carouselExampleCaptions'
+          data-bs-slide='next'
+        >
+          <span
+            className='inline-block bg-no-repeat carousel-control-next-icon'
+            aria-hidden='true'
+          ></span>
+          <span className='visually-hidden'>Next</span>
+        </button>
       </div>
     </div>
   );

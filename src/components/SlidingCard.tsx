@@ -34,10 +34,10 @@ const SlidingCards = (props: SlidingCardsProps) => {
   };
 
   return (
-    <div className='mx-4 my-8'>
+    <div className='mx-4 my-8 '>
       <div
         id='scrollContainer'
-        className='flex flex-no-wrap items-start overflow-x-scroll scrolling-touch scroll'
+        className='flex flex-no-wrap items-start overflow-hidden scrolling-touch hover:overflow-x-auto'
       >
         {getCardsLayout()}
       </div>

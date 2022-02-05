@@ -1,10 +1,10 @@
 import { Query } from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import Restaurants from '@/models/restaurantModel';
+import Restaurants, { Restaurant } from '@/models/restaurantModel';
 import connectDB from '@/utils/connectDB';
 
-import { Notify } from '@/types';
+import { Notify, RestaurantDTO } from '@/types';
 
 connectDB();
 
@@ -38,19 +38,33 @@ class APIfeatures {
   }
 }
 
-const getRestaurants = async (req: NextApiRequest, res: NextApiResponse) => {
+export type RestaurantsResponse = {
+  restaurants: Array<RestaurantDTO>;
+};
+
+const getRestaurants = async (
+  req: NextApiRequest,
+  res: NextApiResponse<RestaurantsResponse | Notify>
+) => {
   try {
     const features = new APIfeatures(Restaurants.find(), req.query);
 
-    const restaurants = await features.query;
+    const restaurants: Restaurant[] = await features.query;
+
+    const result: Array<RestaurantDTO> = restaurants.map((r) => ({
+      _id: r._id,
+      name: r.name,
+      image: r.image,
+      cuisine: r.cuisine,
+      contact: r.contact,
+      address: r.address.addressLine,
+    }));
 
     res.json({
-      status: 'success',
-      result: restaurants.length,
-      restaurants,
+      restaurants: result,
     });
   } catch (err: any) {
-    return res.status(500).json({ err: err.message });
+    return res.status(500).json({ error: err.message || err });
   }
 };
 

@@ -27,3 +27,12 @@ export type RestaurantFormData = {
   restaurant: string;
   address: Address;
 };
+
+export type RestaurantDTO = {
+  _id: number;
+  name: string;
+  image: string;
+  cuisine: string;
+  contact: string;
+  address: string;
+};

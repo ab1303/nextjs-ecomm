@@ -3,6 +3,7 @@ import { ReactElement, useState } from 'react';
 import React from 'react';
 import { CellProps, Column, useRowSelect, useTable } from 'react-table';
 
+import Card from '@/components/card';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 import Table from '@/components/table';
 
@@ -55,49 +56,53 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
   return (
     /* eslint-disable react/jsx-key */
     <div className='container min-w-full mx-auto'>
-      <div>
-        <div className='h-20'></div>
-        <h2 className='text-center text-3xl font-extrabold text-gray-900'>
-          Restaurant(s)
-        </h2>
-      </div>
-      <div className='shadow overflow-hidden border-b border-gray-200 sm:rounded-lg'>
-        <Table {...getTableProps()}>
-          <Table.THead>
-            {headerGroups.map((headerGroup) => (
-              <Table.THead.TR {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <Table.THead.TH {...column.getHeaderProps()}>
-                    {column.render('Header')}
-                  </Table.THead.TH>
-                ))}
-              </Table.THead.TR>
-            ))}
-          </Table.THead>
-          <Table.TBody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <Table.TBody.TR {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <Table.TBody.TD {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                      </Table.TBody.TD>
-                    );
-                  })}
-                </Table.TBody.TR>
-              );
-            })}
-          </Table.TBody>
-        </Table>
-      </div>
+      <Card>
+        <Card.Header>
+          <div className='justify-between text-left'>
+            <Card.Header.Title>
+              Restaurants - Total ({restaurants.length || ''})
+            </Card.Header.Title>
+          </div>
+        </Card.Header>
+
+        <Card.Body>
+          <Table {...getTableProps()}>
+            <Table.THead>
+              {headerGroups.map((headerGroup) => (
+                <Table.THead.TR {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <Table.THead.TH {...column.getHeaderProps()}>
+                      {column.render('Header')}
+                    </Table.THead.TH>
+                  ))}
+                </Table.THead.TR>
+              ))}
+            </Table.THead>
+            <Table.TBody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <Table.TBody.TR {...row.getRowProps()}>
+                    {row.cells.map((cell) => {
+                      return (
+                        <Table.TBody.TD {...cell.getCellProps()}>
+                          {cell.render('Cell')}
+                        </Table.TBody.TD>
+                      );
+                    })}
+                  </Table.TBody.TR>
+                );
+              })}
+            </Table.TBody>
+          </Table>
+        </Card.Body>
+      </Card>
     </div>
   );
 }
 
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
-  // TODO: Later SSR
+  // TODO: Later Pagination
 
   // const page = query.page || 1;
   // const category = query.category || 'all';

@@ -12,7 +12,7 @@ export const getData = async (url: string, token?: string) => {
   return data;
 };
 
-export const postData = async (url: string, post: unknown, token?: string) => {
+export const postData = async (url: string, body: unknown, token?: string) => {
   const headers: { 'Content-Type': string; Authorization?: string } = {
     'Content-Type': 'application/json',
   };
@@ -22,7 +22,7 @@ export const postData = async (url: string, post: unknown, token?: string) => {
   const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'POST',
     headers,
-    body: JSON.stringify(post),
+    body: JSON.stringify(body),
   });
 
   const data = await res.json();
@@ -33,28 +33,28 @@ export const postData = async (url: string, post: unknown, token?: string) => {
   };
 };
 
-export const putData = async (url: string, post: unknown, token: string) => {
+export const putData = async (url: string, body: unknown, token: string) => {
   const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
     },
-    body: JSON.stringify(post),
+    body: JSON.stringify(body),
   });
 
   const data = await res.json();
   return data;
 };
 
-export const patchData = async (url: string, post: unknown, token: string) => {
+export const patchData = async (url: string, body: unknown, token: string) => {
   const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
     },
-    body: JSON.stringify(post),
+    body: JSON.stringify(body),
   });
 
   const data = await res.json();

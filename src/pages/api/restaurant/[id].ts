@@ -4,7 +4,7 @@ import addressModelToAddressMap from '@/mappers/addressMapper';
 import Restaurants, { Restaurant } from '@/models/restaurantModel';
 import connectDB from '@/utils/connectDB';
 
-import { Address, Notify } from '@/types';
+import { Address, EditRestaurantFormData, Notify } from '@/types';
 
 connectDB();
 
@@ -53,6 +53,24 @@ const getRestaurant = async (
         address: addressModelToAddressMap(restaurant.address),
       },
     });
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
+const updateRestaurant = async (
+  req: NextApiRequest,
+  res: NextApiResponse<Notify>
+) => {
+  try {
+    const { restaurantName, address } = req.body as EditRestaurantFormData;
+
+    const { id } = req.query;
+    const restaurant: Restaurant = await Restaurants.findById(id);
+    if (!restaurant)
+      return res.status(400).json({ error: 'This restaurant does not exist.' });
+
+    res.status(200).json({ success: 'Restaurant updated succesfully!' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
   }

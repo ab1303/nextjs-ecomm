@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Restaurants, { Restaurant } from '@/models/restaurantModel';
 import connectDB from '@/utils/connectDB';
 
-import { Notify } from '@/types';
+import { Notify, RestaurantFormData } from '@/types';
 
 connectDB();
 
@@ -82,7 +82,7 @@ const createRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const { restaurantName, address } = req.body;
+    const { restaurantName, address } = req.body as RestaurantFormData;
 
     // TODO: Search if restaurant already exists with same name and (addressLine,contact)
 

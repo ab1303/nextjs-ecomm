@@ -83,10 +83,30 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
     <div className='container min-w-full mx-auto'>
       <Card>
         <Card.Header>
-          <div className='justify-between text-left'>
+          <div className='flex justify-between text-left'>
             <Card.Header.Title>
               Restaurants - Total ({restaurants.length || ''})
             </Card.Header.Title>
+            <button
+              type='button'
+              className='inline-block px-4 py-2.5 bg-gray-200 text-gray-700 font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-300 hover:shadow-lg focus:bg-gray-300 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-400 active:shadow-lg transition duration-150 ease-in-out'
+              onClick={() => router.push(`/settings/restaurants/create`)}
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='h-4 w-4'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M12 4v16m8-8H4'
+                />
+              </svg>
+            </button>
           </div>
         </Card.Header>
 

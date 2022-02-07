@@ -1,10 +1,17 @@
 import clsx from 'clsx';
+import { GetServerSidePropsContext } from 'next';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 
 import AddressComponent from '@/features/Address';
+import {
+  GetRestaurantDTO,
+  GetRestaurantResponse,
+} from '@/pages/api/restaurant/[id]';
+import { getData } from '@/utils/fetchHttpClient';
 
 import { RestaurantFormData } from '@/types';
 
@@ -12,21 +19,23 @@ type EditRestaurantFormData = RestaurantFormData;
 
 type EditRestaurantPageProps = {
   apiKey: string;
+  restaurant: GetRestaurantDTO;
 };
 
 export default function EditRestaurantsPage({
   apiKey,
+  restaurant,
 }: EditRestaurantPageProps) {
   const formMethods = useForm<EditRestaurantFormData>({
     mode: 'onBlur',
     defaultValues: {
-      restaurant: '',
+      restaurant: restaurant.name,
       address: {
-        addressLine: '',
-        street_address: '',
-        suburb: '',
-        postcode: '',
-        state: '',
+        addressLine: restaurant.address.addressLine,
+        street_address: restaurant.address.street_address,
+        suburb: restaurant.address.suburb,
+        postcode: restaurant.address.postcode,
+        state: restaurant.address.state,
       },
     },
   });
@@ -88,7 +97,7 @@ export default function EditRestaurantsPage({
                       type='submit'
                       className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500'
                     >
-                      Create
+                      Save
                     </button>
                   </div>
                 </form>
@@ -102,11 +111,16 @@ export default function EditRestaurantsPage({
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   // server side rendering
+
+  const id = query.id;
+  const response: GetRestaurantResponse = await getData(`restaurant\\${id}`);
+
   return {
     props: {
       apiKey: process.env.GOOGLE_API_KEY!,
+      restaurant: response.restaurant,
     },
   };
 }

@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
-import { ReactElement, useState } from 'react';
+import { useRouter } from 'next/router';
+import { ReactElement } from 'react';
 import React from 'react';
 import { CellProps, Column, useRowSelect, useTable } from 'react-table';
 
@@ -19,7 +20,7 @@ type RestaurantsPageProps = {
 };
 
 export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
-  const [rowIndex, setRowIndex] = useState<number | null>(null);
+  const router = useRouter();
 
   const columns = React.useMemo<Column<RestaurantDTO>[]>(
     () => [
@@ -39,8 +40,35 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         Header: 'Contact #',
         accessor: 'contact',
       },
+      {
+        Header: 'Action',
+        // eslint-disable-next-line react/display-name
+        Cell: ({ row }: CellProps<RestaurantDTO>) => {
+          const { original } = row;
+
+          return (
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              className='h-6 w-6 cursor-pointer'
+              fill='none'
+              viewBox='0 0 24 24'
+              stroke='currentColor'
+              onClick={() =>
+                router.push(`/settings/restaurants/edit/${original._id}`)
+              }
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                d='M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z'
+              />
+            </svg>
+          );
+        },
+      },
     ],
-    []
+    [router]
   );
 
   const hooks = [useRowSelect];

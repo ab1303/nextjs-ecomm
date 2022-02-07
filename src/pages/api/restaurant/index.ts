@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Restaurants, { Restaurant } from '@/models/restaurantModel';
 import connectDB from '@/utils/connectDB';
 
-import { Notify, RestaurantDTO } from '@/types';
+import { Notify } from '@/types';
 
 connectDB();
 
@@ -38,8 +38,17 @@ class APIfeatures {
   }
 }
 
+type RestaurantListDTO = {
+  _id: number;
+  name: string;
+  image: string;
+  cuisine: string;
+  contact: string;
+  address: string;
+};
+
 export type RestaurantsResponse = {
-  restaurants: Array<RestaurantDTO>;
+  restaurants: Array<RestaurantListDTO>;
 };
 
 const getRestaurants = async (
@@ -51,7 +60,7 @@ const getRestaurants = async (
 
     const restaurants: Restaurant[] = await features.query;
 
-    const result: Array<RestaurantDTO> = restaurants.map((r) => ({
+    const result: Array<RestaurantListDTO> = restaurants.map((r) => ({
       _id: r._id,
       name: r.name,
       image: r.image,

@@ -69,7 +69,8 @@ const updateRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const { restaurantName, address } = req.body as EditRestaurantFormData;
+    const { restaurantName, cuisine, address } =
+      req.body as EditRestaurantFormData;
 
     const { id } = req.query;
     const restaurant: Restaurant = await Restaurants.findById(id);
@@ -78,7 +79,11 @@ const updateRestaurant = async (
 
     await Restaurants.findByIdAndUpdate(
       { _id: id },
-      { name: restaurantName, address: addressToAddressModelMap(address) }
+      {
+        name: restaurantName,
+        cuisine,
+        address: addressToAddressModelMap(address),
+      }
     );
 
     res.status(200).json({ success: 'Restaurant updated succesfully!' });

@@ -82,7 +82,7 @@ const createRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const { restaurantName, address } = req.body as RestaurantFormData;
+    const { restaurantName, cuisine, address } = req.body as RestaurantFormData;
 
     // TODO: Search if restaurant already exists with same name and (addressLine,contact)
 
@@ -96,7 +96,7 @@ const createRestaurant = async (
         postcode: address.postcode,
         state: address.state,
       },
-      cuisine: 'Western',
+      cuisine: cuisine,
       contact: 'domino@domino.com',
       menu: [
         {

@@ -2,7 +2,8 @@ import clsx from 'clsx';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+import Select from 'react-select';
 import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
@@ -16,6 +17,7 @@ import {
 import { getData, putData } from '@/utils/fetchHttpClient';
 
 import { Notify, RestaurantFormData } from '@/types';
+import { CuisineMap } from '@/types/maps';
 
 type EditRestaurantFormData = RestaurantFormData;
 
@@ -33,6 +35,7 @@ export default function EditRestaurantsPage({
     mode: 'onBlur',
     defaultValues: {
       restaurantName: restaurant.name,
+      cuisine: restaurant.cuisine,
       address: {
         addressLine: restaurant.address.addressLine,
         street_address: restaurant.address.street_address,
@@ -45,6 +48,7 @@ export default function EditRestaurantsPage({
 
   const {
     register,
+    control,
     formState: { errors },
     handleSubmit,
   } = formMethods;
@@ -55,6 +59,7 @@ export default function EditRestaurantsPage({
         `restaurant\\${restaurant._id}`,
         {
           restaurantName: formData.restaurantName,
+          cuisine: formData.cuisine,
           address: formData.address,
         }
       );
@@ -105,6 +110,47 @@ export default function EditRestaurantsPage({
                               'text-orange-700 border-orange-700'
                           )}
                           {...register('restaurantName', { required: true })}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label
+                        className={clsx(
+                          'block text-sm font-medium ',
+                          errors.restaurantName
+                            ? 'text-orange-700'
+                            : 'text-gray-700'
+                        )}
+                      >
+                        Cuisine
+                      </label>
+                      <div className='mt-1'>
+                        <Controller
+                          name='cuisine'
+                          control={control}
+                          rules={{
+                            required: true,
+                          }}
+                          render={({ field: { onChange, value } }) => (
+                            <Select
+                              styles={{
+                                control: (base) => ({
+                                  ...base,
+                                  borderColor:
+                                    errors.cuisine && 'rgba(194, 65, 12)',
+                                }),
+                              }}
+                              value={{ label: value }}
+                              options={Object.keys(CuisineMap).map((k) => ({
+                                label: k,
+                              }))}
+                              getOptionValue={({ label }) => label}
+                              onChange={(option) => {
+                                onChange(option?.label || null);
+                              }}
+                            />
+                          )}
                         />
                       </div>
                     </div>

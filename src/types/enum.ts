@@ -4,3 +4,18 @@ enum RoleVariant {
 }
 
 export type UserRole = keyof typeof RoleVariant;
+
+export enum CuisineType {
+  Continental = 'Continental',
+  Chinese = 'Chinese',
+  Egyptian = 'Egyptian',
+  Filipino = 'Filipino',
+  Indian = 'Indian',
+  Italian = 'Italian',
+  Korean = 'Korean',
+  Lebanese = 'Lebanese',
+  Pakistani = 'Pakistani',
+  Thai = 'Thai',
+  Vietnemese = 'Vietnemese',
+  Western = 'Western',
+}

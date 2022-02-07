@@ -25,6 +25,7 @@ export type Address = {
 
 export type RestaurantFormData = {
   restaurantName: string;
+  cuisine: string;
   address: Address;
 };
 

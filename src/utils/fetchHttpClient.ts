@@ -33,13 +33,16 @@ export const postData = async (url: string, body: unknown, token?: string) => {
   };
 };
 
-export const putData = async (url: string, body: unknown, token: string) => {
+export const putData = async (url: string, body: unknown, token?: string) => {
+  const headers: { 'Content-Type': string; Authorization?: string } = {
+    'Content-Type': 'application/json',
+  };
+
+  if (token) headers.Authorization = token;
+
   const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token,
-    },
+    headers,
     body: JSON.stringify(body),
   });
 

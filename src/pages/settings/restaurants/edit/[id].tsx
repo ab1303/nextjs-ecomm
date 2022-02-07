@@ -3,6 +3,7 @@ import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
@@ -12,9 +13,9 @@ import {
   GetRestaurantDTO,
   GetRestaurantResponse,
 } from '@/pages/api/restaurant/[id]';
-import { getData } from '@/utils/fetchHttpClient';
+import { getData, putData } from '@/utils/fetchHttpClient';
 
-import { RestaurantFormData } from '@/types';
+import { Notify, RestaurantFormData } from '@/types';
 
 type EditRestaurantFormData = RestaurantFormData;
 
@@ -27,10 +28,11 @@ export default function EditRestaurantsPage({
   apiKey,
   restaurant,
 }: EditRestaurantPageProps) {
+  const router = useRouter();
   const formMethods = useForm<EditRestaurantFormData>({
     mode: 'onBlur',
     defaultValues: {
-      restaurant: restaurant.name,
+      restaurantName: restaurant.name,
       address: {
         addressLine: restaurant.address.addressLine,
         street_address: restaurant.address.street_address,
@@ -47,8 +49,23 @@ export default function EditRestaurantsPage({
     handleSubmit,
   } = formMethods;
 
-  const submitHandler = (formData: EditRestaurantFormData) => {
-    console.log('Restaurant Form Data:', JSON.stringify(formData, null, 2));
+  const submitHandler = async (formData: EditRestaurantFormData) => {
+    try {
+      const result: { ok: boolean } & Notify = await putData(
+        `restaurant\\${restaurant._id}`,
+        {
+          restaurantName: formData.restaurantName,
+          address: formData.address,
+        }
+      );
+
+      if (!result.ok) toast.error(result.error);
+
+      toast.success(result.success || 'Restaurant updated!');
+      router.replace('/settings/restaurants');
+    } catch (e: any) {
+      toast.error(e.error);
+    }
   };
 
   return (
@@ -73,7 +90,7 @@ export default function EditRestaurantsPage({
                       <label
                         className={clsx(
                           'block text-sm font-medium ',
-                          errors.restaurant
+                          errors.restaurantName
                             ? 'text-orange-700'
                             : 'text-gray-700'
                         )}
@@ -84,10 +101,10 @@ export default function EditRestaurantsPage({
                         <input
                           type='text'
                           className={clsx(
-                            errors.restaurant &&
+                            errors.restaurantName &&
                               'text-orange-700 border-orange-700'
                           )}
-                          {...register('restaurant', { required: true })}
+                          {...register('restaurantName', { required: true })}
                         />
                       </div>
                     </div>

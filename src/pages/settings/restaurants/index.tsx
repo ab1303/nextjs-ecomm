@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import React from 'react';
@@ -8,21 +7,19 @@ import Card from '@/components/card';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 import Table from '@/components/table';
 
-import { RestaurantsResponse } from '@/pages/api/restaurant';
+import { RestaurantListDTO, RestaurantsResponse } from '@/pages/api/restaurant';
 import { getData } from '@/utils/fetchHttpClient';
-
-import { RestaurantDTO } from '@/types';
 
 // TODO: This is going to be a SSR page with list of restaurants
 
 type RestaurantsPageProps = {
-  restaurants: Array<RestaurantDTO>;
+  restaurants: Array<RestaurantListDTO>;
 };
 
 export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
   const router = useRouter();
 
-  const columns = React.useMemo<Column<RestaurantDTO>[]>(
+  const columns = React.useMemo<Column<RestaurantListDTO>[]>(
     () => [
       {
         Header: 'Name',
@@ -43,7 +40,7 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
       {
         Header: 'Action',
         // eslint-disable-next-line react/display-name
-        Cell: ({ row }: CellProps<RestaurantDTO>) => {
+        Cell: ({ row }: CellProps<RestaurantListDTO>) => {
           const { original } = row;
 
           return (
@@ -73,7 +70,7 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
 
   const hooks = [useRowSelect];
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable<RestaurantDTO>(
+    useTable<RestaurantListDTO>(
       {
         columns,
         data: restaurants,
@@ -129,7 +126,7 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
   );
 }
 
-export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+export async function getServerSideProps() {
   // TODO: Later Pagination
 
   // const page = query.page || 1;

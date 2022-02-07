@@ -1,6 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import addressModelToAddressMap from '@/mappers/addressMapper';
+import {
+  addressModelToAddressMap,
+  addressToAddressModelMap,
+} from '@/mappers/addressMapper';
 import Restaurants, { Restaurant } from '@/models/restaurantModel';
 import connectDB from '@/utils/connectDB';
 
@@ -15,6 +18,9 @@ export default async function handleRestaurantRequest(
   switch (req.method) {
     case 'GET':
       await getRestaurant(req, res);
+      break;
+    case 'PUT':
+      await updateRestaurant(req, res);
       break;
   }
 }
@@ -69,6 +75,11 @@ const updateRestaurant = async (
     const restaurant: Restaurant = await Restaurants.findById(id);
     if (!restaurant)
       return res.status(400).json({ error: 'This restaurant does not exist.' });
+
+    await Restaurants.findByIdAndUpdate(
+      { _id: id },
+      { name: restaurantName, address: addressToAddressModelMap(address) }
+    );
 
     res.status(200).json({ success: 'Restaurant updated succesfully!' });
   } catch (err: any) {

@@ -38,7 +38,7 @@ class APIfeatures {
   }
 }
 
-type RestaurantListDTO = {
+export type RestaurantListDTO = {
   _id: number;
   name: string;
   image: string;

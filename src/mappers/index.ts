@@ -1,7 +1,11 @@
-import addressModelToAddressMap from './addressMapper';
+import {
+  addressModelToAddressMap,
+  addressToAddressModelMap,
+} from './addressMapper';
 
 const barrelObject = {
   addressModelToAddressMap,
+  addressToAddressModelMap,
 };
 
 export default barrelObject;

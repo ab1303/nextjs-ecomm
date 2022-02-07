@@ -12,4 +12,14 @@ const addressModelToAddressMap = (addressModel: AddressModel): Address => {
   };
 };
 
-export default addressModelToAddressMap;
+const addressToAddressModelMap = (addressModel: Address): AddressModel => {
+  return {
+    addressLine: addressModel.addressLine,
+    postcode: addressModel.postcode,
+    state: addressModel.state,
+    streetAddress: addressModel.street_address,
+    suburb: addressModel.suburb,
+  };
+};
+
+export { addressModelToAddressMap, addressToAddressModelMap };

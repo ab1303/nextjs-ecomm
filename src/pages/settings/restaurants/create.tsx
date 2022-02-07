@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -21,11 +20,10 @@ type CreateRestaurantPageProps = {
 export default function CreateRestaurantPage({
   apiKey,
 }: CreateRestaurantPageProps) {
-  const router = useRouter();
   const formMethods = useForm<CreateRestaurantFormData>({
     mode: 'onBlur',
     defaultValues: {
-      restaurant: '',
+      restaurantName: '',
       address: {
         addressLine: '',
         street_address: '',
@@ -45,7 +43,7 @@ export default function CreateRestaurantPage({
   const submitHandler = async (formData: RestaurantFormData) => {
     try {
       const result: { ok: boolean } & Notify = await postData('restaurant', {
-        restaurant: formData.restaurant,
+        restaurant: formData.restaurantName,
         address: formData.address,
       });
 
@@ -81,7 +79,9 @@ export default function CreateRestaurantPage({
                     <label
                       className={clsx(
                         'block text-sm font-medium ',
-                        errors.restaurant ? 'text-orange-700' : 'text-gray-700'
+                        errors.restaurantName
+                          ? 'text-orange-700'
+                          : 'text-gray-700'
                       )}
                     >
                       Name
@@ -90,10 +90,10 @@ export default function CreateRestaurantPage({
                       <input
                         type='text'
                         className={clsx(
-                          errors.restaurant &&
+                          errors.restaurantName &&
                             'text-orange-700 border-orange-700'
                         )}
-                        {...register('restaurant', { required: true })}
+                        {...register('restaurantName', { required: true })}
                       />
                     </div>
                   </div>

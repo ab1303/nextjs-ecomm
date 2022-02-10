@@ -36,6 +36,25 @@ class APIfeatures {
     this.query = query;
     this.queryString = queryString;
   }
+
+  paginating() {
+    const page = !Array.isArray(this.queryString.page)
+      ? this.queryString.page
+        ? +this.queryString.page * 1
+        : 1
+      : 1;
+
+    const limit =
+      !Array.isArray(this.queryString.limit) || !this.queryString.limit
+        ? this.queryString.limit
+          ? +this.queryString.limit * 1
+          : 6
+        : 6;
+
+    const skip = (page - 1) * limit;
+    this.query = this.query.skip(skip).limit(limit);
+    return this;
+  }
 }
 
 const getRestaurants = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -59,6 +78,7 @@ const createRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
+
     const { restaurantName, address } = req.body;
 
     // TODO: Search if restaurant already exists with same name and (addressLine,contact)
@@ -75,6 +95,8 @@ const createRestaurant = async (
       },
       cuisine: 'Western',
       contact: 'domino@domino.com',
+      category: 'Try Something New',
+      deliveryFee: 2.0,
       menu: [
         {
           title: 'Pizza',
@@ -85,9 +107,10 @@ const createRestaurant = async (
         },
       ],
     });
-    await newRestaurant.save();
 
-    res.json({ success: 'Success! Created a new restaurant' });
+      await newRestaurant.save();
+
+      res.json({ success: 'Success! Created a new restaurant' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || err });
   }

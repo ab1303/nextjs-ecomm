@@ -14,3 +14,16 @@ export type Photo = {
   filename: string;
   url: string;
 };
+
+export type Address = {
+  addressLine: string;
+  street_address: string;
+  suburb: string;
+  postcode: string;
+  state: string;
+};
+
+export type RestaurantFormData = {
+  restaurant: string;
+  address: Address;
+};

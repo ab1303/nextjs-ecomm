@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import { Address } from '@/types';
+
 export interface Menu {
   _id: number;
   title: string;
@@ -13,7 +15,7 @@ export interface Restaurant {
   _id: number;
   name: string;
   image: string;
-  address: string;
+  address: Address;
   cuisine: string;
   contact: string;
   menu: Menu[];
@@ -31,8 +33,26 @@ const restaurantSchema = new mongoose.Schema({
     trim: true,
   },
   address: {
-    type: String,
-    required: true,
+    addressLine: {
+      type: String,
+      required: true,
+    },
+    streetAddress: {
+      type: String,
+      required: true,
+    },
+    suburb: {
+      type: String,
+      required: true,
+    },
+    postcode: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
   },
   cuisine: {
     type: String,

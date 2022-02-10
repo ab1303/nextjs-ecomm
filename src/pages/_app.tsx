@@ -3,8 +3,10 @@ import { AppProps } from 'next/app';
 import dynamic from 'next/dynamic';
 import { SessionProvider } from 'next-auth/react';
 import { ReactElement, ReactNode } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import '@/styles/globals.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Layout from '@/components/layout/Layout';
 
@@ -30,6 +32,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <GlobalStateProvider>
         <DynamicTailwindElementsWithNoSSR />
         {getLayout(<Component {...pageProps} />)}
+        <ToastContainer />
       </GlobalStateProvider>
     </SessionProvider>
   );

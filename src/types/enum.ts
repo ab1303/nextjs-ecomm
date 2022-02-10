@@ -4,3 +4,9 @@ enum RoleVariant {
 }
 
 export type UserRole = keyof typeof RoleVariant;
+
+export interface CardData {
+  image: string;
+  title: string;
+  url: string;
+}

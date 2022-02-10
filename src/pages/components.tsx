@@ -8,6 +8,7 @@ import CustomLink from '@/components/links/CustomLink';
 import UnstyledLink from '@/components/links/UnstyledLink';
 import NextImage from '@/components/NextImage';
 import Seo from '@/components/Seo';
+import SlidingCards from '@/components/SlidingCard';
 
 export default function ComponentsPage() {
   const [mode, setMode] = React.useState('dark');
@@ -209,6 +210,41 @@ export default function ComponentsPage() {
                   height='180'
                   alt='Icon'
                 />
+              </li>
+              <li className='space-y-2'>
+                <h2 className='text-lg md:text-xl'>Next Image</h2>
+                <p className={clsx('text-sm !mt-1', textColor)}>Siding Cards</p>
+                <SlidingCards
+                  cardData={[
+                    {
+                      image: '/images/restaurants/domino-sydney.jpg',
+                      title: 'Pizza',
+                      url: '#',
+                    },
+                    {
+                      image:
+                        '/images/restaurants/its-time-for-thai-haymarket.jpg',
+                      title: 'Thai',
+                      url: '#',
+                    },
+                    {
+                      image: '/images/restaurants/metro-pita-kebab-ultimo.jpg',
+                      title: 'Oriental',
+                      url: '#',
+                    },
+                    {
+                      image: '/images/restaurants/the-pharaoh-bbq.jpg',
+                      title: 'BBQ',
+                      url: '#',
+                    },
+                    {
+                      image:
+                        '/images/restaurants/una-restaurant-darlinghurst.jpg',
+                      title: 'Italian',
+                      url: '#',
+                    },
+                  ]}
+                ></SlidingCards>
               </li>
             </ol>
           </div>

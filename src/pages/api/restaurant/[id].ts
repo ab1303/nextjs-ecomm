@@ -69,7 +69,7 @@ const updateRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const { restaurantName, cuisine, address } =
+    const { restaurantName, imageUrl, cuisine, address } =
       req.body as EditRestaurantFormData;
 
     const { id } = req.query;
@@ -82,6 +82,7 @@ const updateRestaurant = async (
       {
         name: restaurantName,
         cuisine,
+        image: imageUrl,
         address: addressToAddressModelMap(address),
       }
     );

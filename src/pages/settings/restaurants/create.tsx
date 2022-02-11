@@ -47,7 +47,7 @@ export default function CreateRestaurantPage({
   const submitHandler = async (formData: RestaurantFormData) => {
     try {
       const result: { ok: boolean } & Notify = await postData('restaurant', {
-        restaurant: formData.restaurantName,
+        restaurantName: formData.restaurantName,
         cuisine: formData.cuisine,
         address: formData.address,
       });

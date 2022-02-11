@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { GetServerSidePropsContext } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -36,6 +37,7 @@ export default function EditRestaurantsPage({
     defaultValues: {
       restaurantName: restaurant.name,
       cuisine: restaurant.cuisine,
+      imageUrl: restaurant.image,
       address: {
         addressLine: restaurant.address.addressLine,
         street_address: restaurant.address.street_address,
@@ -53,6 +55,8 @@ export default function EditRestaurantsPage({
     handleSubmit,
   } = formMethods;
 
+  const [imageUrl, setImageUrl] = React.useState<string>(restaurant.image);
+
   const submitHandler = async (formData: EditRestaurantFormData) => {
     try {
       const result: { ok: boolean } & Notify = await putData(
@@ -60,6 +64,7 @@ export default function EditRestaurantsPage({
         {
           restaurantName: formData.restaurantName,
           cuisine: formData.cuisine,
+          imageUrl: formData.imageUrl,
           address: formData.address,
         }
       );
@@ -81,6 +86,16 @@ export default function EditRestaurantsPage({
             <div className='mt-4 text-left'>
               <Card.Header.Title>Edit Restaurant</Card.Header.Title>
             </div>
+            {imageUrl && (
+              <div className='h-80 mt-4 relative rounded overflow-hidden shadow-lg'>
+                <Image
+                  layout='fill'
+                  objectFit='cover'
+                  src={restaurant.image}
+                  alt='Image'
+                />
+              </div>
+            )}
           </Card.Header>
 
           <div className='bg-white shadow mt-4 py-8 px-6 sm:px-10'>
@@ -150,6 +165,38 @@ export default function EditRestaurantsPage({
                         />
                       )}
                     />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    className={clsx(
+                      'block text-sm font-medium ',
+                      'text-gray-700'
+                    )}
+                  >
+                    Image Url
+                  </label>
+                  <div className='mt-1'>
+                    <input
+                      type='text'
+                      {...register('imageUrl')}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    className={clsx(
+                      'block text-sm font-medium ',
+                      'text-gray-700'
+                    )}
+                  >
+                    Thumbnail Url
+                  </label>
+                  <div className='mt-1'>
+                    <input type='text' {...register('thumbnailUrl')} />
                   </div>
                 </div>
 

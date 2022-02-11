@@ -98,15 +98,7 @@ const createRestaurant = async (
       },
       cuisine: cuisine,
       contact: 'domino@domino.com',
-      menu: [
-        {
-          title: 'Pizza',
-          image: 'pizza.jpg',
-          description: 'BBQ Pizza',
-          category: 'Dinner',
-          price: 20,
-        },
-      ],
+      menu: [],
     });
     await newRestaurant.save();
 

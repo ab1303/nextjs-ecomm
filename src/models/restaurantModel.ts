@@ -35,7 +35,7 @@ const restaurantSchema = new mongoose.Schema({
   },
   image: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
   },
   address: {
@@ -66,7 +66,7 @@ const restaurantSchema = new mongoose.Schema({
   },
   contact: {
     type: String,
-    required: true,
+    required: false,
   },
   menu: [
     {

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import React from 'react';
@@ -21,6 +22,26 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
 
   const columns = React.useMemo<Column<RestaurantListDTO>[]>(
     () => [
+      {
+        id: 'thumbnail',
+        // eslint-disable-next-line react/display-name
+        Cell: ({ row }: CellProps<RestaurantListDTO>) => {
+          const { original } = row;
+
+          if (!original.image) return null;
+
+          return (
+            <div className='h-20 w-40 relative rounded overflow-hidden shadow-lg'>
+              <Image
+                layout='fill'
+                objectFit='cover'
+                src={original.image || ''}
+                alt='Image'
+              />
+            </div>
+          );
+        },
+      },
       {
         Header: 'Name',
         accessor: 'name',

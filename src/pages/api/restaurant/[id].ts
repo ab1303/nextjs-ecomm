@@ -29,6 +29,7 @@ export type GetRestaurantDTO = {
   _id: number;
   name: string;
   image: string;
+  thumbnail: string;
   cuisine: string;
   contact: string;
   address: Address;
@@ -54,6 +55,7 @@ const getRestaurant = async (
         _id: restaurant._id,
         name: restaurant.name,
         image: restaurant.image,
+        thumbnail: restaurant.thumbnail,
         cuisine: restaurant.cuisine,
         contact: restaurant.contact,
         address: addressModelToAddressMap(restaurant.address),
@@ -69,7 +71,7 @@ const updateRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const { restaurantName, imageUrl, cuisine, address } =
+    const { restaurantName, imageUrl, thumbnailUrl, cuisine, address } =
       req.body as EditRestaurantFormData;
 
     const { id } = req.query;
@@ -83,6 +85,7 @@ const updateRestaurant = async (
         name: restaurantName,
         cuisine,
         image: imageUrl,
+        thumbnail: thumbnailUrl,
         address: addressToAddressModelMap(address),
       }
     );

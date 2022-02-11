@@ -21,6 +21,7 @@ export interface Restaurant {
   _id: number;
   name: string;
   image: string;
+  thumbnail: string;
   address: AddressModel;
   cuisine: string;
   contact: string;
@@ -36,6 +37,11 @@ const restaurantSchema = new mongoose.Schema({
     trim: true,
   },
   image: {
+    type: String,
+    required: false,
+    trim: true,
+  },
+  thumbnail: {
     type: String,
     required: false,
     trim: true,

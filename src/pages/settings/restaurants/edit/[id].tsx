@@ -38,6 +38,7 @@ export default function EditRestaurantsPage({
       restaurantName: restaurant.name,
       cuisine: restaurant.cuisine,
       imageUrl: restaurant.image,
+      thumbnailUrl: restaurant.thumbnail,
       address: {
         addressLine: restaurant.address.addressLine,
         street_address: restaurant.address.street_address,
@@ -65,6 +66,7 @@ export default function EditRestaurantsPage({
           restaurantName: formData.restaurantName,
           cuisine: formData.cuisine,
           imageUrl: formData.imageUrl,
+          thumbnailUrl: formData.thumbnailUrl,
           address: formData.address,
         }
       );

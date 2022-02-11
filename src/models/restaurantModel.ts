@@ -72,11 +72,11 @@ const restaurantSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: true,
+    required: false,
   },
   deliveryFee: {
     type: Number,
-    required: true,
+    required: false,
   },
   menu: [
     {

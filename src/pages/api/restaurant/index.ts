@@ -107,7 +107,6 @@ const createRestaurant = async (
 
     const newRestaurant = new Restaurants({
       name: restaurantName,
-      image: '/images/restaurant/domino-sydney.jpg',
       address: {
         addressLine: address.addressLine,
         streetAddress: address.street_address,

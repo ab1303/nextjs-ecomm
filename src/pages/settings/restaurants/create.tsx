@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import React from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
@@ -23,6 +24,7 @@ type CreateRestaurantPageProps = {
 export default function CreateRestaurantPage({
   apiKey,
 }: CreateRestaurantPageProps) {
+  const router = useRouter();
   const formMethods = useForm<CreateRestaurantFormData>({
     mode: 'onBlur',
     defaultValues: {
@@ -55,7 +57,7 @@ export default function CreateRestaurantPage({
       if (!result.ok) toast.error(result.error);
 
       toast.success(result.success || 'Restaurant created!');
-      // router.replace('/settings/restaurants');
+      router.replace('/settings/restaurants');
     } catch (e: any) {
       toast.error(e.error);
     }

@@ -19,3 +19,9 @@ export enum CuisineType {
   Vietnemese = 'Vietnemese',
   Western = 'Western',
 }
+
+export interface CardData {
+  image: string;
+  title: string;
+  url: string;
+}

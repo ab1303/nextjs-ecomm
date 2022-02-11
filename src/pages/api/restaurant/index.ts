@@ -36,6 +36,25 @@ class APIfeatures {
     this.query = query;
     this.queryString = queryString;
   }
+
+  paginating() {
+    const page = !Array.isArray(this.queryString.page)
+      ? this.queryString.page
+        ? +this.queryString.page * 1
+        : 1
+      : 1;
+
+    const limit =
+      !Array.isArray(this.queryString.limit) || !this.queryString.limit
+        ? this.queryString.limit
+          ? +this.queryString.limit * 1
+          : 6
+        : 6;
+
+    const skip = (page - 1) * limit;
+    this.query = this.query.skip(skip).limit(limit);
+    return this;
+  }
 }
 
 export type RestaurantListDTO = {
@@ -100,6 +119,7 @@ const createRestaurant = async (
       contact: 'domino@domino.com',
       menu: [],
     });
+
     await newRestaurant.save();
 
     res.json({ success: 'Success! Created a new restaurant' });

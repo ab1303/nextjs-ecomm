@@ -27,3 +27,10 @@ export type RestaurantFormData = {
   restaurant: string;
   address: Address;
 };
+
+export type ProfileData = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+};

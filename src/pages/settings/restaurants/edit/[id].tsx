@@ -8,6 +8,7 @@ import Select from 'react-select';
 import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
+import ImageUploader from '@/components/image-uploader/ImageUploader';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 
 import AddressComponent from '@/features/Address';
@@ -54,6 +55,7 @@ export default function EditRestaurantsPage({
     control,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = formMethods;
 
   const [imageUrl, setImageUrl] = React.useState<string>(restaurant.image);
@@ -80,27 +82,36 @@ export default function EditRestaurantsPage({
     }
   };
 
+  const handleUpload = (image: string) => {
+    setImageUrl(image);
+    setValue('imageUrl', image);
+    setValue(
+      'thumbnailUrl',
+      image.replace('/upload/', '/upload/c_thumb,w_200/')
+    );
+  };
+
   return (
-    <div className='min-h-screen bg-gray-100 flex flex-col px-6 lg:px-8'>
+    <div className='flex flex-col min-h-screen px-6 bg-gray-100 lg:px-8'>
       <div className='container min-w-full mx-auto'>
-        <div className='mx-auto w-3/4'>
+        <div className='w-3/4 mx-auto'>
           <Card.Header>
             <div className='mt-4 text-left'>
               <Card.Header.Title>Edit Restaurant</Card.Header.Title>
             </div>
             {imageUrl && (
-              <div className='h-80 mt-4 relative rounded overflow-hidden shadow-lg'>
+              <div className='relative mt-4 overflow-hidden rounded shadow-lg h-80'>
                 <Image
                   layout='fill'
                   objectFit='cover'
-                  src={restaurant.image}
+                  src={imageUrl}
                   alt='Image'
                 />
               </div>
             )}
           </Card.Header>
 
-          <div className='bg-white shadow mt-4 py-8 px-6 sm:px-10'>
+          <div className='px-6 py-8 mt-4 bg-white shadow sm:px-10'>
             <FormProvider {...formMethods}>
               <form
                 className='mb-0 space-y-6'
@@ -169,7 +180,22 @@ export default function EditRestaurantsPage({
                     />
                   </div>
                 </div>
-
+                <div>
+                  <label
+                    className={clsx(
+                      'block text-sm font-medium ',
+                      'text-gray-700'
+                    )}
+                  >
+                    Image Upload
+                  </label>
+                  <div className='mt-1'>
+                    <ImageUploader
+                      uploadFinished={handleUpload}
+                      initialImage={restaurant.image}
+                    />
+                  </div>
+                </div>
                 <div>
                   <label
                     className={clsx(
@@ -181,9 +207,13 @@ export default function EditRestaurantsPage({
                   </label>
                   <div className='mt-1'>
                     <input
+                      disabled
                       type='text'
                       {...register('imageUrl')}
-                      onChange={(e) => setImageUrl(e.target.value)}
+                      onChange={(e) => {
+                        console.log(e.target.value);
+                      }}
+                      value={imageUrl ? imageUrl : ''}
                     />
                   </div>
                 </div>
@@ -198,7 +228,19 @@ export default function EditRestaurantsPage({
                     Thumbnail Url
                   </label>
                   <div className='mt-1'>
-                    <input type='text' {...register('thumbnailUrl')} />
+                    <input
+                      type='text'
+                      disabled
+                      {...register('thumbnailUrl')}
+                      value={
+                        imageUrl
+                          ? imageUrl.replace(
+                              '/upload/',
+                              '/upload/c_thumb,w_200/'
+                            )
+                          : ''
+                      }
+                    />
                   </div>
                 </div>
 
@@ -207,7 +249,7 @@ export default function EditRestaurantsPage({
                 <div>
                   <button
                     type='submit'
-                    className='w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500'
+                    className='flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-orange-600 border border-transparent rounded-md shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500'
                   >
                     Save
                   </button>

@@ -24,7 +24,10 @@ export type Address = {
 };
 
 export type RestaurantFormData = {
-  restaurant: string;
+  restaurantName: string;
+  imageUrl: string;
+  thumbnailUrl: string;
+  cuisine: string;
   address: Address;
 };
 
@@ -34,3 +37,5 @@ export type ProfileData = {
   email: string;
   phone: string;
 };
+
+export type EditRestaurantFormData = RestaurantFormData;

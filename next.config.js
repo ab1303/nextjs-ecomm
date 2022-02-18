@@ -7,7 +7,6 @@ module.exports = {
     dirs: ['src'],
   },
   images: {
-    domains: ['localhost']
-  }
-
+    domains: ['res.cloudinary.com', 'localhost'],
+  },
 };

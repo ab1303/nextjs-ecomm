@@ -199,7 +199,6 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   return {
     props: {
       restaurants: res.restaurants,
-      result: res.result,
     }, // will be passed to the page component as props
   };
 }

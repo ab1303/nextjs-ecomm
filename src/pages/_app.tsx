@@ -12,11 +12,6 @@ import Layout from '@/components/layout/Layout';
 
 import { GlobalStateProvider } from '@/store/GlobalStore';
 
-const DynamicTailwindElementsWithNoSSR = dynamic(
-  () => import('./tailwindElements'),
-  { ssr: false }
-);
-
 type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -30,7 +25,6 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <SessionProvider session={pageProps.session}>
       <GlobalStateProvider>
-        <DynamicTailwindElementsWithNoSSR />
         {getLayout(<Component {...pageProps} />)}
         <ToastContainer />
       </GlobalStateProvider>

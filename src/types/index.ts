@@ -36,6 +36,7 @@ export type ProfileData = {
   lastname: string;
   email: string;
   phone: string;
+  country: string;
 };
 
 export type EditRestaurantFormData = RestaurantFormData;

@@ -1,7 +1,9 @@
 import clsx from 'clsx';
+import Link from 'next/link';
 import { User } from 'next-auth';
 import React, { ReactElement } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+import Select from 'react-select';
 import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
@@ -10,6 +12,7 @@ import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 import { postData } from '@/utils/fetchHttpClient';
 
 import { Notify, ProfileData } from '@/types';
+import { CountryMap } from '@/types/maps';
 
 type ProfileFormData = ProfileData;
 
@@ -24,12 +27,14 @@ export default function ProfilePage({ user }: ProfilePageProps) {
       firstname: user.firstName,
       lastname: user.lastName,
       email: user.email,
-      phone: '+61(AU) 0123 4567',
+      phone: '0123 4567',
+      country: 'AU (+61)',
     },
   });
 
   const {
     register,
+    control,
     formState: { errors },
     handleSubmit,
   } = formMethods;
@@ -127,24 +132,69 @@ export default function ProfilePage({ user }: ProfilePageProps) {
                   </div>
                 </div>
 
-                <div>
-                  <label
-                    className={clsx(
-                      'block text-sm font-medium ',
-                      errors.phone ? 'text-orange-700' : 'text-gray-700'
-                    )}
-                  >
-                    Phone
-                  </label>
-                  <div className='mt-1'>
-                    <input
-                      type='text'
+                <div className='flex'>
+                  <div className='w-1/2 '>
+                    <label
                       className={clsx(
-                        errors.phone && 'text-orange-700 border-orange-700'
+                        'block text-sm font-medium ',
+                        errors.phone ? 'text-orange-700' : 'text-gray-700'
                       )}
-                      {...register('phone', { required: false })}
-                    />
+                    >
+                      Country
+                    </label>
+                    <div className='mt-1'>
+                      <Controller
+                        name='country'
+                        control={control}
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field: { onChange, value } }) => (
+                          <Select
+                            value={{ label: value }}
+                            options={Object.keys(CountryMap).map((k) => ({
+                              label: k,
+                            }))}
+                            getOptionValue={({ label }) => label}
+                            onChange={(option) => {
+                              onChange(option?.label || null);
+                            }}
+                          />
+                        )}
+                      />
+                    </div>
                   </div>
+                  <div className='w-1/2 ml-3'>
+                    <label
+                      className={clsx(
+                        'block text-sm font-medium ',
+                        errors.phone ? 'text-orange-700' : 'text-gray-700'
+                      )}
+                    >
+                      Phone
+                    </label>
+                    <div className='mt-1'>
+                      <input
+                        type='text'
+                        className={clsx(
+                          errors.phone && 'text-orange-700 border-orange-700'
+                        )}
+                        {...register('phone', { required: false })}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <Link href='#'>
+                    <a
+                      className={clsx(
+                        'block text-sm font-medium text-orange-700'
+                      )}
+                    >
+                      Reset your password
+                    </a>
+                  </Link>
                 </div>
 
                 <div>

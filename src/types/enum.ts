@@ -25,3 +25,9 @@ export interface CardData {
   title: string;
   url: string;
 }
+
+export enum Countries {
+  Australia = 'AU (+61)',
+  NewZealand = 'NZ (+64)',
+  Singapore = 'SG (+65)',
+}

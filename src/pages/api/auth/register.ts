@@ -35,6 +35,7 @@ const register = async (req: NextApiRequest, res: NextApiResponse<Notify>) => {
       lastName,
       email,
       password: passwordHash,
+      active: true,
     });
 
     await newUser.save();

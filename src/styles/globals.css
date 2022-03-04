@@ -32,7 +32,7 @@
   }
   [type='checkbox'],
   [type='radio'] {
-    @apply border-gray-300 rounded text-orange-600 focus:ring-orange-500;
+    @apply text-orange-600 border-gray-300 rounded focus:ring-orange-500;
   }
 
   /* inter var - latin */
@@ -103,6 +103,12 @@
     background-size: 0 2px, 100% 2px;
   }
 } */
+
+input:checked ~ .dot {
+  transform: translateX(100%);
+  background-color: #f97316;
+  border-color: #e74c3c;
+}
 
 /* ----------- Loading ------------- */
 @import url('./loading.css');

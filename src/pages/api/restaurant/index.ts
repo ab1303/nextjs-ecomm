@@ -37,6 +37,23 @@ class APIfeatures {
     this.queryString = queryString;
   }
 
+  filtering() {
+    const queryObj = { ...this.queryString };
+
+    const excludeFields = ['page', 'sort', 'limit'];
+    excludeFields.forEach((el) => delete queryObj[el]);
+
+    if (queryObj.category && queryObj.category != '')
+      this.query.find({ category: queryObj.category });
+
+    if (queryObj.name && queryObj.name !== '')
+      this.query.find({ name: queryObj.name });
+
+    this.query.find();
+
+    return this;
+  }
+
   paginating() {
     const page = !Array.isArray(this.queryString.page)
       ? this.queryString.page
@@ -59,7 +76,9 @@ class APIfeatures {
 
 const getRestaurants = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const features = new APIfeatures(Restaurants.find(), req.query);
+    const features = new APIfeatures(Restaurants.find(), req.query)
+      .filtering()
+      .paginating();
 
     const restaurants = await features.query;
 
@@ -78,7 +97,6 @@ const createRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-
     const { restaurantName, address } = req.body;
 
     // TODO: Search if restaurant already exists with same name and (addressLine,contact)
@@ -108,9 +126,9 @@ const createRestaurant = async (
       ],
     });
 
-      await newRestaurant.save();
+    await newRestaurant.save();
 
-      res.json({ success: 'Success! Created a new restaurant' });
+    res.json({ success: 'Success! Created a new restaurant' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || err });
   }

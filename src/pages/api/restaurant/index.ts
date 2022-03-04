@@ -1,10 +1,10 @@
 import { Query } from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import Restaurants from '@/models/restaurantModel';
+import Restaurants, { Restaurant } from '@/models/restaurantModel';
 import connectDB from '@/utils/connectDB';
 
-import { Notify } from '@/types';
+import { Notify, RestaurantFormData } from '@/types';
 
 connectDB();
 
@@ -37,23 +37,6 @@ class APIfeatures {
     this.queryString = queryString;
   }
 
-  filtering() {
-    const queryObj = { ...this.queryString };
-
-    const excludeFields = ['page', 'sort', 'limit'];
-    excludeFields.forEach((el) => delete queryObj[el]);
-
-    if (queryObj.category && queryObj.category != '')
-      this.query.find({ category: queryObj.category });
-
-    if (queryObj.name && queryObj.name !== '')
-      this.query.find({ name: queryObj.name });
-
-    this.query.find();
-
-    return this;
-  }
-
   paginating() {
     const page = !Array.isArray(this.queryString.page)
       ? this.queryString.page
@@ -74,21 +57,42 @@ class APIfeatures {
   }
 }
 
-const getRestaurants = async (req: NextApiRequest, res: NextApiResponse) => {
-  try {
-    const features = new APIfeatures(Restaurants.find(), req.query)
-      .filtering()
-      .paginating();
+export type RestaurantListDTO = {
+  _id: number;
+  name: string;
+  image: string;
+  cuisine: string;
+  contact: string;
+  address: string;
+};
 
-    const restaurants = await features.query;
+export type RestaurantsResponse = {
+  restaurants: Array<RestaurantListDTO>;
+};
+
+const getRestaurants = async (
+  req: NextApiRequest,
+  res: NextApiResponse<RestaurantsResponse | Notify>
+) => {
+  try {
+    const features = new APIfeatures(Restaurants.find(), req.query);
+
+    const restaurants: Restaurant[] = await features.query;
+
+    const result: Array<RestaurantListDTO> = restaurants.map((r) => ({
+      _id: r._id,
+      name: r.name,
+      image: r.image,
+      cuisine: r.cuisine,
+      contact: r.contact,
+      address: r.address.addressLine,
+    }));
 
     res.json({
-      status: 'success',
-      result: restaurants.length,
-      restaurants,
+      restaurants: result,
     });
   } catch (err: any) {
-    return res.status(500).json({ err: err.message });
+    return res.status(500).json({ error: err.message || err });
   }
 };
 
@@ -97,13 +101,12 @@ const createRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const { restaurantName, address } = req.body;
+    const { restaurantName, cuisine, address } = req.body as RestaurantFormData;
 
     // TODO: Search if restaurant already exists with same name and (addressLine,contact)
 
     const newRestaurant = new Restaurants({
       name: restaurantName,
-      image: '/images/restaurant/domino-sydney.jpg',
       address: {
         addressLine: address.addressLine,
         streetAddress: address.street_address,
@@ -111,19 +114,9 @@ const createRestaurant = async (
         postcode: address.postcode,
         state: address.state,
       },
-      cuisine: 'Western',
+      cuisine: cuisine,
       contact: 'domino@domino.com',
-      category: 'Try Something New',
-      deliveryFee: 2.0,
-      menu: [
-        {
-          title: 'Pizza',
-          image: 'pizza.jpg',
-          description: 'BBQ Pizza',
-          category: 'Dinner',
-          price: 20,
-        },
-      ],
+      menu: [],
     });
 
     await newRestaurant.save();

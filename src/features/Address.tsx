@@ -128,7 +128,7 @@ export default function AddressComponent({ apiKey }: { apiKey: string }) {
             rules={{
               required: true,
             }}
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <AsyncSelect
                 {...selectProps}
                 styles={{
@@ -138,11 +138,12 @@ export default function AddressComponent({ apiKey }: { apiKey: string }) {
                       errors.address?.addressLine && 'rgba(194, 65, 12)',
                   }),
                 }}
+                value={{ label: value }}
                 loadOptions={fetchSuggestions}
                 getOptionValue={({ label }) => label}
                 onChange={(option) => {
                   handleSelect(option);
-                  onChange(option?.label);
+                  onChange(option?.label || null);
                 }}
               />
             )}

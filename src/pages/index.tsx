@@ -1,14 +1,12 @@
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { getSession, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 // import { useRouter } from 'next/router';
 import * as React from 'react';
 
-import ImageGallery from '@/components/ImageGallery';
 import Hero from '@/components/layout/Hero';
-import Loading from '@/components/Loading';
 import PageLoading from '@/components/PageLoading';
+import SlidingCardGallery from '@/components/SlidingCardGallery';
 
 // import FilterCategory from '@/features/category/FilterCategory';
 // import ProductItem from '@/features/product/ProductItem';
@@ -22,6 +20,8 @@ import { getData } from '@/utils/fetchHttpClient';
 // import filterSearch from '@/utils/filterSearch';
 // import { ModalItem } from '@/types';
 import { groupBy } from '@/utils/groupBy';
+
+import { CardData } from '@/types/enum';
 
 export default function LandingPage(props: RestaurantResponse) {
   // const [products, setProducts] = useState<Product[]>(props.products);
@@ -87,6 +87,7 @@ export default function LandingPage(props: RestaurantResponse) {
       description: 'Your favorite restaurants to order from',
       mainActionText: 'Sign in',
       extraActionText: 'Sign up',
+      showActionButtons: true,
     },
   };
 
@@ -100,12 +101,23 @@ export default function LandingPage(props: RestaurantResponse) {
   }
 
   const categories = groupBy(props.restaurants, (r) => r.category);
-  const restaurantList = [];
+  const slidingCards = [];
 
   for (const key in categories) {
     if (Object.prototype.hasOwnProperty.call(categories, key)) {
-      restaurantList.push(
-        <ImageGallery key={key} category={key} restaurants={categories[key]} />
+      const cards: CardData[] = [];
+      for (const restaurant of categories[key]) {
+        const card: CardData = {
+          title: restaurant.name,
+          url: '',
+          image: restaurant.image,
+        };
+
+        cards.push(card);
+      }
+
+      slidingCards.push(
+        <SlidingCardGallery key={key} title={key} cards={cards} />
       );
     }
   }
@@ -122,64 +134,10 @@ export default function LandingPage(props: RestaurantResponse) {
         description={data.hero.description}
         mainActionText={data.hero.mainActionText}
         extraActionText={data.hero.extraActionText}
+        showActionButtons={data.hero.showActionButtons}
       />
 
-      {restaurantList}
-
-      {/* TODO : Cleanup */}
-      {/* {state.categories && <FilterCategory categories={state.categories} />}
-
-      {auth && auth.user && auth.user.role === 'admin' && (
-        <div
-          className='mt-2 delete_all btn btn-danger'
-          style={{ marginBottom: '-10px' }}
-        >
-          <input
-            type='checkbox'
-            checked={isCheck}
-            onChange={handleCheckALL}
-            style={{
-              width: '25px',
-              height: '25px',
-              transform: 'translateY(8px)',
-            }}
-          />
-
-          <button
-            className='ml-2 btn btn-danger'
-            data-toggle='modal'
-            data-target='#exampleModal'
-            onClick={handleDeleteAll}
-          >
-            DELETE ALL
-          </button>
-        </div>
-      )}
-
-      <div className='products'>
-        {products.length === 0 ? (
-          <h2>No Products</h2>
-        ) : (
-          products.map((product) => (
-            <ProductItem
-              key={product._id}
-              product={product}
-              handleCheck={handleCheck}
-            />
-          ))
-        )}
-      </div>
-
-      {props.result < page * 6 ? (
-        ''
-      ) : (
-        <button
-          className='mx-auto mb-4 btn btn-outline-info d-block'
-          onClick={handleLoadmore}
-        >
-          Load more
-        </button>
-      )} */}
+      {slidingCards}
     </div>
   );
 }
@@ -189,11 +147,9 @@ type RestaurantResponse = {
   result: number;
 };
 
-export async function getServerSideProps({ query }: GetServerSidePropsContext) {
-  const page = query.page || 1;
-
+export async function getStaticProps() {
   const res: RestaurantResponse = await getData(
-    `restaurant?limit=${+page * 6}`
+    `restaurant?limit=6&category=Try Something New`
   );
   // server side rendering
   return {

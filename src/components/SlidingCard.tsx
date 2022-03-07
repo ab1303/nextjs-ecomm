@@ -45,7 +45,7 @@ const SlidingCards = (props: SlidingCardsProps) => {
   };
 
   return (
-    <div className='mx-4 my-8 '>
+    <div className='my-8'>
       <div
         id='scrollContainer'
         ref={scrollDiv}
@@ -54,7 +54,7 @@ const SlidingCards = (props: SlidingCardsProps) => {
         {getCardsLayout()}
         <button
           onClick={scrollLeft}
-          className='absolute flex items-center justify-start w-1/2 h-64 p-0 text-center border-0 left-8 top--64 carousel-control-prev hover:outline-none hover:no-underline focus:outline-none focus:no-underline'
+          className='absolute flex items-center justify-start w-1/2 h-64 p-0 text-center border-0 top--64 carousel-control-prev hover:outline-none hover:no-underline focus:outline-none focus:no-underline'
           type='button'
           data-bs-target='#carouselExampleCaptions'
           data-bs-slide='prev'

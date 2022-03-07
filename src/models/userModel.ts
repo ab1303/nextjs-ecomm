@@ -5,10 +5,13 @@ export interface User {
   firstName: string;
   lastName: string;
   email: string;
+  county: string;
+  phone: number;
   password: string;
   role: string;
   root: boolean;
   avatar: string;
+  active: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -28,6 +31,13 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    country: {
+      type: String,
+    },
+    phone: {
+      type: Number,
+      unique: true,
+    },
     password: {
       type: String,
       required: true,
@@ -44,6 +54,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default:
         'https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png',
+    },
+    active: {
+      type: Boolean,
+      required: false,
     },
   },
   {

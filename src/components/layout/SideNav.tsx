@@ -50,7 +50,7 @@ export default function SideNav({
         openNav ? 'translate-x-0' : '-translate-x-full'
       )}
     >
-      <div className='flex h-14 justify-between items-center relative'>
+      <div className='relative flex items-center justify-between h-14'>
         <button
           className='p-2 focus-visible:outline-none'
           onClick={(e) => handleCloseSideNav(e.nativeEvent)}
@@ -82,7 +82,7 @@ export default function SideNav({
         <SideNavLink name='Profile' href='/profile' className='border-b-2'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
-            className='h-6 w-6'
+            className='w-6 h-6'
             fill='none'
             viewBox='0 0 24 24'
             stroke='currentColor'
@@ -105,7 +105,7 @@ export default function SideNav({
         {userRole === 'admin' && (
           <li>
             <Disclosure>
-              <Disclosure.Button className='flex justify-start items-center h-14 w-full space-x-3 border-b-2 hover:bg-gray-100 hover:border-orange-300'>
+              <Disclosure.Button className='flex items-center justify-start w-full space-x-3 border-b-2 h-14 hover:bg-gray-100 hover:border-orange-300'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   viewBox='0 0 512 512'
@@ -118,7 +118,7 @@ export default function SideNav({
                   Settings
                 </span>
               </Disclosure.Button>
-              <Disclosure.Panel as='ul' className='text-gray-500 pl-3'>
+              <Disclosure.Panel as='ul' className='pl-3 text-gray-500'>
                 <SideNavLink
                   name='Restaurants'
                   href='/settings/restaurants'
@@ -126,7 +126,7 @@ export default function SideNav({
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
-                    className='h-4 w-4'
+                    className='w-4 h-4'
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'
@@ -146,7 +146,7 @@ export default function SideNav({
                 >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
-                    className='h-4 w-4'
+                    className='w-4 h-4'
                     fill='none'
                     viewBox='0 0 24 24'
                     stroke='currentColor'
@@ -159,6 +159,26 @@ export default function SideNav({
                     />
                   </svg>
                 </SideNavLink>
+                <SideNavLink
+                  name='Users'
+                  href='/settings/users'
+                  className='border-b-0'
+                >
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    className='w-4 h-4'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    stroke='currentColor'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      strokeWidth='2'
+                      d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
+                    />
+                  </svg>
+                </SideNavLink>
               </Disclosure.Panel>
             </Disclosure>
           </li>
@@ -166,7 +186,7 @@ export default function SideNav({
 
         <button
           type='button'
-          className='flex justify-start items-center h-14 w-full space-x-3 border-b-2 hover:bg-gray-100  hover:border-orange-300'
+          className='flex items-center justify-start w-full space-x-3 border-b-2 h-14 hover:bg-gray-100 hover:border-orange-300'
           onClick={handleSignOut}
         >
           <svg

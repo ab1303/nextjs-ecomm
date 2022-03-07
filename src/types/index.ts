@@ -31,4 +31,12 @@ export type RestaurantFormData = {
   address: Address;
 };
 
+export type ProfileData = {
+  firstname: string;
+  lastname: string;
+  email: string;
+  phone: string;
+  country: string;
+};
+
 export type EditRestaurantFormData = RestaurantFormData;

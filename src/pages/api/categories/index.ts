@@ -42,6 +42,15 @@ const createCategory = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+export type CategoryListDTO = {
+  _id: number;
+  name: string;
+};
+
+export type CategoriesResponse = {
+  categories: Array<CategoryListDTO>;
+};
+
 const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const categories = await Categories.find();

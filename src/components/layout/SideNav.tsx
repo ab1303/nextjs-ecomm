@@ -140,8 +140,8 @@ export default function SideNav({
                   </svg>
                 </SideNavLink>
                 <SideNavLink
-                  name='Cuisines'
-                  href='/settings/cuisines'
+                  name='Categories'
+                  href='/settings/categories'
                   className='border-b-0'
                 >
                   <svg

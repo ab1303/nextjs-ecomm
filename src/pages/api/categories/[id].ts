@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import auth from '@/middleware/auth';
 import Categories from '@/models/categoriesModel';
-import Products from '@/models/productModel';
 import connectDB from '@/utils/connectDB';
 
 connectDB();
@@ -53,12 +52,6 @@ const deleteCategory = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).json({ err: 'Authentication is not valid.' });
 
     const { id } = req.query;
-
-    const products = await Products.findOne({ category: id });
-    if (products)
-      return res.status(400).json({
-        err: 'Please delete all products with a relationship',
-      });
 
     await Categories.findByIdAndDelete(id);
 

@@ -14,7 +14,6 @@ import { getData } from '@/utils/fetchHttpClient';
 import ActionMap from './actionMap';
 
 import { ModalItem, Notify } from '@/types';
-import { CartItem } from '@/types/CartItem';
 
 export enum AuthEvent {
   LOGIN = 'AUTH/LOGIN',
@@ -54,7 +53,6 @@ type Auth = {
 export type GlobalState = {
   notify?: Notify;
   auth?: Auth;
-  cart: CartItem[];
   orders: Order[];
   users: User[];
   categories: Category[];
@@ -80,9 +78,6 @@ type Messages = {
   };
   [UsersEvent.ADD]: {
     users: User[];
-  };
-  [CartEvent.ADD]: {
-    cart: CartItem[];
   };
   [ModalEvent.ADD]: {
     modal: ModalItem[];
@@ -116,11 +111,7 @@ const globalStateReducer = (
         ...state,
         categories: [...action.payload.categories],
       };
-    case CartEvent.ADD:
-      return {
-        ...state,
-        cart: [...action.payload.cart],
-      };
+
     case OrdersEvent.ADD:
       return {
         ...state,
@@ -158,13 +149,12 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
     modal: [],
     notify: {},
     auth: undefined,
-    cart: [],
     orders: [],
     users: [],
     categories: [],
   });
 
-  const { cart, auth } = state;
+  const { auth } = state;
 
   useEffect(() => {
     // TODO: Clean up
@@ -201,22 +191,6 @@ export const GlobalStateProvider: React.FC<GlobalStateProviderProps> = ({
       });
     }
   }, []);
-
-  useEffect(() => {
-    const __next__cart01__devat = JSON.parse(
-      localStorage.getItem('__next__cart01__devat') || '[]'
-    );
-
-    if (__next__cart01__devat)
-      dispatch({
-        type: CartEvent.ADD,
-        payload: { cart: __next__cart01__devat },
-      });
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('__next__cart01__devat', JSON.stringify(cart));
-  }, [cart]);
 
   useEffect(() => {
     if (auth && auth.token) {

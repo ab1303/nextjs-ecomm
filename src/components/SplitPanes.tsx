@@ -1,5 +1,3 @@
-import clsx from 'clsx';
-
 export default function SplitPanes({
   showRightPane,
   children,
@@ -10,12 +8,8 @@ export default function SplitPanes({
   const { leftPane, rightPane } = children;
   return (
     <div className='flex flex-row'>
-      <div className='flex-1'>{leftPane}</div>
-      {showRightPane && (
-        <div className={clsx('flex-1')}>
-          <div className=''>{rightPane}</div>
-        </div>
-      )}
+      <div className='flex-1 w-2/5'>{leftPane}</div>
+      {showRightPane && <div className='w-3/5'>{rightPane}</div>}
     </div>
   );
 }

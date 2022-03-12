@@ -66,11 +66,11 @@ export default function AddCategory({
             <div className='flex justify-center items-baseline'>
               <label
                 className={clsx(
-                  'block text-sm font-medium mr-10 ',
+                  'block text-sm font-medium mr-2 ',
                   errors.categoryName ? 'text-orange-700' : 'text-gray-700'
                 )}
               >
-                Name
+                Category Name
               </label>
               <input
                 type='text'

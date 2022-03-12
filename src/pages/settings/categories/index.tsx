@@ -6,14 +6,20 @@ import SplitPanes from '@/components/SplitPanes';
 import AddCategory from '@/features/category/AddCategory';
 import CategoryDetails from '@/features/category/CategoryDetails';
 import { CategoriesResponse, CategoryListDTO } from '@/pages/api/categories';
+import { RestaurantListDTO, RestaurantsResponse } from '@/pages/api/restaurant';
+import { getData } from '@/utils/fetchHttpClient';
 
 type CategoriesPageProps = {
   categories: Array<CategoryListDTO>;
+  restaurants: Array<RestaurantListDTO>;
   handleCategorySelect: (id: number) => void;
 };
 
-export default function CategoriesPage({ categories }: CategoriesPageProps) {
-  const [isCategorySelected, setIsCategorySelected] = useState<boolean>(false);
+export default function CategoriesPage({
+  categories,
+  restaurants,
+}: CategoriesPageProps) {
+  const [isCategorySelected, setIsCategorySelected] = useState<boolean>(true);
 
   const handleCategorySelect: (id: number) => void = (id: number) => {
     console.log('category selected:', id);
@@ -37,6 +43,7 @@ export default function CategoriesPage({ categories }: CategoriesPageProps) {
             ),
             rightPane: (
               <CategoryDetails
+                restaurants={restaurants}
                 handleCategoryDeSelect={handleCategoryDeSelect}
               />
             ),
@@ -56,7 +63,8 @@ export async function getServerSideProps() {
   // const search = query.search || 'all';
 
   // const response: CategoriesResponse = await getData(`categories`);
-  const response: CategoriesResponse = {
+  const restaurantResponse: RestaurantsResponse = await getData(`restaurant`);
+  const categoriesResponse: CategoriesResponse = {
     categories: [
       {
         _id: 1,
@@ -99,7 +107,8 @@ export async function getServerSideProps() {
   // server side rendering
   return {
     props: {
-      categories: response.categories,
+      categories: categoriesResponse.categories,
+      restaurants: restaurantResponse.restaurants,
     }, // will be passed to the page component as props
   };
 }

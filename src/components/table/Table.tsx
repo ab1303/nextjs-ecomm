@@ -9,7 +9,9 @@ type CommonComponents = {
 };
 
 const Table: React.FC & CommonComponents = ({ children }) => (
-  <table className='min-w-full divide-y divide-gray-200'>{children}</table>
+  <table className='min-w-full divide-y divide-gray-200 overflow-x-scroll'>
+    {children}
+  </table>
 );
 
 Table.TBody = TBody;

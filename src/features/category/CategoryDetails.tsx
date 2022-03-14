@@ -1,20 +1,27 @@
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select, { SingleValue } from 'react-select';
 import { CellProps, Column, useTable } from 'react-table';
+import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
 import Table from '@/components/table';
 
+import { CategoryDetailsResponse } from '@/pages/api/categories/[id]';
 import { RestaurantListDTO } from '@/pages/api/restaurant';
+import { getData } from '@/utils/fetchHttpClient';
+
+import { Notify } from '@/types';
 
 type CategoryDetailsProps = {
   restaurants: Array<RestaurantListDTO>;
+  selectedCategoryId: number | null;
   handleCategoryDeSelect: () => void;
 };
 
 export default function CategoryDetails({
   restaurants,
+  selectedCategoryId,
   handleCategoryDeSelect,
 }: CategoryDetailsProps) {
   const [restaurantOptions, setRestaurantOptions] =
@@ -24,6 +31,21 @@ export default function CategoryDetails({
   const [linkedRestaurants, setLinkedRestaurants] = useState<
     Array<RestaurantListDTO>
   >([]);
+
+  useEffect(() => {
+    async function fetchCategoryDetails() {
+      const categoryDetailsResult: (CategoryDetailsResponse | Notify) & {
+        ok: boolean;
+      } = await getData(`categories/${selectedCategoryId}`);
+
+      const categoryRestaurants = (
+        categoryDetailsResult as CategoryDetailsResponse
+      ).restaurants;
+      if (categoryRestaurants) setLinkedRestaurants(categoryRestaurants);
+    }
+
+    fetchCategoryDetails();
+  }, []);
 
   const columns = React.useMemo<Column<RestaurantListDTO>[]>(() => {
     const handleUnLinkRestaurant = (id: number) => {

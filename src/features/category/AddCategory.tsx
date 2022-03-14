@@ -1,15 +1,20 @@
 import clsx from 'clsx';
+import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
 
-import { CategoryListDTO } from '@/pages/api/categories';
+import {
+  CategoryListDTO,
+  CreateCategoryResponse,
+} from '@/pages/api/categories';
 import { postData } from '@/utils/fetchHttpClient';
 
-import { CategoryFormData, Notify } from '@/types';
+import { CategoryFormData } from '@/types';
 
 type AddCategoryProps = {
+  isCategorySelected: boolean;
   categories: Array<CategoryListDTO>;
   handleCategorySelect: (id: number) => void;
 };
@@ -17,9 +22,13 @@ type AddCategoryProps = {
 type CreateCategoryFormData = CategoryFormData;
 
 export default function AddCategory({
+  isCategorySelected,
   categories,
   handleCategorySelect,
 }: AddCategoryProps) {
+  const [categoryList, setCategoryList] =
+    useState<CategoryListDTO[]>(categories);
+
   const formMethods = useForm<CreateCategoryFormData>({
     mode: 'onBlur',
     defaultValues: {
@@ -29,20 +38,30 @@ export default function AddCategory({
 
   const {
     register,
-    control,
     formState: { errors },
     handleSubmit,
   } = formMethods;
 
   const submitHandler = async (formData: CategoryFormData) => {
     try {
-      const result: { ok: boolean } & Notify = await postData('categories', {
-        categoryName: formData.categoryName,
-      });
+      const result: { ok: boolean } & CreateCategoryResponse = await postData(
+        'categories',
+        {
+          categoryName: formData.categoryName,
+        }
+      );
 
-      if (!result.ok) toast.error(result.error);
+      if (!result.ok && result) {
+        toast.error(result.error);
+        return;
+      }
 
-      // TODO: Update categories collection
+      const updatedCategoryList = [
+        ...categoryList,
+        { _id: result.id, name: result.name },
+      ];
+
+      setCategoryList(updatedCategoryList);
       toast.success(result.success || 'Category created!');
     } catch (e: any) {
       toast.error(e.error);
@@ -101,9 +120,14 @@ export default function AddCategory({
           </div>
         </Card.Header>
         <div className='h-96 overflow-y-scroll'>
-          {categories.map((category) => (
+          {categoryList.map((category) => (
             <div key={category._id} className='flex flex-row'>
-              <div className='w-2 bg-orange-400 mt-4'></div>
+              <div
+                className={clsx(
+                  'mt-4 w-2',
+                  isCategorySelected ? 'bg-orange-400' : 'bg-orange-300'
+                )}
+              ></div>
               <div
                 className='bg-white cursor-pointer flex flex-row flex-1 align-middle shadow mt-4 py-4 px-6 sm:px-10'
                 onClick={() => handleCategorySelect(category._id)}
@@ -115,7 +139,7 @@ export default function AddCategory({
                   viewBox='0 0 24 24'
                   fill='currentColor'
                   onClick={() => {
-                    // TODO:
+                    // TODO: on Delete
                     return;
                   }}
                 >

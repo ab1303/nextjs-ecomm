@@ -19,16 +19,20 @@ export default function CategoriesPage({
   categories,
   restaurants,
 }: CategoriesPageProps) {
-  const [isCategorySelected, setIsCategorySelected] = useState<boolean>(true);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null
+  );
 
   const handleCategorySelect: (id: number) => void = (id: number) => {
     console.log('category selected:', id);
-    setIsCategorySelected(true);
+    setSelectedCategoryId(id);
   };
 
   const handleCategoryDeSelect: () => void = () => {
-    setIsCategorySelected(false);
+    setSelectedCategoryId(null);
   };
+
+  const isCategorySelected = !!selectedCategoryId;
 
   return (
     <div className='bg-gray-100 px-6 py-6 lg:px-8'>
@@ -37,12 +41,14 @@ export default function CategoriesPage({
           {{
             leftPane: (
               <AddCategory
+                isCategorySelected={isCategorySelected}
                 categories={categories}
                 handleCategorySelect={handleCategorySelect}
               />
             ),
             rightPane: (
               <CategoryDetails
+                selectedCategoryId={selectedCategoryId}
                 restaurants={restaurants}
                 handleCategoryDeSelect={handleCategoryDeSelect}
               />
@@ -64,46 +70,7 @@ export async function getServerSideProps() {
 
   // const response: CategoriesResponse = await getData(`categories`);
   const restaurantResponse: RestaurantsResponse = await getData(`restaurant`);
-  const categoriesResponse: CategoriesResponse = {
-    categories: [
-      {
-        _id: 1,
-        name: 'First Category',
-      },
-      {
-        _id: 2,
-        name: 'Second Category',
-      },
-      {
-        _id: 3,
-        name: 'Third Category',
-      },
-      {
-        _id: 4,
-        name: 'Four Category',
-      },
-      {
-        _id: 5,
-        name: 'Five Category',
-      },
-      {
-        _id: 6,
-        name: 'Six Category',
-      },
-      {
-        _id: 7,
-        name: 'Seven Category',
-      },
-      {
-        _id: 8,
-        name: 'Eight Category',
-      },
-      {
-        _id: 9,
-        name: 'Nine Category',
-      },
-    ],
-  };
+  const categoriesResponse: CategoriesResponse = await getData(`categories`);
   // server side rendering
   return {
     props: {

@@ -4,7 +4,7 @@ export interface Category {
   _id: number;
   name: string;
   isActive: boolean;
-  restaurants: Array<{ id: number }>;
+  restaurants: Array<{ id: string }>;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -23,7 +23,7 @@ const CategoriesSchema = new mongoose.Schema(
     restaurants: [
       {
         id: {
-          type: Number,
+          type: String,
           required: true,
         },
       },

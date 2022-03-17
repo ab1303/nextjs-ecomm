@@ -57,7 +57,7 @@ const createCategory = async (
 };
 
 export type CategoryListDTO = {
-  _id: number;
+  _id: string;
   name: string;
 };
 

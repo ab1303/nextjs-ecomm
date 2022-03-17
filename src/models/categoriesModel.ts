@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export interface Category {
-  _id: number;
+  _id: string;
   name: string;
   isActive: boolean;
   restaurants: Array<{ id: string }>;

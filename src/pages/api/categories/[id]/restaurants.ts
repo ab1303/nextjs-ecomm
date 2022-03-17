@@ -82,9 +82,9 @@ const updateCategoryRestaurants = async (
     // Production Caveat to ensure its in a transaction, mongo cluster needs to be in replica locally
     // For now just update two documents separately
 
-    // TODO : Update restaurant category
-    //const restaurant = await Restaurants.findById(restaurantId);
-    // restaurant.categories.push
+    const restaurant = await Restaurants.findById(restaurantId);
+    restaurant.categories.push({ id });
+    restaurant.save();
 
     const category = await Categories.findById(id);
     category.restaurants.push({ id: restaurantId });

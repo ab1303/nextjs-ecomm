@@ -1,8 +1,11 @@
-import { Query } from 'mongoose';
+import mongoose, { Query } from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import Categories, { Category } from '@/models/categoriesModel';
 import Restaurants, { Restaurant } from '@/models/restaurantModel';
 import connectDB from '@/utils/connectDB';
+
+import { CategoryListDTO } from '../categories';
 
 import { Notify, RestaurantFormData } from '@/types';
 
@@ -78,16 +81,32 @@ const getRestaurants = async (
     const features = new APIfeatures(Restaurants.find(), req.query);
 
     const restaurants: Restaurant[] = await features.query;
+    const categories: Array<Category> = await Categories.find();
 
-    const result: Array<RestaurantListDTO> = restaurants.map((r) => ({
-      _id: r._id,
-      name: r.name,
-      image: r.image,
-      cuisine: r.cuisine,
-      contact: r.contact,
-      address: r.address.addressLine,
+    const categoryResult: Array<CategoryListDTO> = categories.map((c) => ({
+      _id: c._id,
+      name: c.name,
     }));
 
+    const result: Array<RestaurantListDTO> = await Promise.all(
+      restaurants.map(async (r) => {
+        const categoryIds = r.categories.map((c: { id: string }) => c.id);
+
+        const categories = categoryResult.filter((cr) =>
+          categoryIds.find((cid) => cid === cr._id.toString())
+        );
+
+        return {
+          _id: r._id,
+          name: r.name,
+          image: r.image,
+          cuisine: r.cuisine,
+          contact: r.contact,
+          address: r.address.addressLine,
+          categories: categories,
+        };
+      })
+    );
     res.json({
       restaurants: result,
     });

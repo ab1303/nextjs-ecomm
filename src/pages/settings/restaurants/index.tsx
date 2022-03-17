@@ -20,6 +20,7 @@ type RestaurantsPageProps = {
 export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
   const router = useRouter();
 
+  console.log('restaurant response', restaurants);
   const columns = React.useMemo<Column<RestaurantListDTO>[]>(
     () => [
       {
@@ -176,6 +177,7 @@ export async function getServerSideProps() {
   // const search = query.search || 'all';
 
   const response: RestaurantsResponse = await getData(`restaurant`);
+
   // server side rendering
   return {
     props: {

@@ -41,8 +41,8 @@ export default function CategoriesPage({
           {{
             leftPane: (
               <AddCategory
-                isCategorySelected={isCategorySelected}
                 categories={categories}
+                selectedCategoryId={selectedCategoryId}
                 handleCategorySelect={handleCategorySelect}
               />
             ),

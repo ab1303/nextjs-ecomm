@@ -7,9 +7,9 @@ import { toast } from 'react-toastify';
 import Card from '@/components/card';
 import Table from '@/components/table';
 
-import { CategoryDetailsResponse } from '@/pages/api/categories/[id]';
+import { CategoryDetailsResponse } from '@/pages/api/categories/[id]/restaurants';
 import { RestaurantListDTO } from '@/pages/api/restaurant';
-import { getData } from '@/utils/fetchHttpClient';
+import { getData, putData } from '@/utils/fetchHttpClient';
 
 import { Notify } from '@/types';
 
@@ -36,16 +36,22 @@ export default function CategoryDetails({
     async function fetchCategoryDetails() {
       const categoryDetailsResult: (CategoryDetailsResponse | Notify) & {
         ok: boolean;
-      } = await getData(`categories/${selectedCategoryId}`);
+      } = await getData(`categories/${selectedCategoryId}/restaurants`);
 
       const categoryRestaurants = (
         categoryDetailsResult as CategoryDetailsResponse
       ).restaurants;
       if (categoryRestaurants) setLinkedRestaurants(categoryRestaurants);
+
+      const filteredRestaurantOptions = restaurants.filter(
+        (ro) => !categoryRestaurants.find((cr) => cr._id == ro._id)
+      );
+
+      setRestaurantOptions(filteredRestaurantOptions);
     }
 
     fetchCategoryDetails();
-  }, []);
+  }, [restaurants, selectedCategoryId]);
 
   const columns = React.useMemo<Column<RestaurantListDTO>[]>(() => {
     const handleUnLinkRestaurant = (id: number) => {
@@ -54,6 +60,8 @@ export default function CategoryDetails({
       const restaurantToUnLink = restaurants.find((r) => r._id === id);
 
       if (!restaurantToUnLink) return;
+
+      // TODO Make api call
 
       const newLinkedRestaurts = linkedRestaurants.filter((r) => r._id !== id);
 
@@ -159,7 +167,7 @@ export default function CategoryDetails({
     return;
   };
 
-  const handleLinkRestaurant = () => {
+  const handleLinkRestaurant = async () => {
     if (!selectedRestaurant) return;
 
     const restaurantToLink = restaurantOptions.find(
@@ -168,13 +176,31 @@ export default function CategoryDetails({
 
     if (!restaurantToLink) return;
 
-    const newLinkedRestaurts = [...linkedRestaurants, { ...restaurantToLink }];
+    try {
+      const result: { ok: boolean } & Notify = await putData(
+        `categories/${selectedCategoryId}/restaurants`,
+        {
+          restaurantId: selectedRestaurant.value,
+        }
+      );
 
-    setRestaurantOptions(
-      restaurantOptions.filter((ro) => ro._id !== restaurantToLink._id)
-    );
-    setLinkedRestaurants(newLinkedRestaurts);
-    setSelectedRestaurant(null);
+      if (!result.ok) toast.error(result.error);
+
+      toast.success(result.success || 'Restaurant linked!');
+
+      const newLinkedRestaurts = [
+        ...linkedRestaurants,
+        { ...restaurantToLink },
+      ];
+
+      setRestaurantOptions(
+        restaurantOptions.filter((ro) => ro._id !== restaurantToLink._id)
+      );
+      setLinkedRestaurants(newLinkedRestaurts);
+      setSelectedRestaurant(null);
+    } catch (e: any) {
+      toast.error(e.error);
+    }
   };
 
   return (

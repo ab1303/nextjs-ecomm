@@ -14,7 +14,7 @@ import { postData } from '@/utils/fetchHttpClient';
 import { CategoryFormData } from '@/types';
 
 type AddCategoryProps = {
-  isCategorySelected: boolean;
+  selectedCategoryId: number | null;
   categories: Array<CategoryListDTO>;
   handleCategorySelect: (id: number) => void;
 };
@@ -22,7 +22,7 @@ type AddCategoryProps = {
 type CreateCategoryFormData = CategoryFormData;
 
 export default function AddCategory({
-  isCategorySelected,
+  selectedCategoryId,
   categories,
   handleCategorySelect,
 }: AddCategoryProps) {
@@ -125,7 +125,9 @@ export default function AddCategory({
               <div
                 className={clsx(
                   'mt-4 w-2',
-                  isCategorySelected ? 'bg-orange-400' : 'bg-orange-300'
+                  selectedCategoryId === category._id
+                    ? 'bg-orange-500'
+                    : 'bg-orange-300'
                 )}
               ></div>
               <div
@@ -139,7 +141,7 @@ export default function AddCategory({
                   viewBox='0 0 24 24'
                   fill='currentColor'
                   onClick={() => {
-                    // TODO: on Delete
+                    // TODO: on Delete, make an api call to backend
                     return;
                   }}
                 >

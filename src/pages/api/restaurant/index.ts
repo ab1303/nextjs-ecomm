@@ -67,6 +67,7 @@ export type RestaurantListDTO = {
   cuisine: string;
   contact: string;
   address: string;
+  categories: Array<CategoryListDTO>;
 };
 
 export type RestaurantsResponse = {

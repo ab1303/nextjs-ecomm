@@ -23,7 +23,7 @@ export default async function handleCategoriesRequest(
 }
 
 export type CreateCategoryResponse = {
-  id: number;
+  id: string;
   name: string;
 } & Notify;
 

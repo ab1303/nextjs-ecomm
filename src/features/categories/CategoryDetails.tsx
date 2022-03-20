@@ -15,7 +15,7 @@ import { Notify } from '@/types';
 
 type CategoryDetailsProps = {
   restaurants: Array<RestaurantListDTO>;
-  selectedCategoryId: number | null;
+  selectedCategoryId: string | null;
   handleCategoryDeSelect: () => void;
 };
 
@@ -27,7 +27,6 @@ export default function CategoryDetails({
   const [restaurantOptions, setRestaurantOptions] =
     useState<Array<RestaurantListDTO>>(restaurants);
 
-  // TODO: set state from received prop later
   const [linkedRestaurants, setLinkedRestaurants] = useState<
     Array<RestaurantListDTO>
   >([]);
@@ -54,14 +53,27 @@ export default function CategoryDetails({
   }, [restaurants, selectedCategoryId]);
 
   const columns = React.useMemo<Column<RestaurantListDTO>[]>(() => {
-    const handleUnLinkRestaurant = (id: number) => {
+    const handleUnLinkRestaurant = async (id: number) => {
       if (!id) return;
 
       const restaurantToUnLink = restaurants.find((r) => r._id === id);
 
       if (!restaurantToUnLink) return;
 
-      // TODO Make api call
+      const result: { ok: boolean } & Notify = await putData(
+        `categories/${selectedCategoryId}/restaurants`,
+        {
+          restaurantId: id,
+          link: 'remove',
+        }
+      );
+
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
+
+      toast.success(result.success || 'Restaurant linked!');
 
       const newLinkedRestaurts = linkedRestaurants.filter((r) => r._id !== id);
 
@@ -181,10 +193,14 @@ export default function CategoryDetails({
         `categories/${selectedCategoryId}/restaurants`,
         {
           restaurantId: selectedRestaurant.value,
+          link: 'add',
         }
       );
 
-      if (!result.ok) toast.error(result.error);
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
 
       toast.success(result.success || 'Restaurant linked!');
 

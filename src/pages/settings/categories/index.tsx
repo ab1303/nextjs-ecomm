@@ -3,8 +3,8 @@ import { ReactElement, useState } from 'react';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 import SplitPanes from '@/components/SplitPanes';
 
-import AddCategory from '@/features/category/AddCategory';
-import CategoryDetails from '@/features/category/CategoryDetails';
+import AddCategory from '@/features/categories/AddCategory';
+import CategoryDetails from '@/features/categories/CategoryDetails';
 import { CategoriesResponse, CategoryListDTO } from '@/pages/api/categories';
 import { RestaurantListDTO, RestaurantsResponse } from '@/pages/api/restaurant';
 import { getData } from '@/utils/fetchHttpClient';
@@ -19,11 +19,11 @@ export default function CategoriesPage({
   categories,
   restaurants,
 }: CategoriesPageProps) {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null
   );
 
-  const handleCategorySelect: (id: number) => void = (id: number) => {
+  const handleCategorySelect: (id: string) => void = (id: string) => {
     console.log('category selected:', id);
     setSelectedCategoryId(id);
   };

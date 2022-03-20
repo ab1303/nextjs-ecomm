@@ -6,9 +6,9 @@ import { CellProps, Column, useRowSelect, useTable } from 'react-table';
 
 import Card from '@/components/card';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
-import Modal from '@/components/modal/Modal';
 import Table from '@/components/table';
 
+import CategoriesModal from '@/features/restaurant/CategoriesModal';
 import { CategoryListDTO } from '@/pages/api/categories';
 import { RestaurantListDTO, RestaurantsResponse } from '@/pages/api/restaurant';
 import { getData } from '@/utils/fetchHttpClient';
@@ -21,8 +21,6 @@ type RestaurantsPageProps = {
 
 export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
   const router = useRouter();
-
-  console.log('restaurant response', restaurants);
 
   const [restaurantCategories, setRestaurantCategories] = useState<
     Array<CategoryListDTO>
@@ -76,21 +74,23 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
             <div className='flex flex-row content-around justify-between px-4 '>
               {original.categories.length}
 
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                className='h-4 w-4 cursor-pointer'
-                fill='none'
-                viewBox='0 0 24 24'
-                stroke='currentColor'
-                onClick={() => setRestaurantCategories(original.categories)}
-              >
-                <path
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                  strokeWidth='2'
-                  d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
-                />
-              </svg>
+              {original.categories.length > 0 && (
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  className='h-4 w-4 cursor-pointer'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  stroke='currentColor'
+                  onClick={() => setRestaurantCategories(original.categories)}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
+                  />
+                </svg>
+              )}
             </div>
           );
         },
@@ -169,16 +169,12 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         </Card.Header>
 
         <Card.Body>
-          <Modal show={restaurantCategories?.length > 0}>
-            <Modal.Header
-              onClose={() => {
-                setRestaurantCategories(null);
-              }}
-            >
-              Categories
-            </Modal.Header>
-            <Modal.Body>List of linked categories</Modal.Body>
-          </Modal>
+          <CategoriesModal
+            restaurantCategories={restaurantCategories}
+            onClose={() => {
+              setRestaurantCategories([]);
+            }}
+          />
           <Table {...getTableProps()}>
             <Table.THead>
               {headerGroups.map((headerGroup) => (

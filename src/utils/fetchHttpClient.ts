@@ -47,7 +47,10 @@ export const putData = async (url: string, body: unknown, token?: string) => {
   });
 
   const data = await res.json();
-  return data;
+  return {
+    ok: res.ok,
+    ...data,
+  };
 };
 
 export const patchData = async (url: string, body: unknown, token: string) => {
@@ -74,5 +77,8 @@ export const deleteData = async (url: string, token: string) => {
   });
 
   const data = await res.json();
-  return data;
+  return {
+    ok: res.ok,
+    ...data,
+  };
 };

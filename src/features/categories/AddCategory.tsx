@@ -14,9 +14,9 @@ import { postData } from '@/utils/fetchHttpClient';
 import { CategoryFormData } from '@/types';
 
 type AddCategoryProps = {
-  selectedCategoryId: number | null;
+  selectedCategoryId: string | null;
   categories: Array<CategoryListDTO>;
-  handleCategorySelect: (id: number) => void;
+  handleCategorySelect: (id: string) => void;
 };
 
 type CreateCategoryFormData = CategoryFormData;

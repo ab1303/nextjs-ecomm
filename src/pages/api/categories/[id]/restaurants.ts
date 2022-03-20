@@ -9,6 +9,7 @@ import connectDB from '@/utils/connectDB';
 import { RestaurantListDTO } from '../../restaurant';
 
 import { Notify } from '@/types';
+import { CategoryRestaurantLink } from '@/types/enum';
 
 connectDB();
 
@@ -27,7 +28,7 @@ export default async function handleCategoryRequest(
 }
 
 export type CategoryDetailsResponse = {
-  restaurants: Array<RestaurantListDTO>;
+  restaurants: Array<Omit<RestaurantListDTO, 'categories'>>;
 };
 
 const getCategoryRestaurants = async (
@@ -50,14 +51,15 @@ const getCategoryRestaurants = async (
       },
     });
 
-    const result: Array<RestaurantListDTO> = restaurants.map((r) => ({
-      _id: r._id,
-      name: r.name,
-      image: r.image,
-      cuisine: r.cuisine,
-      contact: r.contact,
-      address: r.address.addressLine,
-    }));
+    const result: Array<Omit<RestaurantListDTO, 'categories'>> =
+      restaurants.map((r) => ({
+        _id: r._id,
+        name: r.name,
+        image: r.image,
+        cuisine: r.cuisine,
+        contact: r.contact,
+        address: r.address.addressLine,
+      }));
 
     res.json({
       restaurants: result,
@@ -77,22 +79,47 @@ const updateCategoryRestaurants = async (
       return res.status(400).json({ error: 'Authentication is not valid.' });
 
     const { id } = req.query;
-    const { restaurantId } = req.body;
+    const { restaurantId, link } = req.body;
 
     // Production Caveat to ensure its in a transaction, mongo cluster needs to be in replica locally
     // For now just update two documents separately
 
     const restaurant = await Restaurants.findById(restaurantId);
-    restaurant.categories.push({ id });
-    restaurant.save();
-
     const category = await Categories.findById(id);
-    category.restaurants.push({ id: restaurantId });
-    category.save();
 
-    res.json({
-      success: 'Success! selected restaurant linked with category',
-    });
+    switch (link as CategoryRestaurantLink) {
+      case 'add':
+        restaurant.categories.push({ id });
+        category.restaurants.push({ id: restaurantId });
+        restaurant.save();
+        category.save();
+
+        res.json({
+          success: 'Success! selected restaurant linked with category',
+        });
+
+        break;
+
+      case 'remove': {
+        await Categories.updateOne(
+          { _id: id },
+          { $pull: { restaurants: { id: restaurantId } } },
+          { safe: true, multi: false }
+        );
+
+        await Restaurants.updateOne(
+          { _id: restaurantId },
+          { $pull: { categories: { id } } },
+          { safe: true, multi: false }
+        );
+
+        res.json({
+          success: 'Success! selected restaurant unlinked with category',
+        });
+
+        break;
+      }
+    }
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
   }

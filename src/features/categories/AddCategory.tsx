@@ -4,14 +4,15 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
+import Switch from '@/components/Switch';
 
 import {
   CategoryListDTO,
   CreateCategoryResponse,
 } from '@/pages/api/categories';
-import { postData } from '@/utils/fetchHttpClient';
+import { deleteData, postData } from '@/utils/fetchHttpClient';
 
-import { CategoryFormData } from '@/types';
+import { CategoryFormData, Notify } from '@/types';
 
 type AddCategoryProps = {
   selectedCategoryId: string | null;
@@ -66,6 +67,23 @@ export default function AddCategory({
     } catch (e: any) {
       toast.error(e.error);
     }
+  };
+
+  const deleteCategory = async (categoryId: string) => {
+    const result: Notify & {
+      ok: boolean;
+    } = await deleteData(`categories/${categoryId}`);
+
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+
+    const updatedCategoryList = categoryList.filter((c) => c._id != categoryId);
+
+    setCategoryList(updatedCategoryList);
+
+    toast.success(result.success || 'Category deleted!');
   };
 
   return (
@@ -130,20 +148,28 @@ export default function AddCategory({
                     : 'bg-orange-300'
                 )}
               ></div>
-              <div
-                className='bg-white cursor-pointer flex flex-row flex-1 align-middle shadow mt-4 py-4 px-6 sm:px-10'
-                onClick={() => handleCategorySelect(category._id)}
-              >
-                <span className='flex-1'>{category.name}</span>
+
+              <div className='bg-white cursor-pointer flex flex-row flex-1 align-middle shadow mt-4 py-4 px-6 sm:px-10'>
+                <span
+                  className='flex-1'
+                  onClick={() => handleCategorySelect(category._id)}
+                >
+                  {category.name}
+                </span>
+                {/* <div className='mr-3'>
+                  <Switch
+                    isActive
+                    onStateChange={() => {
+                      return;
+                    }}
+                  />
+                </div> */}
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   className='w-6 h-6 cursor-pointer'
                   viewBox='0 0 24 24'
                   fill='currentColor'
-                  onClick={() => {
-                    // TODO: on Delete, make an api call to backend
-                    return;
-                  }}
+                  onClick={() => deleteCategory(category._id)}
                 >
                   <path
                     fillRule='evenodd'

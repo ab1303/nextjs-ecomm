@@ -27,8 +27,12 @@ export default async function handleCategoryRequest(
   }
 }
 
+export type CategoryRestaurantListDTO = Omit<RestaurantListDTO, 'categories'>;
+
+export type CategoryRestaurants = Array<CategoryRestaurantListDTO>;
+
 export type CategoryDetailsResponse = {
-  restaurants: Array<Omit<RestaurantListDTO, 'categories'>>;
+  restaurants: CategoryRestaurants;
 };
 
 const getCategoryRestaurants = async (
@@ -51,15 +55,14 @@ const getCategoryRestaurants = async (
       },
     });
 
-    const result: Array<Omit<RestaurantListDTO, 'categories'>> =
-      restaurants.map((r) => ({
-        _id: r._id,
-        name: r.name,
-        image: r.image,
-        cuisine: r.cuisine,
-        contact: r.contact,
-        address: r.address.addressLine,
-      }));
+    const result: CategoryRestaurants = restaurants.map((r) => ({
+      _id: r._id,
+      name: r.name,
+      image: r.image,
+      cuisine: r.cuisine,
+      contact: r.contact,
+      address: r.address.addressLine,
+    }));
 
     res.json({
       restaurants: result,

@@ -7,7 +7,11 @@ import { toast } from 'react-toastify';
 import Card from '@/components/card';
 import Table from '@/components/table';
 
-import { CategoryDetailsResponse } from '@/pages/api/categories/[id]/restaurants';
+import {
+  CategoryDetailsResponse,
+  CategoryRestaurantListDTO,
+  CategoryRestaurants,
+} from '@/pages/api/categories/[id]/restaurants';
 import { RestaurantListDTO } from '@/pages/api/restaurant';
 import { getData, putData } from '@/utils/fetchHttpClient';
 
@@ -27,9 +31,8 @@ export default function CategoryDetails({
   const [restaurantOptions, setRestaurantOptions] =
     useState<Array<RestaurantListDTO>>(restaurants);
 
-  const [linkedRestaurants, setLinkedRestaurants] = useState<
-    Array<RestaurantListDTO>
-  >([]);
+  const [linkedRestaurants, setLinkedRestaurants] =
+    useState<CategoryRestaurants>([]);
 
   useEffect(() => {
     async function fetchCategoryDetails() {
@@ -52,7 +55,7 @@ export default function CategoryDetails({
     fetchCategoryDetails();
   }, [restaurants, selectedCategoryId]);
 
-  const columns = React.useMemo<Column<RestaurantListDTO>[]>(() => {
+  const columns = React.useMemo<Column<CategoryRestaurantListDTO>[]>(() => {
     const handleUnLinkRestaurant = async (id: number) => {
       if (!id) return;
 
@@ -147,7 +150,7 @@ export default function CategoryDetails({
         },
       },
     ];
-  }, [linkedRestaurants, restaurantOptions, restaurants]);
+  }, [linkedRestaurants, restaurantOptions, restaurants, selectedCategoryId]);
 
   const [selectedRestaurant, setSelectedRestaurant] = useState<
     | SingleValue<{
@@ -158,7 +161,7 @@ export default function CategoryDetails({
   >();
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable<RestaurantListDTO>({
+    useTable<CategoryRestaurantListDTO>({
       columns,
       data: linkedRestaurants,
     });

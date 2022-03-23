@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
+import Switch from '@/components/Switch';
 import Table from '@/components/table';
 
 import { UserDTO, UsersResponse } from '@/pages/api/users';
@@ -20,43 +21,42 @@ type UsersPageProps = {
 export default function UsersPage({ users }: UsersPageProps) {
   const router = useRouter();
 
-  const deleteHandler = async (user: UserDTO) => {
-    try {
-      const result: { ok: boolean } & Notify = await deleteData(
-        `users\\${user._id}`,
-        ''
-      );
+  const columns = React.useMemo<Column<UserDTO>[]>(() => {
+    const deleteHandler = async (user: UserDTO) => {
+      try {
+        const result: { ok: boolean } & Notify = await deleteData(
+          `users\\${user._id}`,
+          ''
+        );
 
-      if (!result.ok) toast.error(result.error);
+        if (!result.ok) toast.error(result.error);
 
-      if (result.ok) toast.success(result.success || 'User deleted!');
+        if (result.ok) toast.success(result.success || 'User deleted!');
 
-      router.replace('/settings/users');
-    } catch (e: any) {
-      toast.error(e.error);
-    }
-  };
+        router.replace('/settings/users');
+      } catch (e: any) {
+        toast.error(e.error);
+      }
+    };
 
-  const statusHandler = async (user: UserDTO) => {
-    try {
-      const result: { ok: boolean } & Notify = await patchData(
-        `users\\${user._id}`,
-        {},
-        ''
-      );
+    const statusHandler = async (user: UserDTO) => {
+      try {
+        const result: { ok: boolean } & Notify = await patchData(
+          `users\\${user._id}`,
+          {},
+          ''
+        );
 
-      if (!result.ok) toast.error(result.error);
+        if (!result.ok) toast.error(result.error);
 
-      if (result.ok) toast.success(result.success || 'User updated!');
+        if (result.ok) toast.success(result.success || 'User updated!');
 
-      router.replace('/settings/users');
-    } catch (e: any) {
-      toast.error(e.error);
-    }
-  };
-
-  const columns = React.useMemo<Column<UserDTO>[]>(
-    () => [
+        router.replace('/settings/users');
+      } catch (e: any) {
+        toast.error(e.error);
+      }
+    };
+    return [
       {
         Header: 'First Name',
         accessor: 'firstname',
@@ -76,20 +76,10 @@ export default function UsersPage({ users }: UsersPageProps) {
           const { original } = row;
 
           return (
-            <div className='flex w-full items-left justify-left'>
-              <label className='flex items-center cursor-pointer'>
-                <div className='relative'>
-                  <input
-                    type='checkbox'
-                    className='sr-only'
-                    checked={original.active}
-                    onChange={() => statusHandler(original)}
-                  />
-                  <div className='w-10 h-4 bg-gray-400 rounded-full shadow-inner'></div>
-                  <div className='absolute w-6 h-6 transition bg-white rounded-full shadow dot -left-1 -top-1'></div>
-                </div>
-              </label>
-            </div>
+            <Switch
+              isActive={original.active}
+              onStateChange={() => statusHandler(original)}
+            />
           );
         },
       },
@@ -116,9 +106,8 @@ export default function UsersPage({ users }: UsersPageProps) {
           );
         },
       },
-    ],
-    [router]
-  );
+    ];
+  }, [router]);
 
   const hooks = [useRowSelect];
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =

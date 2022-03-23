@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 
-import auth from '@/middleware/auth';
 import Categories from '@/models/categoriesModel';
 import connectDB from '@/utils/connectDB';
 

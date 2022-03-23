@@ -18,7 +18,7 @@ export interface AddressModel {
 }
 
 export interface Restaurant {
-  _id: number;
+  _id: string;
   name: string;
   image: string;
   thumbnail: string;

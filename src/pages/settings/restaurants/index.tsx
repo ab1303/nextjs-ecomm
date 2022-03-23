@@ -13,8 +13,6 @@ import { CategoryListDTO } from '@/pages/api/categories';
 import { RestaurantListDTO, RestaurantsResponse } from '@/pages/api/restaurant';
 import { getData } from '@/utils/fetchHttpClient';
 
-// TODO: This is going to be a SSR page with list of restaurants
-
 type RestaurantsPageProps = {
   restaurants: Array<RestaurantListDTO>;
 };
@@ -22,9 +20,13 @@ type RestaurantsPageProps = {
 export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
   const router = useRouter();
 
-  const [restaurantCategories, setRestaurantCategories] = useState<
-    Array<CategoryListDTO>
-  >([]);
+  const [tableData, setTableData] =
+    useState<Array<RestaurantListDTO>>(restaurants);
+
+  const [selectedRestaurant, setSelectedRestaurant] = useState<{
+    categories: Array<CategoryListDTO>;
+    id: string | null;
+  }>({ id: null, categories: [] });
 
   const columns = React.useMemo<Column<RestaurantListDTO>[]>(
     () => [
@@ -81,7 +83,12 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
                   fill='none'
                   viewBox='0 0 24 24'
                   stroke='currentColor'
-                  onClick={() => setRestaurantCategories(original.categories)}
+                  onClick={() => {
+                    setSelectedRestaurant({
+                      categories: original.categories,
+                      id: original._id,
+                    });
+                  }}
                 >
                   <path
                     strokeLinecap='round'
@@ -131,10 +138,37 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
     useTable<RestaurantListDTO>(
       {
         columns,
-        data: restaurants,
+        data: tableData,
       },
       ...hooks
     );
+
+  const handleCategoriesModalClose = (
+    updatedCategories: Array<CategoryListDTO>
+  ) => {
+    // update selected Restaurant Categories
+    const restaurantToUpdate = restaurants.find(
+      (r) => r._id === selectedRestaurant.id
+    );
+
+    if (!restaurantToUpdate) {
+      // Should not happen
+      throw 'should not happen';
+    }
+
+    restaurantToUpdate.categories = [...updatedCategories];
+
+    const updatedTableData = tableData.map((td) => {
+      return td._id === selectedRestaurant.id ? restaurantToUpdate : td;
+    });
+
+    setTableData(updatedTableData);
+
+    setSelectedRestaurant({
+      categories: [],
+      id: null,
+    });
+  };
 
   return (
     /* eslint-disable react/jsx-key */
@@ -143,7 +177,7 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         <Card.Header>
           <div className='flex justify-between text-left'>
             <Card.Header.Title>
-              Restaurants - Total ({restaurants.length || ''})
+              Restaurants - Total ({tableData.length || ''})
             </Card.Header.Title>
             <button
               type='button'
@@ -170,10 +204,9 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
 
         <Card.Body>
           <CategoriesModal
-            restaurantCategories={restaurantCategories}
-            onClose={() => {
-              setRestaurantCategories([]);
-            }}
+            selectedRestaurantId={selectedRestaurant.id}
+            restaurantCategories={selectedRestaurant.categories}
+            onClose={handleCategoriesModalClose}
           />
           <Table {...getTableProps()}>
             <Table.THead>

@@ -1,24 +1,65 @@
+import { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+
 import Card from '@/components/card';
 import Modal from '@/components/modal';
 
 import { CategoryListDTO } from '@/pages/api/categories';
+import { putData } from '@/utils/fetchHttpClient';
+
+import { Notify } from '@/types';
 
 type CategoriesModalProps = {
+  selectedRestaurantId: string | null;
   restaurantCategories: Array<CategoryListDTO>;
-  onClose: () => void;
+  onClose: (updatedRestaurantCategories: Array<CategoryListDTO>) => void;
 };
 
 export default function CategoriesModal({
+  selectedRestaurantId,
   restaurantCategories,
   onClose,
 }: CategoriesModalProps) {
+  const [linkedCategories, setLinkedCategories] =
+    useState<Array<CategoryListDTO>>(restaurantCategories);
+
+  useEffect(() => {
+    setLinkedCategories(restaurantCategories);
+  }, [restaurantCategories, selectedRestaurantId]);
+
+  const handleUnLinkCategory = async (id: string) => {
+    if (!id) return;
+
+    const categoryToUnLink = restaurantCategories.find((c) => c._id === id);
+
+    if (!categoryToUnLink || !selectedRestaurantId) return;
+
+    const result: { ok: boolean } & Notify = await putData(
+      `restaurant/${selectedRestaurantId}/categories`,
+      {
+        categoryId: id,
+      }
+    );
+
+    if (!result.ok) {
+      toast.error(result.error);
+      return;
+    }
+
+    toast.success(result.success || 'Category unlinked!');
+
+    const newLinkedCategories = linkedCategories.filter((c) => c._id !== id);
+
+    setLinkedCategories(newLinkedCategories);
+  };
+
   return (
-    <Modal show={restaurantCategories?.length > 0}>
-      <Modal.Header onClose={onClose}>
+    <Modal show={linkedCategories?.length > 0}>
+      <Modal.Header onClose={() => onClose(linkedCategories)}>
         <Card.Header.Title>Categories</Card.Header.Title>
       </Modal.Header>
       <Modal.Body>
-        {restaurantCategories.map((category) => (
+        {linkedCategories.map((category) => (
           <div key={category._id} className='flex flex-row'>
             <div className='mt-4 w-2 bg-orange-300'></div>
             <div className='bg-white flex flex-row flex-1 align-middle shadow mt-4 py-4 px-6 sm:px-10'>
@@ -29,7 +70,7 @@ export default function CategoriesModal({
                 viewBox='0 0 24 24'
                 fill='currentColor'
                 onClick={() => {
-                  // TODO: on Delete, make an api call to backend
+                  handleUnLinkCategory(category._id);
                   return;
                 }}
               >

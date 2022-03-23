@@ -61,7 +61,7 @@ class APIfeatures {
 }
 
 export type RestaurantListDTO = {
-  _id: number;
+  _id: string;
   name: string;
   image: string;
   cuisine: string;
@@ -135,7 +135,7 @@ const createRestaurant = async (
         state: address.state,
       },
       cuisine: cuisine,
-      contact: 'domino@domino.com',
+      contact: 'domino@domino.com', // TODO: ?
       menu: [],
     });
 

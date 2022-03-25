@@ -10,20 +10,22 @@ import SlidingCardGallery from '@/components/SlidingCardGallery';
 
 // import FilterCategory from '@/features/category/FilterCategory';
 // import ProductItem from '@/features/product/ProductItem';
-import { Restaurant } from '@/models/restaurantModel';
 // import {
 //   ModalEvent,
 //   useGlobalDispatch,
 //   useGlobalState,
 // } from '@/store/GlobalStore';
-import { getData } from '@/utils/fetchHttpClient';
+import {
+  CategoryRestaurantsDTO,
+  getCategoryCards,
+  getCategoryRestaurants,
+} from '@/utils/getCategoryRestaurant';
+
 // import filterSearch from '@/utils/filterSearch';
 // import { ModalItem } from '@/types';
-import { groupBy } from '@/utils/groupBy';
-
 import { CardData } from '@/types/enum';
 
-export default function LandingPage(props: RestaurantResponse) {
+export default function LandingPage({ categoryRestaurants }: LandingPageProps) {
   // const [products, setProducts] = useState<Product[]>(props.products);
 
   // const [isCheck, setIsCheck] = useState(false);
@@ -100,26 +102,18 @@ export default function LandingPage(props: RestaurantResponse) {
     return null;
   }
 
-  const categories = groupBy(props.restaurants, (r) => r.category);
   const slidingCards = [];
 
-  for (const key in categories) {
-    if (Object.prototype.hasOwnProperty.call(categories, key)) {
-      const cards: CardData[] = [];
-      for (const restaurant of categories[key]) {
-        const card: CardData = {
-          title: restaurant.name,
-          url: '',
-          image: restaurant.image,
-        };
+  for (const categoryRestaurant of categoryRestaurants) {
+    const cards: Array<CardData> = getCategoryCards(categoryRestaurant);
 
-        cards.push(card);
-      }
-
-      slidingCards.push(
-        <SlidingCardGallery key={key} title={key} cards={cards} />
-      );
-    }
+    slidingCards.push(
+      <SlidingCardGallery
+        key={categoryRestaurant.categoryName}
+        title={categoryRestaurant.categoryName}
+        cards={cards}
+      />
+    );
   }
 
   return (
@@ -136,25 +130,24 @@ export default function LandingPage(props: RestaurantResponse) {
         extraActionText={data.hero.extraActionText}
         showActionButtons={data.hero.showActionButtons}
       />
-      {/* TODO: Discuss with Rob */}
-      {/* {slidingCards} */}
+
+      {slidingCards}
     </div>
   );
 }
 
-type RestaurantResponse = {
-  restaurants: Restaurant[];
-  result: number;
+type LandingPageProps = {
+  categoryRestaurants: CategoryRestaurantsDTO[];
 };
 
 export async function getServerSideProps() {
-  const res: RestaurantResponse = await getData(
-    `restaurant?limit=6&category=Try Something New`
-  );
+  const categoryRestaurants: Array<CategoryRestaurantsDTO> =
+    await getCategoryRestaurants(1);
+
   // server side rendering
   return {
     props: {
-      restaurants: res.restaurants,
+      categoryRestaurants: categoryRestaurants,
     }, // will be passed to the page component as props
   };
 }

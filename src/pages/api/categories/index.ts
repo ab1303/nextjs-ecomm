@@ -1,8 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 
-import auth from '@/middleware/auth';
-import Categories from '@/models/categoriesModel';
+import Categories, { Category } from '@/models/categoriesModel';
 import connectDB from '@/utils/connectDB';
+
+import { Notify } from '@/types';
 
 connectDB();
 
@@ -20,34 +22,63 @@ export default async function handleCategoriesRequest(
   }
 }
 
-const createCategory = async (req: NextApiRequest, res: NextApiResponse) => {
+export type CreateCategoryResponse = {
+  id: string;
+  name: string;
+} & Notify;
+
+const createCategory = async (
+  req: NextApiRequest,
+  res: NextApiResponse<CreateCategoryResponse | Notify>
+) => {
   try {
-    const result = await auth(req, res);
-    if (result && result.role !== 'admin')
-      return res.status(400).json({ err: 'Authentication is not valid.' });
+    const session = await getSession({ req });
+    if (session && session.user.role !== 'admin')
+      return res.status(400).json({ error: 'Authentication is not valid.' });
 
-    const { name } = req.body;
-    if (!name)
-      return res.status(400).json({ err: 'Name can not be left blank.' });
+    const { categoryName } = req.body;
+    if (!categoryName)
+      return res
+        .status(400)
+        .json({ error: 'Category Name can not be left blank.' });
 
-    const newCategory = new Categories({ name });
+    const newCategory = new Categories({ name: categoryName });
 
     await newCategory.save();
+
     res.json({
-      msg: 'Success! Created a new category.',
-      newCategory,
+      id: newCategory._id,
+      name: newCategory.name,
+      success: 'Success! Created a new category',
     });
   } catch (err: any) {
-    return res.status(500).json({ err: err.message });
+    return res.status(500).json({ error: err.message || err });
   }
 };
 
-const getCategories = async (req: NextApiRequest, res: NextApiResponse) => {
-  try {
-    const categories = await Categories.find();
+export type CategoryListDTO = {
+  _id: string;
+  name: string;
+};
 
-    res.json({ categories });
+export type CategoriesResponse = {
+  categories: Array<CategoryListDTO>;
+};
+
+const getCategories = async (
+  req: NextApiRequest,
+  res: NextApiResponse<CategoriesResponse | Notify>
+) => {
+  try {
+    const categories: Array<Category> = await Categories.find();
+
+    const result: Array<CategoryListDTO> = categories.map((c) => ({
+      _id: c._id,
+      name: c.name,
+    }));
+
+    res.json({ categories: result });
   } catch (err: any) {
-    return res.status(500).json({ err: err.message });
+    return res.status(500).json({ error: err.message || err });
   }
 };

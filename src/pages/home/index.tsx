@@ -66,7 +66,8 @@ export default function HomePage({ user, restaurants }: HomePageProps) {
         extraActionText=''
       />
 
-      {slidingCards}
+      {/* TODO: Discuss with Rob */}
+      {/* {slidingCards} */}
     </div>
   );
 }
@@ -81,7 +82,7 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   return {
     props: {
       restaurants: res.restaurants,
-      result: res.result,
+      // result: res.result,
     }, // will be passed to the page component as props
   };
 }

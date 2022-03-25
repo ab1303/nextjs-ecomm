@@ -10,7 +10,7 @@ import React from 'react';
 
 const TBodyTD: React.FC = ({ children }) => {
   return (
-    <td role='cell' className='px-6 py-4 whitespace-nowrap'>
+    <td role='cell' className='px-6 py-4'>
       <span className='text-sm text-gray-500'>{children}</span>
     </td>
   );

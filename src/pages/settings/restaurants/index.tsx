@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import React from 'react';
 import { CellProps, Column, useRowSelect, useTable } from 'react-table';
 
@@ -8,10 +8,10 @@ import Card from '@/components/card';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 import Table from '@/components/table';
 
+import CategoriesModal from '@/features/restaurant/CategoriesModal';
+import { CategoryListDTO } from '@/pages/api/categories';
 import { RestaurantListDTO, RestaurantsResponse } from '@/pages/api/restaurant';
 import { getData } from '@/utils/fetchHttpClient';
-
-// TODO: This is going to be a SSR page with list of restaurants
 
 type RestaurantsPageProps = {
   restaurants: Array<RestaurantListDTO>;
@@ -19,6 +19,14 @@ type RestaurantsPageProps = {
 
 export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
   const router = useRouter();
+
+  const [tableData, setTableData] =
+    useState<Array<RestaurantListDTO>>(restaurants);
+
+  const [selectedRestaurant, setSelectedRestaurant] = useState<{
+    categories: Array<CategoryListDTO>;
+    id: string | null;
+  }>({ id: null, categories: [] });
 
   const columns = React.useMemo<Column<RestaurantListDTO>[]>(
     () => [
@@ -59,6 +67,42 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         accessor: 'contact',
       },
       {
+        Header: 'Categories',
+        // eslint-disable-next-line react/display-name
+        Cell: ({ row }: CellProps<RestaurantListDTO>) => {
+          const { original } = row;
+
+          return (
+            <div className='flex flex-row content-around justify-between px-4 '>
+              {original.categories.length}
+
+              {original.categories.length > 0 && (
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  className='h-4 w-4 cursor-pointer'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  stroke='currentColor'
+                  onClick={() => {
+                    setSelectedRestaurant({
+                      categories: original.categories,
+                      id: original._id,
+                    });
+                  }}
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
+                  />
+                </svg>
+              )}
+            </div>
+          );
+        },
+      },
+      {
         Header: 'Action',
         // eslint-disable-next-line react/display-name
         Cell: ({ row }: CellProps<RestaurantListDTO>) => {
@@ -94,10 +138,37 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
     useTable<RestaurantListDTO>(
       {
         columns,
-        data: restaurants,
+        data: tableData,
       },
       ...hooks
     );
+
+  const handleCategoriesModalClose = (
+    updatedCategories: Array<CategoryListDTO>
+  ) => {
+    // update selected Restaurant Categories
+    const restaurantToUpdate = restaurants.find(
+      (r) => r._id === selectedRestaurant.id
+    );
+
+    if (!restaurantToUpdate) {
+      // Should not happen
+      throw 'should not happen';
+    }
+
+    restaurantToUpdate.categories = [...updatedCategories];
+
+    const updatedTableData = tableData.map((td) => {
+      return td._id === selectedRestaurant.id ? restaurantToUpdate : td;
+    });
+
+    setTableData(updatedTableData);
+
+    setSelectedRestaurant({
+      categories: [],
+      id: null,
+    });
+  };
 
   return (
     /* eslint-disable react/jsx-key */
@@ -106,7 +177,7 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         <Card.Header>
           <div className='flex justify-between text-left'>
             <Card.Header.Title>
-              Restaurants - Total ({restaurants.length || ''})
+              Restaurants - Total ({tableData.length || ''})
             </Card.Header.Title>
             <button
               type='button'
@@ -132,6 +203,11 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         </Card.Header>
 
         <Card.Body>
+          <CategoriesModal
+            selectedRestaurantId={selectedRestaurant.id}
+            restaurantCategories={selectedRestaurant.categories}
+            onClose={handleCategoriesModalClose}
+          />
           <Table {...getTableProps()}>
             <Table.THead>
               {headerGroups.map((headerGroup) => (
@@ -176,6 +252,7 @@ export async function getServerSideProps() {
   // const search = query.search || 'all';
 
   const response: RestaurantsResponse = await getData(`restaurant`);
+
   // server side rendering
   return {
     props: {

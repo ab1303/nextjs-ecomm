@@ -41,3 +41,7 @@ export type ProfileData = {
 };
 
 export type EditRestaurantFormData = RestaurantFormData;
+
+export type CategoryFormData = {
+  categoryName: string;
+};

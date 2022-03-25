@@ -136,8 +136,8 @@ export default function LandingPage(props: RestaurantResponse) {
         extraActionText={data.hero.extraActionText}
         showActionButtons={data.hero.showActionButtons}
       />
-
-      {slidingCards}
+      {/* TODO: Discuss with Rob */}
+      {/* {slidingCards} */}
     </div>
   );
 }
@@ -147,7 +147,7 @@ type RestaurantResponse = {
   result: number;
 };
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const res: RestaurantResponse = await getData(
     `restaurant?limit=6&category=Try Something New`
   );

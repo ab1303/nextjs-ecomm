@@ -18,14 +18,14 @@ export interface AddressModel {
 }
 
 export interface Restaurant {
-  _id: number;
+  _id: string;
   name: string;
   image: string;
   thumbnail: string;
   address: AddressModel;
   cuisine: string;
   contact: string;
-  category: string;
+  categories: Array<{ id: string }>;
   deliveryFee: number;
   menu: Menu[];
 }
@@ -76,14 +76,18 @@ const restaurantSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  category: {
-    type: String,
-    required: false,
-  },
   deliveryFee: {
     type: Number,
     required: false,
   },
+  categories: [
+    {
+      id: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   menu: [
     {
       title: {

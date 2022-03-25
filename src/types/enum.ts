@@ -3,6 +3,13 @@ enum RoleVariant {
   'admin',
 }
 
+enum CategoryRestaurantLinkVariant {
+  'add',
+  'remove',
+}
+
+export type CategoryRestaurantLink = keyof typeof CategoryRestaurantLinkVariant;
+
 export type UserRole = keyof typeof RoleVariant;
 
 export enum CuisineType {

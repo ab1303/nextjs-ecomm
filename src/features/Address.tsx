@@ -7,18 +7,22 @@ import AsyncSelect from 'react-select/async';
 import { useDebouncedCallback } from 'use-debounce';
 import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete';
 
-import { RestaurantFormData } from '@/types';
-
 const debounce = 300;
 const minLengthAutocomplete = 3;
 const selectProps = {
   isClearable: true,
 };
 
-export default function AddressComponent({ apiKey }: { apiKey: string }) {
+export default function AddressComponent({
+  apiKey,
+  propertyName,
+}: {
+  apiKey: string;
+  propertyName: string;
+}) {
   const {
     init: initialiseGoogleMap,
-    suggestions: { status, data },
+    suggestions: { data },
     setValue: addressAutoCompleteSetValue,
   } = usePlacesAutocomplete({
     requestOptions: {
@@ -34,7 +38,7 @@ export default function AddressComponent({ apiKey }: { apiKey: string }) {
     control,
     setValue: formFieldSetValue,
     formState: { errors },
-  } = useFormContext<RestaurantFormData>();
+  } = useFormContext();
 
   const fetchSuggestions = useDebouncedCallback(
     React.useCallback(
@@ -59,10 +63,10 @@ export default function AddressComponent({ apiKey }: { apiKey: string }) {
 
   const handleSelect = (selectedOption: SingleValue<{ label: string }>) => {
     if (!selectedOption) {
-      formFieldSetValue('address.street_address', '');
-      formFieldSetValue('address.suburb', '');
-      formFieldSetValue('address.postcode', '');
-      formFieldSetValue('address.state', '');
+      formFieldSetValue(`${propertyName}.addressLine`, '');
+      formFieldSetValue(`${propertyName}.suburb`, '');
+      formFieldSetValue(`${propertyName}.postcode`, '');
+      formFieldSetValue(`${propertyName}.state`, '');
       return;
     }
 

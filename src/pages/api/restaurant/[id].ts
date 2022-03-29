@@ -26,7 +26,7 @@ export default async function handleRestaurantRequest(
 }
 
 export type GetRestaurantDTO = {
-  _id: number;
+  _id: string;
   name: string;
   image: string;
   thumbnail: string;
@@ -71,8 +71,14 @@ const updateRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const { restaurantName, imageUrl, thumbnailUrl, cuisine, address } =
-      req.body as EditRestaurantFormData;
+    const {
+      restaurantName,
+      imageUrl,
+      thumbnailUrl,
+      cuisine,
+      contact,
+      address,
+    } = req.body as EditRestaurantFormData;
 
     const { id } = req.query;
     const restaurant: Restaurant = await Restaurants.findById(id);
@@ -86,6 +92,7 @@ const updateRestaurant = async (
         cuisine,
         image: imageUrl,
         thumbnail: thumbnailUrl,
+        contact: contact,
         address: addressToAddressModelMap(address),
       }
     );

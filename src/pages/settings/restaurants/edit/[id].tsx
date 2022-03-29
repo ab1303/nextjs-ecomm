@@ -4,8 +4,11 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import PhoneInput from 'react-phone-input-2';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
+
+import 'react-phone-input-2/lib/style.css';
 
 import Card from '@/components/card';
 import ImageUploader from '@/components/image-uploader/ImageUploader';
@@ -38,6 +41,7 @@ export default function EditRestaurantsPage({
     defaultValues: {
       restaurantName: restaurant.name,
       cuisine: restaurant.cuisine,
+      contact: restaurant.contact,
       imageUrl: restaurant.image,
       thumbnailUrl: restaurant.thumbnail,
       address: {
@@ -51,9 +55,9 @@ export default function EditRestaurantsPage({
   });
 
   const {
-    register,
     control,
     formState: { errors },
+    register,
     handleSubmit,
     setValue,
   } = formMethods;
@@ -67,6 +71,7 @@ export default function EditRestaurantsPage({
         {
           restaurantName: formData.restaurantName,
           cuisine: formData.cuisine,
+          contact: formData.contact,
           imageUrl: formData.imageUrl,
           thumbnailUrl: formData.thumbnailUrl,
           address: formData.address,
@@ -144,9 +149,7 @@ export default function EditRestaurantsPage({
                   <label
                     className={clsx(
                       'block text-sm font-medium ',
-                      errors.restaurantName
-                        ? 'text-orange-700'
-                        : 'text-gray-700'
+                      errors.cuisine ? 'text-orange-700' : 'text-gray-700'
                     )}
                   >
                     Cuisine
@@ -175,6 +178,65 @@ export default function EditRestaurantsPage({
                           onChange={(option) => {
                             onChange(option?.label || null);
                           }}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    className={clsx(
+                      'block text-sm font-medium ',
+                      errors.contact ? 'text-orange-700' : 'text-gray-700'
+                    )}
+                  >
+                    Contact
+                  </label>
+                  <div className='mt-1'>
+                    <Controller
+                      name='contact'
+                      control={control}
+                      rules={{
+                        required: true,
+                        validate: (inputNumber) => {
+                          const numberExCountryCode =
+                            inputNumber.split('61')[1];
+
+                          if (!numberExCountryCode) return false;
+
+                          const phoneLength = numberExCountryCode.length;
+                          return phoneLength > 8 && phoneLength < 12;
+                        },
+                      }}
+                      render={({ field: { onChange, value }, fieldState }) => (
+                        <PhoneInput
+                          enableAreaCodes
+                          enableAreaCodeStretch
+                          country={'au'}
+                          onlyCountries={['au']}
+                          value={value}
+                          isValid={(inputNumber, country: any, countries) => {
+                            if (!fieldState.isDirty) return true;
+
+                            const selectedCountry = countries.find(
+                              (c: any) => c.dialCode === country.dialCode
+                            ) as any;
+
+                            if (!selectedCountry) {
+                              return false;
+                            }
+
+                            const numberExDialCode = inputNumber.split(
+                              selectedCountry.dialCode
+                            )[1];
+
+                            const phoneLength = numberExDialCode.length;
+
+                            return phoneLength > 7 && phoneLength < 10
+                              ? true
+                              : false;
+                          }}
+                          onChange={(phone) => onChange(phone)}
                         />
                       )}
                     />
@@ -244,7 +306,7 @@ export default function EditRestaurantsPage({
                   </div>
                 </div>
 
-                <AddressComponent apiKey={apiKey} />
+                <AddressComponent apiKey={apiKey} propertyName='address' />
 
                 <div>
                   <button

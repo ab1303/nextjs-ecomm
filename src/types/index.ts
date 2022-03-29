@@ -28,6 +28,7 @@ export type RestaurantFormData = {
   imageUrl: string;
   thumbnailUrl: string;
   cuisine: string;
+  contact: string;
   address: Address;
 };
 

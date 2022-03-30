@@ -4,17 +4,15 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import PhoneInput from 'react-phone-input-2';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
-
-import 'react-phone-input-2/lib/style.css';
 
 import Card from '@/components/card';
 import ImageUploader from '@/components/image-uploader/ImageUploader';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 
 import AddressComponent from '@/features/Address';
+import TelInput from '@/features/TelInput';
 import {
   GetRestaurantDTO,
   GetRestaurantResponse,
@@ -193,53 +191,7 @@ export default function EditRestaurantsPage({
                     Contact
                   </label>
                   <div className='mt-1'>
-                    <Controller
-                      name='contact'
-                      control={control}
-                      rules={{
-                        required: true,
-                        validate: (inputNumber) => {
-                          const numberExCountryCode =
-                            inputNumber.split('61')[1];
-
-                          if (!numberExCountryCode) return false;
-
-                          const phoneLength = numberExCountryCode.length;
-                          return phoneLength > 8 && phoneLength < 12;
-                        },
-                      }}
-                      render={({ field: { onChange, value }, fieldState }) => (
-                        <PhoneInput
-                          enableAreaCodes
-                          enableAreaCodeStretch
-                          country={'au'}
-                          onlyCountries={['au']}
-                          value={value}
-                          isValid={(inputNumber, country: any, countries) => {
-                            if (!fieldState.isDirty) return true;
-
-                            const selectedCountry = countries.find(
-                              (c: any) => c.dialCode === country.dialCode
-                            ) as any;
-
-                            if (!selectedCountry) {
-                              return false;
-                            }
-
-                            const numberExDialCode = inputNumber.split(
-                              selectedCountry.dialCode
-                            )[1];
-
-                            const phoneLength = numberExDialCode.length;
-
-                            return phoneLength > 7 && phoneLength < 10
-                              ? true
-                              : false;
-                          }}
-                          onChange={(phone) => onChange(phone)}
-                        />
-                      )}
-                    />
+                    <TelInput propertyName='contact' />
                   </div>
                 </div>
                 <div>

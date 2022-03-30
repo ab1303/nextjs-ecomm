@@ -46,9 +46,9 @@ const getRestaurant = async (
   try {
     const { id } = req.query;
 
-    const restaurant: Restaurant = await Restaurants.findById(id);
+    const restaurant: Restaurant | null = await Restaurants.findById(id);
     if (!restaurant)
-      return res.status(400).json({ error: 'This restaurant does not exist.' });
+      return res.status(422).json({ error: 'This restaurant does not exist.' });
 
     res.json({
       restaurant: {
@@ -81,9 +81,9 @@ const updateRestaurant = async (
     } = req.body as EditRestaurantFormData;
 
     const { id } = req.query;
-    const restaurant: Restaurant = await Restaurants.findById(id);
+    const restaurant: Restaurant | null = await Restaurants.findById(id);
     if (!restaurant)
-      return res.status(400).json({ error: 'This restaurant does not exist.' });
+      return res.status(422).json({ error: 'This restaurant does not exist.' });
 
     await Restaurants.findByIdAndUpdate(
       { _id: id },

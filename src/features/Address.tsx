@@ -64,6 +64,7 @@ export default function AddressComponent({
   const handleSelect = (selectedOption: SingleValue<{ label: string }>) => {
     if (!selectedOption) {
       formFieldSetValue(`${propertyName}.addressLine`, '');
+      formFieldSetValue(`${propertyName}.street_address`, '');
       formFieldSetValue(`${propertyName}.suburb`, '');
       formFieldSetValue(`${propertyName}.postcode`, '');
       formFieldSetValue(`${propertyName}.state`, '');
@@ -168,7 +169,8 @@ export default function AddressComponent({
           <input
             type='text'
             className={clsx(
-              errors.address?.state && 'text-orange-700 border-orange-700'
+              errors.address?.street_address &&
+                'text-orange-700 border-orange-700'
             )}
             {...register('address.street_address', { required: true })}
           />

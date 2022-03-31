@@ -30,6 +30,7 @@ export type RestaurantFormData = {
   cuisine: string;
   contact: string;
   address: Address;
+  categories: string[];
 };
 
 export type ProfileData = {

@@ -67,7 +67,7 @@ const SlidingCards = (props: SlidingCardsProps) => {
         </button>
         <button
           onClick={scrollRight}
-          className='absolute flex items-center justify-end w-1/2 h-64 p-0 text-center border-0 right-8 top--64 carousel-control-next hover:outline-none hover:no-underline focus:outline-none focus:no-underline'
+          className='absolute flex items-center justify-end w-1/2 h-64 p-0 text-center border-0 right-48 top--64 carousel-control-next hover:outline-none hover:no-underline focus:outline-none focus:no-underline'
           type='button'
           data-bs-target='#carouselExampleCaptions'
           data-bs-slide='next'

@@ -46,7 +46,10 @@ const getCategoryRestaurants = async (
 
     const { id } = req.query;
 
-    const category: Category = await Categories.findById(id);
+    const category: Category | null = await Categories.findById(id);
+    if (!category)
+      return res.status(400).json({ error: 'This category does not exist.' });
+
     const restaurantIds = category.restaurants.map((r: { id: string }) => r.id);
 
     const restaurants = await Restaurants.find({

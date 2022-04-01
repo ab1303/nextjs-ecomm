@@ -53,7 +53,7 @@ export default function SideNav({
       <div className='relative flex items-center justify-between h-14'>
         <button
           className='p-2 focus-visible:outline-none'
-          onClick={(e) => handleCloseSideNav()}
+          onClick={() => handleCloseSideNav()}
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'

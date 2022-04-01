@@ -1,8 +1,8 @@
-import mongoose from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 
-import auth from '@/middleware/auth';
 import Restaurants, { Restaurant } from '@/models/restaurantModel';
+import Users from '@/models/userModel';
 import Wishlist from '@/models/wishlistModel';
 import connectDB from '@/utils/connectDB';
 
@@ -31,11 +31,9 @@ export type FavRestaurantListDTO = {
 
 const getUserWishlist = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    //const user = await auth(req, res);
-    const id = new mongoose.Types.ObjectId('61fc77437e2160ed86314082');
-
+    const user = await getUser(req, res);
     const userWishList = await Wishlist.findOne({
-      userId: '61ea28db76a6bc9d7f9028ba',
+      userId: user.id,
     });
 
     if (!userWishList)
@@ -44,15 +42,10 @@ const getUserWishlist = async (req: NextApiRequest, res: NextApiResponse) => {
         .json({ error: 'No favourites added for the user.' });
 
     const favRestaurants: Restaurant[] = [];
-    userWishList.restaurants.forEach(async function (rId: any) {
-      const query: any = { _id: new mongoose.Types.ObjectId(rId) };
-
-      const restaurant = await Restaurants.findOne(query);
-      console.log(rId);
-      console.log(query);
-      console.log(restaurant.name);
+    for (const resId of userWishList.restaurants) {
+      const restaurant = await Restaurants.findOne({ _id: resId });
       favRestaurants.push(restaurant);
-    });
+    }
 
     const result: Array<FavRestaurantListDTO> = favRestaurants.map((w) => ({
       restaurantName: w.name,
@@ -61,7 +54,6 @@ const getUserWishlist = async (req: NextApiRequest, res: NextApiResponse) => {
 
     res.json({
       favRestaurants: result,
-      count: favRestaurants.length,
     });
   } catch (err: any) {
     return res.status(500).json({ err: err.message });
@@ -73,26 +65,34 @@ const updateUserWishlist = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const user = await auth(req, res);
+    const user = await getUser(req, res);
+    const userWishList = await Wishlist.findOne({
+      userId: user.id,
+    });
+
     const { restaurantId } = req.body;
-
-    const userWishList = await Wishlist.findOne({ userId: '' });
-
-    if (userWishList) {
+    if (userWishList && restaurantId) {
       userWishList.restaurants.push(restaurantId);
       await userWishList.save();
     } else {
       const newWishlist = new Wishlist({
-        userId: '',
+        userId: user.id,
         restaurants: [restaurantId],
       });
-
       await newWishlist.save();
     }
 
-    await userWishList.save();
     res.json({ success: 'Wishlist Update Successful!' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || err });
   }
+};
+
+const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
+  const session = await getSession({ req });
+  if (!session)
+    return res.status(400).json({ error: 'Authentication is not valid.' });
+
+  const user = await Users.findOne({ email: session.user.email });
+  return user;
 };

@@ -31,7 +31,6 @@ export type FavRestaurantListDTO = {
 
 const getUserWishlist = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    //createWishlists(req, res);
     //const user = await auth(req, res);
     const id = new mongoose.Types.ObjectId('61fc77437e2160ed86314082');
 
@@ -95,23 +94,5 @@ const updateUserWishlist = async (
     res.json({ success: 'Wishlist Update Successful!' });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || err });
-  }
-};
-
-const createWishlists = async (req: NextApiRequest, res: NextApiResponse) => {
-  try {
-    const newRestaurant1 = new Wishlist({
-      userId: '61ea28db76a6bc9d7f9028ba',
-      restaurants: ['61fc77437e2160ed86314082', '61fc77437e2160ed86314085'],
-    });
-    await newRestaurant1.save();
-    const newRestaurant2 = new Wishlist({
-      userId: '620f4ac1f357cc02dc21e0f8',
-      restaurants: ['61fc77437e2160ed86314088'],
-    });
-    await newRestaurant2.save();
-    res.json({ msg: 'Success! Created a wishlist' });
-  } catch (err: any) {
-    return res.status(500).json({ err: err.message });
   }
 };

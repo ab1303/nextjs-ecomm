@@ -224,9 +224,6 @@ export default function EditRestaurantsPage({
                       disabled
                       type='text'
                       {...register('imageUrl')}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                      }}
                       value={imageUrl ? imageUrl : ''}
                     />
                   </div>

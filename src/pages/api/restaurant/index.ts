@@ -1,3 +1,4 @@
+import { Query } from 'mongoose';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import Categories, { Category } from '@/models/categoriesModel';

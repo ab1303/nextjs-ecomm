@@ -103,8 +103,8 @@ export default function AddressComponent({
         formFieldSetValue('address.postcode', postalcode || '');
         formFieldSetValue('address.state', state || '');
       })
-      .catch((error) => {
-        console.log('😱 Error: ', error);
+      .catch(() => {
+        // console.log('😱 Error: ', error);
       });
   };
   return (

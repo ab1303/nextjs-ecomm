@@ -8,10 +8,7 @@ type TelInputComponentProps = {
 };
 
 export default function TelInput({ propertyName }: TelInputComponentProps) {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext();
+  const { control } = useFormContext();
 
   return (
     <Controller

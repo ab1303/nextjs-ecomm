@@ -24,7 +24,6 @@ export default function CategoriesPage({
   );
 
   const handleCategorySelect: (id: string) => void = (id: string) => {
-    console.log('category selected:', id);
     setSelectedCategoryId(id);
   };
 

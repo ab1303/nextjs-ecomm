@@ -16,6 +16,8 @@ const ImageUploader = (props: UploaderProps) => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    const currentDropbox = dropbox.current;
+
     function dragEnter(e: any) {
       e.stopPropagation();
       e.preventDefault();
@@ -35,16 +37,16 @@ const ImageUploader = (props: UploaderProps) => {
 
       handleFiles(files);
     }
-    if (dropbox.current) {
-      dropbox.current.addEventListener('dragenter', dragEnter, false);
-      dropbox.current.addEventListener('dragover', dragOver, false);
-      dropbox.current.addEventListener('drop', drop, false);
+    if (currentDropbox) {
+      currentDropbox.addEventListener('dragenter', dragEnter, false);
+      currentDropbox.addEventListener('dragover', dragOver, false);
+      currentDropbox.addEventListener('drop', drop, false);
     }
     return () => {
-      if (dropbox.current) {
-        dropbox.current.removeEventListener('dragenter', dragEnter);
-        dropbox.current.removeEventListener('dragover', dragOver);
-        dropbox.current.removeEventListener('drop', drop);
+      if (currentDropbox) {
+        currentDropbox.removeEventListener('dragenter', dragEnter);
+        currentDropbox.removeEventListener('dragover', dragOver);
+        currentDropbox.removeEventListener('drop', drop);
       }
     };
   });

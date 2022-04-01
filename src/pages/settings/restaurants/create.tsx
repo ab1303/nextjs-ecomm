@@ -143,7 +143,7 @@ export default function CreateRestaurantPage({
                   </div>
                 </div>
 
-                <AddressComponent apiKey={apiKey} />
+                <AddressComponent apiKey={apiKey} propertyName='address' />
 
                 <div>
                   <button

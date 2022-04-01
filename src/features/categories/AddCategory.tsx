@@ -4,7 +4,6 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
-import Switch from '@/components/Switch';
 
 import {
   CategoryListDTO,

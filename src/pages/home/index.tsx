@@ -20,7 +20,7 @@ type HomePageProps = {
   categoryRestaurants: CategoryRestaurantsDTO[];
 };
 
-export default function HomePage({ user, categoryRestaurants }: HomePageProps) {
+export default function HomePage({ categoryRestaurants }: HomePageProps) {
   const slidingCards = [];
 
   for (const categoryRestaurant of categoryRestaurants) {

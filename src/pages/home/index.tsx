@@ -7,39 +7,32 @@ import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 import Hero from '@/components/layout/Hero';
 import SlidingCardGallery from '@/components/SlidingCardGallery';
 
-import { Restaurant } from '@/models/restaurantModel';
-import { getData } from '@/utils/fetchHttpClient';
-import { groupBy } from '@/utils/groupBy';
+import {
+  CategoryRestaurantsDTO,
+  getCategoryCards,
+  getCategoryRestaurants,
+} from '@/utils/getCategoryRestaurant';
 
 import { CardData } from '@/types/enum';
 
 type HomePageProps = {
   user: User;
-  restaurants: Restaurant[];
-  result: number;
+  categoryRestaurants: CategoryRestaurantsDTO[];
 };
 
-export default function HomePage({ user, restaurants }: HomePageProps) {
-  const categories = groupBy(restaurants, (r) => r.category);
+export default function HomePage({ user, categoryRestaurants }: HomePageProps) {
   const slidingCards = [];
 
-  for (const key in categories) {
-    if (Object.prototype.hasOwnProperty.call(categories, key)) {
-      const cards: CardData[] = [];
-      for (const restaurant of categories[key]) {
-        const card: CardData = {
-          title: restaurant.name,
-          url: '',
-          image: restaurant.image,
-        };
+  for (const categoryRestaurant of categoryRestaurants) {
+    const cards: Array<CardData> = getCategoryCards(categoryRestaurant);
 
-        cards.push(card);
-      }
-
-      slidingCards.push(
-        <SlidingCardGallery key={key} title={key} cards={cards} />
-      );
-    }
+    slidingCards.push(
+      <SlidingCardGallery
+        key={categoryRestaurant.categoryName}
+        title={categoryRestaurant.categoryName}
+        cards={cards}
+      />
+    );
   }
 
   const data = {
@@ -76,12 +69,13 @@ HomePage.getLayout = function getLayout(page: ReactElement) {
 };
 
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
-  const res: HomePageProps = await getData(`restaurant?limit=50`);
+  const categoryRestaurants: Array<CategoryRestaurantsDTO> =
+    await getCategoryRestaurants(0);
+
   // server side rendering
   return {
     props: {
-      restaurants: res.restaurants,
-      result: res.result,
+      categoryRestaurants: categoryRestaurants,
     }, // will be passed to the page component as props
   };
 }

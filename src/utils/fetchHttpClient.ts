@@ -47,16 +47,22 @@ export const putData = async (url: string, body: unknown, token?: string) => {
   });
 
   const data = await res.json();
-  return data;
+  return {
+    ok: res.ok,
+    ...data,
+  };
 };
 
 export const patchData = async (url: string, body: unknown, token: string) => {
+  const headers: { 'Content-Type': string; Authorization?: string } = {
+    'Content-Type': 'application/json',
+  };
+
+  if (token) headers.Authorization = token;
+
   const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token,
-    },
+    headers,
     body: JSON.stringify(body),
   });
 
@@ -64,15 +70,21 @@ export const patchData = async (url: string, body: unknown, token: string) => {
   return data;
 };
 
-export const deleteData = async (url: string, token: string) => {
+export const deleteData = async (url: string, token?: string) => {
+  const headers: { 'Content-Type': string; Authorization?: string } = {
+    'Content-Type': 'application/json',
+  };
+
+  if (token) headers.Authorization = token;
+
   const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token,
-    },
+    headers,
   });
 
   const data = await res.json();
-  return data;
+  return {
+    ok: res.ok,
+    ...data,
+  };
 };

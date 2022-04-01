@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
 
 export interface Category {
-  _id: number;
+  _id: string;
   name: string;
+  isActive: boolean;
+  restaurants: Array<{ id: string }>;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -14,6 +16,18 @@ const CategoriesSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    isActive: {
+      type: Boolean,
+      default: false,
+    },
+    restaurants: [
+      {
+        id: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,

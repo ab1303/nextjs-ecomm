@@ -2,10 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import auth from '@/middleware/auth';
 import Orders from '@/models/orderModel';
-import Products from '@/models/productModel';
 import connectDB from '@/utils/connectDB';
-
-import { CartItem } from '@/types/CartItem';
 
 connectDB();
 
@@ -60,10 +57,6 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse) => {
       total,
     });
 
-    cart.filter((item: CartItem) => {
-      return sold(item._id, item.quantity, item.inStock, item.sold);
-    });
-
     await newOrder.save();
 
     res.json({
@@ -73,19 +66,4 @@ const createOrder = async (req: NextApiRequest, res: NextApiResponse) => {
   } catch (err: any) {
     return res.status(500).json({ err: err.message });
   }
-};
-
-const sold = async (
-  id: number,
-  quantity: number,
-  oldInStock: number,
-  oldSold: number
-) => {
-  await Products.findOneAndUpdate(
-    { _id: id },
-    {
-      inStock: oldInStock - quantity,
-      sold: quantity + oldSold,
-    }
-  );
 };

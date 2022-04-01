@@ -26,7 +26,7 @@ export default async function handleRestaurantRequest(
 }
 
 export type GetRestaurantDTO = {
-  _id: number;
+  _id: string;
   name: string;
   image: string;
   thumbnail: string;
@@ -46,7 +46,7 @@ const getRestaurant = async (
   try {
     const { id } = req.query;
 
-    const restaurant: Restaurant = await Restaurants.findById(id);
+    const restaurant: Restaurant | null = await Restaurants.findById(id);
     if (!restaurant)
       return res.status(400).json({ error: 'This restaurant does not exist.' });
 
@@ -75,7 +75,7 @@ const updateRestaurant = async (
       req.body as EditRestaurantFormData;
 
     const { id } = req.query;
-    const restaurant: Restaurant = await Restaurants.findById(id);
+    const restaurant: Restaurant | null = await Restaurants.findById(id);
     if (!restaurant)
       return res.status(400).json({ error: 'This restaurant does not exist.' });
 

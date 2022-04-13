@@ -48,7 +48,7 @@ const getRestaurant = async (
 
     const restaurant: Restaurant | null = await Restaurants.findById(id);
     if (!restaurant)
-      return res.status(400).json({ error: 'This restaurant does not exist.' });
+      return res.status(422).json({ error: 'This restaurant does not exist.' });
 
     res.json({
       restaurant: {
@@ -71,13 +71,19 @@ const updateRestaurant = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const { restaurantName, imageUrl, thumbnailUrl, cuisine, address } =
-      req.body as EditRestaurantFormData;
+    const {
+      restaurantName,
+      imageUrl,
+      thumbnailUrl,
+      cuisine,
+      contact,
+      address,
+    } = req.body as EditRestaurantFormData;
 
     const { id } = req.query;
     const restaurant: Restaurant | null = await Restaurants.findById(id);
     if (!restaurant)
-      return res.status(400).json({ error: 'This restaurant does not exist.' });
+      return res.status(422).json({ error: 'This restaurant does not exist.' });
 
     await Restaurants.findByIdAndUpdate(
       { _id: id },
@@ -86,6 +92,7 @@ const updateRestaurant = async (
         cuisine,
         image: imageUrl,
         thumbnail: thumbnailUrl,
+        contact: contact,
         address: addressToAddressModelMap(address),
       }
     );

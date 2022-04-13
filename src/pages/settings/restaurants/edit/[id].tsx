@@ -12,6 +12,7 @@ import ImageUploader from '@/components/image-uploader/ImageUploader';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 
 import AddressComponent from '@/features/Address';
+import TelInput from '@/features/TelInput';
 import {
   GetRestaurantDTO,
   GetRestaurantResponse,
@@ -38,6 +39,7 @@ export default function EditRestaurantsPage({
     defaultValues: {
       restaurantName: restaurant.name,
       cuisine: restaurant.cuisine,
+      contact: restaurant.contact,
       imageUrl: restaurant.image,
       thumbnailUrl: restaurant.thumbnail,
       address: {
@@ -51,9 +53,9 @@ export default function EditRestaurantsPage({
   });
 
   const {
-    register,
     control,
     formState: { errors },
+    register,
     handleSubmit,
     setValue,
   } = formMethods;
@@ -67,6 +69,7 @@ export default function EditRestaurantsPage({
         {
           restaurantName: formData.restaurantName,
           cuisine: formData.cuisine,
+          contact: formData.contact,
           imageUrl: formData.imageUrl,
           thumbnailUrl: formData.thumbnailUrl,
           address: formData.address,
@@ -144,9 +147,7 @@ export default function EditRestaurantsPage({
                   <label
                     className={clsx(
                       'block text-sm font-medium ',
-                      errors.restaurantName
-                        ? 'text-orange-700'
-                        : 'text-gray-700'
+                      errors.cuisine ? 'text-orange-700' : 'text-gray-700'
                     )}
                   >
                     Cuisine
@@ -184,6 +185,19 @@ export default function EditRestaurantsPage({
                   <label
                     className={clsx(
                       'block text-sm font-medium ',
+                      errors.contact ? 'text-orange-700' : 'text-gray-700'
+                    )}
+                  >
+                    Contact
+                  </label>
+                  <div className='mt-1'>
+                    <TelInput propertyName='contact' />
+                  </div>
+                </div>
+                <div>
+                  <label
+                    className={clsx(
+                      'block text-sm font-medium ',
                       'text-gray-700'
                     )}
                   >
@@ -210,9 +224,6 @@ export default function EditRestaurantsPage({
                       disabled
                       type='text'
                       {...register('imageUrl')}
-                      onChange={(e) => {
-                        console.log(e.target.value);
-                      }}
                       value={imageUrl ? imageUrl : ''}
                     />
                   </div>
@@ -244,7 +255,7 @@ export default function EditRestaurantsPage({
                   </div>
                 </div>
 
-                <AddressComponent apiKey={apiKey} />
+                <AddressComponent apiKey={apiKey} propertyName='address' />
 
                 <div>
                   <button

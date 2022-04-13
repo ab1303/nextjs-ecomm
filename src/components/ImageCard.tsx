@@ -7,7 +7,7 @@ type ImageCardProps = {
   deliveryFee: number;
 };
 
-const ImageCard = ({ photo, deliveryFee }: ImageCardProps) => {
+const ImageCard = ({ photo }: ImageCardProps) => {
   return (
     <div className='max-w-sm overflow-hidden rounded shadow-lg'>
       <div className='relative h-64 w-96'>

@@ -8,8 +8,6 @@ interface SlidingCardsProps {
 }
 const SlidingCards = (props: SlidingCardsProps) => {
   const scrollDiv = useRef<HTMLDivElement>(null);
-  const next = useRef<HTMLDivElement>(null);
-  const prev = useRef<HTMLDivElement>(null);
 
   const scrollLeft = () => {
     if (scrollDiv.current) scrollDiv.current.scrollLeft += 40;

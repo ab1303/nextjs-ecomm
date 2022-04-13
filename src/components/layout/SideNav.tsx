@@ -28,7 +28,7 @@ export default function SideNav({
     setOpenNav(showSideNav);
   }, [showSideNav]);
 
-  function handleCloseSideNav(event: MouseEvent) {
+  function handleCloseSideNav() {
     // Note event.preventDefault was causing other mouse events to be ignored
     // when nav was on page
     // event.preventDefault();
@@ -53,7 +53,7 @@ export default function SideNav({
       <div className='relative flex items-center justify-between h-14'>
         <button
           className='p-2 focus-visible:outline-none'
-          onClick={(e) => handleCloseSideNav(e.nativeEvent)}
+          onClick={() => handleCloseSideNav()}
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'

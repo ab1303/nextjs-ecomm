@@ -7,18 +7,22 @@ import AsyncSelect from 'react-select/async';
 import { useDebouncedCallback } from 'use-debounce';
 import usePlacesAutocomplete, { getGeocode } from 'use-places-autocomplete';
 
-import { RestaurantFormData } from '@/types';
-
 const debounce = 300;
 const minLengthAutocomplete = 3;
 const selectProps = {
   isClearable: true,
 };
 
-export default function AddressComponent({ apiKey }: { apiKey: string }) {
+export default function AddressComponent({
+  apiKey,
+  propertyName,
+}: {
+  apiKey: string;
+  propertyName: string;
+}) {
   const {
     init: initialiseGoogleMap,
-    suggestions: { status, data },
+    suggestions: { data },
     setValue: addressAutoCompleteSetValue,
   } = usePlacesAutocomplete({
     requestOptions: {
@@ -34,7 +38,7 @@ export default function AddressComponent({ apiKey }: { apiKey: string }) {
     control,
     setValue: formFieldSetValue,
     formState: { errors },
-  } = useFormContext<RestaurantFormData>();
+  } = useFormContext();
 
   const fetchSuggestions = useDebouncedCallback(
     React.useCallback(
@@ -59,10 +63,11 @@ export default function AddressComponent({ apiKey }: { apiKey: string }) {
 
   const handleSelect = (selectedOption: SingleValue<{ label: string }>) => {
     if (!selectedOption) {
-      formFieldSetValue('address.street_address', '');
-      formFieldSetValue('address.suburb', '');
-      formFieldSetValue('address.postcode', '');
-      formFieldSetValue('address.state', '');
+      formFieldSetValue(`${propertyName}.addressLine`, '');
+      formFieldSetValue(`${propertyName}.street_address`, '');
+      formFieldSetValue(`${propertyName}.suburb`, '');
+      formFieldSetValue(`${propertyName}.postcode`, '');
+      formFieldSetValue(`${propertyName}.state`, '');
       return;
     }
 
@@ -98,8 +103,8 @@ export default function AddressComponent({ apiKey }: { apiKey: string }) {
         formFieldSetValue('address.postcode', postalcode || '');
         formFieldSetValue('address.state', state || '');
       })
-      .catch((error) => {
-        console.log('😱 Error: ', error);
+      .catch(() => {
+        // console.log('😱 Error: ', error);
       });
   };
   return (
@@ -164,7 +169,8 @@ export default function AddressComponent({ apiKey }: { apiKey: string }) {
           <input
             type='text'
             className={clsx(
-              errors.address?.state && 'text-orange-700 border-orange-700'
+              errors.address?.street_address &&
+                'text-orange-700 border-orange-700'
             )}
             {...register('address.street_address', { required: true })}
           />

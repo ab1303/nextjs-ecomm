@@ -19,7 +19,7 @@ export default NextAuth({
         try {
           if (!credentials) return null;
 
-          const user: User | undefined = await Users.findOne({
+          const user: User | null | undefined = await Users.findOne({
             email: credentials.email,
           });
 

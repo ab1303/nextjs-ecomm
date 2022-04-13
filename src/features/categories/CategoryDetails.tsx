@@ -56,7 +56,7 @@ export default function CategoryDetails({
   }, [restaurants, selectedCategoryId]);
 
   const columns = React.useMemo<Column<CategoryRestaurantListDTO>[]>(() => {
-    const handleUnLinkRestaurant = async (id: number) => {
+    const handleUnLinkRestaurant = async (id: string) => {
       if (!id) return;
 
       const restaurantToUnLink = restaurants.find((r) => r._id === id);
@@ -154,7 +154,7 @@ export default function CategoryDetails({
 
   const [selectedRestaurant, setSelectedRestaurant] = useState<
     | SingleValue<{
-        value: number;
+        value: string;
         label: string;
       }>
     | undefined
@@ -168,7 +168,7 @@ export default function CategoryDetails({
 
   const handleOptionChange = (
     option: SingleValue<{
-      value: number;
+      value: string;
       label: string;
     }>
   ) => {

@@ -1,0 +1,22 @@
+Dockerfile
+.dockerignore
+.next
+
+/node_modules
+
+
+
+
+# env files
+.env.development
+
+# local env files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+
+# compose files
+app-variables.env
+.env.docker-compose

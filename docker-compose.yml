@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+  foodapp:
+    depends_on:
+      - mongodb
+    env_file:
+      - docker-compose.env
+    image: ${DOCKER_REGISTRY-}foodapp-client
+    # command: tail -F anything
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BASE_URL: http://localhost:3000
+        NODE_ENV: development
+    networks:
+      - food-app
+    ports:
+      - '3000:3000'
+
+  mongodb:
+    image: mongo:latest
+    container_name: food-app-db
+    networks:
+      - food-app
+    volumes:
+      - food-app-data:/data/db
+    ports:
+      - 27019:27017
+
+volumes:
+  food-app-data:
+
+networks:
+  food-app:
+    name: food-app-network
+    external: false
+# networks:
+#   food-app:
+#     external: true
+#     name: containers_default

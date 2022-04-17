@@ -6,7 +6,10 @@ const connectDB = () => {
     return;
   }
   mongoose.connect(process.env.MONGODB_URL!, (err) => {
-    if (err) throw err;
+    if (err) {
+      console.log('trying to connect mongodb url', process.env.MONGODB_URL);
+      throw err;
+    }
     console.log('Connected to mongodb.');
   });
 };

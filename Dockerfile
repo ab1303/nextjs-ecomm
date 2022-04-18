@@ -12,12 +12,10 @@ RUN apk --no-cache add curl
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-COPY docker-compose.env /app/.env
 
 ARG NEXT_PUBLIC_BASE_URL
 
 ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
-# ENV MONGODB_URL=mongodb://172.20.0.1:27017/nextjs-ecomm?retryWrites=true&w=majority&connectTimeoutMS=5000
 
 RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 
@@ -43,7 +41,6 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/.env ./.env
 
 # We then become that nextjs user. 
 # By default Docker runs as root on the contained machine. But that is pretty dangerous since it gives root privileges to whatever code we run

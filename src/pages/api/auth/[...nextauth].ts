@@ -16,35 +16,31 @@ export default NextAuth({
         password: {},
       },
       authorize: async (credentials) => {
-        try {
-          if (!credentials) return null;
+        if (!credentials) return null;
 
-          const user: User | null | undefined = await Users.findOne({
-            email: credentials.email,
-          });
+        const user: User | null | undefined = await Users.findOne({
+          email: credentials.email,
+        });
 
-          if (!user) {
-            throw new Error('No user found!');
-          }
-
-          const isValid = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
-
-          if (!isValid) {
-            throw new Error('Could not log you in!');
-          }
-
-          return {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            role: user.role,
-          };
-        } catch (err: any) {
-          return { err: err.message };
+        if (!user) {
+          return null;
         }
+
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+
+        if (!isValid) {
+          return null;
+        }
+
+        return {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          role: user.role,
+        };
       },
     }),
   ],

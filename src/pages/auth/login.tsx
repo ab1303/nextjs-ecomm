@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { signIn, SignInResponse } from 'next-auth/react';
 import { FormEvent, useRef } from 'react';
+import { toast } from 'react-toastify';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 
@@ -29,7 +30,12 @@ const Login = () => {
       }
     );
 
-    if (!!result && result.ok) {
+    if (result) {
+      if (!result.ok) {
+        toast.error(`Could not log you in. Please check your credentials`);
+        return;
+      }
+
       router.push('/home');
     }
   }

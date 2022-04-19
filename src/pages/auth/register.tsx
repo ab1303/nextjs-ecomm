@@ -34,7 +34,10 @@ const Register = () => {
         passwordConfirm,
       });
 
-      if (!result.ok) toast.error(result.error);
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
 
       toast.success(result.success || 'Registration successful!');
       router.push('/auth/login');

@@ -96,8 +96,9 @@ const updateCategoryRestaurants = async (
     switch (link as CategoryRestaurantLink) {
       case 'add':
         restaurant.categories.push({ id });
-        category.restaurants.push({ id: restaurantId });
         restaurant.save();
+
+        category.restaurants.push({ id: restaurantId });
         category.save();
 
         res.json({

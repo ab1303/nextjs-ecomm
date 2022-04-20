@@ -4,17 +4,17 @@ import * as React from 'react';
 import Header from './Header';
 import Loading from '../Loading';
 
-export default function AuthorizedLayout({
+export default function AuthorizedLayout2({
   children,
 }: {
   children: React.ReactElement;
 }) {
-  const { data: session, status } = useSession({ required: true });
+  const { data: session, status } = useSession();
 
-  const isUser = !!session?.user;
-  if (status === 'loading' || !isUser) return <Loading />;
+  if (status === 'loading') return <Loading />;
 
-  // Put Header or Footer Here
+  if (status === 'unauthenticated' || !session) return children;
+
   const childrenWithUserProp = React.cloneElement(children, {
     user: session.user,
   });

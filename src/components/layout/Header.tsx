@@ -27,7 +27,7 @@ export default function Header({ user }: HeaderProps) {
             </svg>
           </button>
           <span className='flex-grow flex items-center justify-center font-extrabold font-serif text-xl text-orange-500 '>
-            Food App
+            Favorite Restaurant App
           </span>
           <div className='flex items-center relative'>
             <span className='text-gray-400'>

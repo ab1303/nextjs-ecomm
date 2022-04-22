@@ -56,7 +56,7 @@ const Login = () => {
             Sign in
           </h2>
           <p className='mt-2 text-center text-sm text-gray-600 max-w'>
-            New to Food App? &nbsp;
+            New to Favorite Restaurant App? &nbsp;
             <UnstyledLink
               href='/auth/register'
               className='font-medium text-orange-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500'

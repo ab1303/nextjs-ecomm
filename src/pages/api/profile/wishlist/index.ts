@@ -7,6 +7,7 @@ import Wishlist from '@/models/wishlistModel';
 import connectDB from '@/utils/connectDB';
 
 import { Notify } from '@/types';
+import { FavoriteLink } from '@/types/enum';
 
 connectDB();
 
@@ -65,24 +66,55 @@ const updateUserWishlist = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
+    const { restaurantId, link } = req.body;
     const user = await getUser(req, res);
+
     const userWishList = await Wishlist.findOne({
       userId: user.id,
     });
 
-    const { restaurantId } = req.body;
     if (userWishList && restaurantId) {
-      userWishList.restaurants.push(restaurantId);
-      await userWishList.save();
-    } else {
-      const newWishlist = new Wishlist({
-        userId: user.id,
-        restaurants: [restaurantId],
-      });
-      await newWishlist.save();
+      switch (link as FavoriteLink) {
+        case 'add':
+          if (
+            !userWishList.restaurants.find(
+              (r: { id: string }) => r.id === restaurantId
+            )
+          ) {
+            userWishList.restaurants.push({ id: restaurantId });
+            await userWishList.save();
+          }
+
+          res.json({
+            success: 'Success! selected restaurant added to wishlist',
+          });
+
+          break;
+
+        case 'remove':
+          await Wishlist.updateOne(
+            { _id: userWishList._id },
+            { $pull: { restaurants: { id: restaurantId } } },
+            { safe: true, multi: false }
+          );
+
+          res.json({
+            success: 'Success! selected restaurant removed from wishlist',
+          });
+
+          break;
+      }
     }
 
-    res.json({ success: 'Wishlist Update Successful!' });
+    const newWishlist = new Wishlist({
+      userId: user.id,
+      restaurants: [{ id: restaurantId }],
+    });
+    await newWishlist.save();
+
+    res.json({
+      success: 'Success! selected restaurant added to wishlist',
+    });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || err });
   }

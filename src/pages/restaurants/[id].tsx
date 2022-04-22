@@ -2,6 +2,7 @@ import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import * as React from 'react';
 import PhoneInput from 'react-phone-input-2';
+import { toast } from 'react-toastify';
 
 import 'react-phone-input-2/lib/style.css';
 
@@ -10,12 +11,14 @@ import FavoriteSwitch from '@/components/FavoriteSwitch';
 import AuthorizedLayout2 from '@/components/layout/AuthorizedLayout2';
 
 import { User } from '@/models/userModel';
-import { getData } from '@/utils/fetchHttpClient';
+import { getData, postData, putData } from '@/utils/fetchHttpClient';
 
 import {
   GetRestaurantDTO,
   GetRestaurantResponse,
 } from '../api/restaurant/[id]';
+
+import { Notify } from '@/types';
 
 type ViewRestaurantPageProps = {
   user: User;
@@ -27,6 +30,37 @@ export default function ViewRestaurantPage({
   restaurant,
 }: ViewRestaurantPageProps) {
   const [isFavorite, setIsFavorite] = React.useState<boolean>(false);
+
+  const handleToggleState = async () => {
+    try {
+      const toggleState = isFavorite ? 'remove' : 'add';
+
+      const result: { ok: boolean } & Notify = await postData(
+        `profile/wishlist`,
+        {
+          restaurantId: restaurant._id,
+          link: toggleState,
+        }
+      );
+
+      if (!result.ok) {
+        toast.error(result.error);
+        return;
+      }
+
+      setIsFavorite((isFavorite) => !isFavorite);
+
+      const successMsg =
+        toggleState === 'add'
+          ? 'Restaurant added to wishlist !'
+          : 'Restaurant removed from wishlist !';
+
+      toast.success(result.success || successMsg);
+    } catch (e: any) {
+      toast.error(e.error);
+    }
+  };
+
   return (
     <div className='flex flex-col min-h-screen px-6 bg-gray-100 lg:px-8'>
       <div className='container min-w-full mx-auto'>
@@ -53,9 +87,7 @@ export default function ViewRestaurantPage({
               {user && (
                 <FavoriteSwitch
                   isSelected={isFavorite}
-                  onStateChange={() =>
-                    setIsFavorite((isFavorite) => !isFavorite)
-                  }
+                  onStateChange={handleToggleState}
                 />
               )}
             </div>

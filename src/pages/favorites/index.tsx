@@ -132,35 +132,42 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         </Card.Header>
 
         <Card.Body>
-          <Table {...getTableProps()}>
-            <Table.THead>
-              {headerGroups.map((headerGroup) => (
-                <Table.THead.TR {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column) => (
-                    <Table.THead.TH {...column.getHeaderProps()}>
-                      {column.render('Header')}
-                    </Table.THead.TH>
-                  ))}
-                </Table.THead.TR>
-              ))}
-            </Table.THead>
-            <Table.TBody {...getTableBodyProps()}>
-              {rows.map((row) => {
-                prepareRow(row);
-                return (
-                  <Table.TBody.TR {...row.getRowProps()}>
-                    {row.cells.map((cell) => {
-                      return (
-                        <Table.TBody.TD {...cell.getCellProps()}>
-                          {cell.render('Cell')}
-                        </Table.TBody.TD>
-                      );
-                    })}
-                  </Table.TBody.TR>
-                );
-              })}
-            </Table.TBody>
-          </Table>
+          {tableData.length > 0 ? (
+            <Table {...getTableProps()}>
+              <Table.THead>
+                {headerGroups.map((headerGroup) => (
+                  <Table.THead.TR {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <Table.THead.TH {...column.getHeaderProps()}>
+                        {column.render('Header')}
+                      </Table.THead.TH>
+                    ))}
+                  </Table.THead.TR>
+                ))}
+              </Table.THead>
+              <Table.TBody {...getTableBodyProps()}>
+                {rows.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <Table.TBody.TR {...row.getRowProps()}>
+                      {row.cells.map((cell) => {
+                        return (
+                          <Table.TBody.TD {...cell.getCellProps()}>
+                            {cell.render('Cell')}
+                          </Table.TBody.TD>
+                        );
+                      })}
+                    </Table.TBody.TR>
+                  );
+                })}
+              </Table.TBody>
+            </Table>
+          ) : (
+            <div className='text-orange-400 mt-10 text-center text-lg font-bold'>
+              {' '}
+              No restaurant added to favorite list !
+            </div>
+          )}
         </Card.Body>
       </Card>
     </div>

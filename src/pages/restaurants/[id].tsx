@@ -1,5 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
+import { getSession } from 'next-auth/react';
 import * as React from 'react';
 import PhoneInput from 'react-phone-input-2';
 import { toast } from 'react-toastify';
@@ -11,7 +12,7 @@ import FavoriteSwitch from '@/components/FavoriteSwitch';
 import AuthorizedLayout2 from '@/components/layout/AuthorizedLayout2';
 
 import { User } from '@/models/userModel';
-import { getData, postData, putData } from '@/utils/fetchHttpClient';
+import { getData, postData } from '@/utils/fetchHttpClient';
 
 import {
   GetRestaurantDTO,
@@ -23,13 +24,16 @@ import { Notify } from '@/types';
 type ViewRestaurantPageProps = {
   user: User;
   restaurant: GetRestaurantDTO;
+  isFavoriteRestaurant: boolean;
 };
 
 export default function ViewRestaurantPage({
   user,
   restaurant,
+  isFavoriteRestaurant,
 }: ViewRestaurantPageProps) {
-  const [isFavorite, setIsFavorite] = React.useState<boolean>(false);
+  const [isFavorite, setIsFavorite] =
+    React.useState<boolean>(isFavoriteRestaurant);
 
   const handleToggleState = async () => {
     try {
@@ -121,15 +125,21 @@ export default function ViewRestaurantPage({
   );
 }
 
-export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   // server side rendering
 
+  const session = await getSession(context);
+  const { query } = context;
   const id = query.id;
-  const response: GetRestaurantResponse = await getData(`restaurant\\${id}`);
+  const response: GetRestaurantResponse =
+    session != null
+      ? await getData(`restaurant\\${id}?userEmail=${session.user.email}`)
+      : await getData(`restaurant\\${id}`);
 
   return {
     props: {
       restaurant: response.restaurant,
+      isFavoriteRestaurant: response.isFavorite,
     },
   };
 }

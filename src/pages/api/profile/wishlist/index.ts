@@ -43,8 +43,8 @@ const getUserWishlist = async (req: NextApiRequest, res: NextApiResponse) => {
         .json({ error: 'No favourites added for the user.' });
 
     const favRestaurants: Restaurant[] = [];
-    for (const resId of userWishList.restaurants) {
-      const restaurant = await Restaurants.findOne({ _id: resId });
+    for (const restaurantItem of userWishList.restaurants) {
+      const restaurant = await Restaurants.findOne({ _id: restaurantItem.id });
       favRestaurants.push(restaurant);
     }
 
@@ -67,7 +67,11 @@ const updateUserWishlist = async (
 ) => {
   try {
     const { restaurantId, link } = req.body;
-    const user = await getUser(req, res);
+    const user = await getUser(req);
+
+    if (!user) {
+      res.status(400).json({ error: 'Authentication is not valid.' });
+    }
 
     const userWishList = await Wishlist.findOne({
       userId: user.id,
@@ -120,10 +124,9 @@ const updateUserWishlist = async (
   }
 };
 
-const getUser = async (req: NextApiRequest, res: NextApiResponse) => {
+const getUser = async (req: NextApiRequest) => {
   const session = await getSession({ req });
-  if (!session)
-    return res.status(400).json({ error: 'Authentication is not valid.' });
+  if (!session) return null;
 
   const user = await Users.findOne({ email: session.user.email });
   return user;

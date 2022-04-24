@@ -19,7 +19,7 @@ const SlidingCards = (props: SlidingCardsProps) => {
     return props.cardData.map((card) => {
       return (
         <Link key={card.title} href={card.url} passHref>
-          <div className='flex-none w-1/4 mr-8 border rounded-lg md:w-1/3 md:pb-4'>
+          <div className='flex-none w-1/4 mr-8 border rounded-lg md:w-1/3 md:pb-4 cursor-pointer'>
             <div className='max-w-sm overflow-hidden rounded shadow-lg'>
               <div className='relative h-64 w-96'>
                 <Image

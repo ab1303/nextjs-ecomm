@@ -37,9 +37,9 @@ export default function HomePage({ categoryRestaurants }: HomePageProps) {
 
   const data = {
     hero: {
-      appType: 'Food app',
-      tagLine: 'Why stay hungry when you can order',
-      description: 'Your favorite restaurants to order from',
+      appType: 'Favorite Restaurant app',
+      tagLine: 'Why stay hungry',
+      description: 'Select your favorite restaurants',
       showActionButtons: false,
     },
   };

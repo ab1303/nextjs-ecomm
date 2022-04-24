@@ -39,7 +39,7 @@ export default function HomePage({ categoryRestaurants }: HomePageProps) {
     hero: {
       appType: 'Favorite Restaurant app',
       tagLine: 'Why stay hungry',
-      description: 'Select your favorite restaurants',
+      description: 'select your favorite restaurants',
       showActionButtons: false,
     },
   };

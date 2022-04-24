@@ -6,6 +6,8 @@ import Users from '@/models/userModel';
 import Wishlist from '@/models/wishlistModel';
 import connectDB from '@/utils/connectDB';
 
+import { RestaurantListDTO } from '../../restaurant';
+
 import { Notify } from '@/types';
 import { FavoriteLink } from '@/types/enum';
 
@@ -25,14 +27,13 @@ export default async function handleWishlistRequest(
   }
 }
 
-export type FavRestaurantListDTO = {
-  restaurantName: string;
-  image: string;
-};
+export type FavRestaurantListDTO = Omit<RestaurantListDTO, 'categories'>;
 
 const getUserWishlist = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const user = await getUser(req, res);
+    const { userEmail } = req.query;
+    const user = await Users.findOne({ email: userEmail });
+
     const userWishList = await Wishlist.findOne({
       userId: user.id,
     });
@@ -48,13 +49,17 @@ const getUserWishlist = async (req: NextApiRequest, res: NextApiResponse) => {
       favRestaurants.push(restaurant);
     }
 
-    const result: Array<FavRestaurantListDTO> = favRestaurants.map((w) => ({
-      restaurantName: w.name,
-      image: w.image,
+    const result: Array<FavRestaurantListDTO> = favRestaurants.map((r) => ({
+      _id: r._id,
+      name: r.name,
+      image: r.image,
+      cuisine: r.cuisine,
+      contact: r.contact,
+      address: r.address.addressLine,
     }));
 
     res.json({
-      favRestaurants: result,
+      restaurants: result,
     });
   } catch (err: any) {
     return res.status(500).json({ err: err.message });
@@ -108,6 +113,8 @@ const updateUserWishlist = async (
 
           break;
       }
+
+      return;
     }
 
     const newWishlist = new Wishlist({

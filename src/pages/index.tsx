@@ -1,84 +1,20 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
-// import { useRouter } from 'next/router';
 import * as React from 'react';
 
 import Hero from '@/components/layout/Hero';
 import PageLoading from '@/components/PageLoading';
 import SlidingCardGallery from '@/components/SlidingCardGallery';
 
-// import FilterCategory from '@/features/category/FilterCategory';
-// import ProductItem from '@/features/product/ProductItem';
-// import {
-//   ModalEvent,
-//   useGlobalDispatch,
-//   useGlobalState,
-// } from '@/store/GlobalStore';
 import {
   CategoryRestaurantsDTO,
-  getCategoryCards,
   getCategoryRestaurants,
-} from '@/utils/getCategoryRestaurant';
+} from '@/static-props/getCategoryRestaurant';
 
-// import filterSearch from '@/utils/filterSearch';
-// import { ModalItem } from '@/types';
 import { CardData } from '@/types/enum';
 
 export default function LandingPage({ categoryRestaurants }: LandingPageProps) {
-  // const [products, setProducts] = useState<Product[]>(props.products);
-
-  // const [isCheck, setIsCheck] = useState(false);
-  // const [page, setPage] = useState(1);
-
-  // const router = useRouter();
-
-  // const state = useGlobalState();
-  // const { auth } = state;
-  // const dispatch = useGlobalDispatch();
-
-  // useEffect(() => {
-  //   setProducts(props.products);
-  // }, [props.products]);
-
-  // useEffect(() => {
-  //   if (Object.keys(router.query).length === 0) setPage(1);
-  // }, [router.query]);
-
-  // const handleCheck = (id: number) => {
-  //   products.forEach((product) => {
-  //     if (product._id === id) product.checked = !product.checked;
-  //   });
-  //   setProducts([...products]);
-  // };
-
-  // const handleCheckALL = () => {
-  //   products.forEach((product) => (product.checked = !isCheck));
-  //   setProducts([...products]);
-  //   setIsCheck(!isCheck);
-  // };
-
-  // const handleDeleteAll = () => {
-  //   const deleteArr: Array<ModalItem> = [];
-  //   products.forEach((product) => {
-  //     if (product.checked) {
-  //       deleteArr.push({
-  //         data: '',
-  //         id: product._id,
-  //         title: 'Delete all selected products?',
-  //         type: 'DELETE_PRODUCT',
-  //       });
-  //     }
-  //   });
-
-  //   dispatch({ type: ModalEvent.ADD, payload: { modal: deleteArr } });
-  // };
-
-  // const handleLoadmore = () => {
-  //   setPage(page + 1);
-  //   filterSearch({ router, page: `${page + 1}` });
-  // };
-
   const router = useRouter();
   const { status } = useSession();
 
@@ -105,7 +41,11 @@ export default function LandingPage({ categoryRestaurants }: LandingPageProps) {
   const slidingCards = [];
 
   for (const categoryRestaurant of categoryRestaurants) {
-    const cards: Array<CardData> = getCategoryCards(categoryRestaurant);
+    const cards: Array<CardData> = categoryRestaurant.restaurants.map((r) => ({
+      title: r.name,
+      url: `/restaurants/${r._id}`,
+      image: r.image,
+    }));
 
     slidingCards.push(
       <SlidingCardGallery
@@ -140,7 +80,7 @@ type LandingPageProps = {
   categoryRestaurants: CategoryRestaurantsDTO[];
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const categoryRestaurants: Array<CategoryRestaurantsDTO> =
     await getCategoryRestaurants(1);
 
@@ -148,6 +88,7 @@ export async function getServerSideProps() {
   return {
     props: {
       categoryRestaurants: categoryRestaurants,
+      // categoryRestaurants: [],
     }, // will be passed to the page component as props
   };
 }

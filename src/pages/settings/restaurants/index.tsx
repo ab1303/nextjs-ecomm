@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ReactElement, useState } from 'react';
@@ -8,10 +9,14 @@ import Card from '@/components/card';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 import Table from '@/components/table';
 
-import CategoriesModal from '@/features/restaurant/CategoriesModal';
 import { CategoryListDTO } from '@/pages/api/categories';
 import { RestaurantListDTO, RestaurantsResponse } from '@/pages/api/restaurant';
 import { getData } from '@/utils/fetchHttpClient';
+
+// import CategoriesModal from '@/features/restaurant/CategoriesModal';
+const CategoriesModal = dynamic(
+  () => import('@/features/restaurant/CategoriesModal')
+);
 
 type RestaurantsPageProps = {
   restaurants: Array<RestaurantListDTO>;

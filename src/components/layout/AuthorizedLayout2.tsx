@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react';
 import * as React from 'react';
 
 import Header from './Header';
-import Loading from '../Loading';
+import PageLoading from '../PageLoading';
 
 export default function AuthorizedLayout2({
   children,
@@ -11,7 +11,7 @@ export default function AuthorizedLayout2({
 }) {
   const { data: session, status } = useSession();
 
-  if (status === 'loading') return <Loading />;
+  if (status === 'loading') return <PageLoading />;
 
   if (status === 'unauthenticated' || !session) return children;
 

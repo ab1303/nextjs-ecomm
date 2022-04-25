@@ -24,8 +24,36 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
   const [tableData, setTableData] =
     useState<Array<RestaurantListDTO>>(restaurants);
 
-  const columns = React.useMemo<Column<RestaurantListDTO>[]>(
-    () => [
+  const columns = React.useMemo<Column<RestaurantListDTO>[]>(() => {
+    const handleRemoveFavorite = async (restaurantId: string) => {
+      try {
+        const result: { ok: boolean } & Notify = await postData(
+          `profile/wishlist`,
+          {
+            restaurantId,
+            link: 'remove',
+          }
+        );
+
+        if (!result.ok) {
+          toast.error(result.error);
+          return;
+        }
+
+        const updatedFavoriteRestaurants = restaurants.filter(
+          (r) => r._id !== restaurantId
+        );
+
+        setTableData(updatedFavoriteRestaurants);
+
+        const successMsg = 'Restaurant removed from wishlist !';
+
+        toast.success(result.success || successMsg);
+      } catch (e: any) {
+        toast.error(e.error);
+      }
+    };
+    return [
       {
         id: 'thumbnail',
         // eslint-disable-next-line react/display-name
@@ -76,9 +104,8 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
           );
         },
       },
-    ],
-    []
-  );
+    ];
+  }, []);
 
   const hooks = [useRowSelect];
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -89,35 +116,6 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
       },
       ...hooks
     );
-
-  const handleRemoveFavorite = async (restaurantId: string) => {
-    try {
-      const result: { ok: boolean } & Notify = await postData(
-        `profile/wishlist`,
-        {
-          restaurantId,
-          link: 'remove',
-        }
-      );
-
-      if (!result.ok) {
-        toast.error(result.error);
-        return;
-      }
-
-      const updatedFavoriteRestaurants = restaurants.filter(
-        (r) => r._id !== restaurantId
-      );
-
-      setTableData(updatedFavoriteRestaurants);
-
-      const successMsg = 'Restaurant removed from wishlist !';
-
-      toast.success(result.success || successMsg);
-    } catch (e: any) {
-      toast.error(e.error);
-    }
-  };
 
   return (
     /* eslint-disable react/jsx-key */

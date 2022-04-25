@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react';
 import * as React from 'react';
 
 import Header from './Header';
-import Loading from '../Loading';
+import PageLoading from '../PageLoading';
 
 export default function AuthorizedLayout({
   children,
@@ -12,7 +12,7 @@ export default function AuthorizedLayout({
   const { data: session, status } = useSession({ required: true });
 
   const isUser = !!session?.user;
-  if (status === 'loading' || !isUser) return <Loading />;
+  if (status === 'loading' || !isUser) return <PageLoading />;
 
   // Put Header or Footer Here
   const childrenWithUserProp = React.cloneElement(children, {

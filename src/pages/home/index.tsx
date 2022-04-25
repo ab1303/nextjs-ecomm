@@ -1,4 +1,3 @@
-import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import { User } from 'next-auth';
 import React, { ReactElement } from 'react';
@@ -9,22 +8,26 @@ import SlidingCardGallery from '@/components/SlidingCardGallery';
 
 import {
   CategoryRestaurantsDTO,
-  getCategoryCards,
   getCategoryRestaurants,
-} from '@/utils/getCategoryRestaurant';
+} from '@/static-props/getCategoryRestaurant';
 
 import { CardData } from '@/types/enum';
 
 type HomePageProps = {
   user: User;
   categoryRestaurants: CategoryRestaurantsDTO[];
+  time: string;
 };
 
-export default function HomePage({ categoryRestaurants }: HomePageProps) {
+export default function HomePage({ categoryRestaurants, time }: HomePageProps) {
   const slidingCards = [];
 
   for (const categoryRestaurant of categoryRestaurants) {
-    const cards: Array<CardData> = getCategoryCards(categoryRestaurant);
+    const cards: Array<CardData> = categoryRestaurant.restaurants.map((r) => ({
+      title: r.name,
+      url: `/restaurants/${r._id}`,
+      image: r.image,
+    }));
 
     slidingCards.push(
       <SlidingCardGallery
@@ -53,7 +56,7 @@ export default function HomePage({ categoryRestaurants }: HomePageProps) {
       <Hero
         appType={data.hero.appType}
         tagLine={data.hero.tagLine}
-        description={data.hero.description}
+        description={`${data.hero.description} - ${time}`}
         showActionButtons={data.hero.showActionButtons}
         mainActionText=''
         extraActionText=''
@@ -68,14 +71,16 @@ HomePage.getLayout = function getLayout(page: ReactElement) {
   return <AuthorizedLayout>{page}</AuthorizedLayout>;
 };
 
-export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+export async function getStaticProps() {
   const categoryRestaurants: Array<CategoryRestaurantsDTO> =
     await getCategoryRestaurants(0);
 
   // server side rendering
   return {
     props: {
+      time: new Date().toISOString(),
       categoryRestaurants: categoryRestaurants,
-    }, // will be passed to the page component as props
+    },
+    revalidate: 30,
   };
 }

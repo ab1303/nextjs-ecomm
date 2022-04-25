@@ -10,6 +10,13 @@ enum CategoryRestaurantLinkVariant {
 
 export type CategoryRestaurantLink = keyof typeof CategoryRestaurantLinkVariant;
 
+enum FavoriteVariant {
+  'add',
+  'remove',
+}
+
+export type FavoriteLink = keyof typeof FavoriteVariant;
+
 export type UserRole = keyof typeof RoleVariant;
 
 export enum CuisineType {

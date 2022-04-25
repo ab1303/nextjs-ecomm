@@ -23,13 +23,14 @@ const updateProfile = async (
   res: NextApiResponse<Notify>
 ) => {
   try {
-    const { firstname, lastname, email } = req.body;
+    const { firstname, lastname, email, phone } = req.body;
 
     const user = await Users.findOne({ email });
     if (!user) return res.status(400).json({ error: 'User not found.' });
 
     user.firstName = firstname;
     user.lastName = lastname;
+    user.phone = phone;
 
     await user.save();
     res.json({ success: 'Profile Update Successful!' });

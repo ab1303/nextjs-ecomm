@@ -1,10 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
 
 import {
   addressModelToAddressMap,
   addressToAddressModelMap,
 } from '@/mappers/addressMapper';
 import Restaurants, { Restaurant } from '@/models/restaurantModel';
+import Users from '@/models/userModel';
+import Wishlist from '@/models/wishlistModel';
 import connectDB from '@/utils/connectDB';
 
 import { Address, EditRestaurantFormData, Notify } from '@/types';
@@ -37,6 +40,7 @@ export type GetRestaurantDTO = {
 
 export type GetRestaurantResponse = {
   restaurant: GetRestaurantDTO;
+  isFavorite: boolean;
 };
 
 const getRestaurant = async (
@@ -44,7 +48,19 @@ const getRestaurant = async (
   res: NextApiResponse<GetRestaurantResponse | Notify>
 ) => {
   try {
-    const { id } = req.query;
+    const { id, userEmail } = req.query;
+
+    let isFavorite = false;
+    const user = await Users.findOne({ email: userEmail });
+    if (user) {
+      const userWishList = await Wishlist.findOne({
+        userId: user.id,
+      });
+
+      isFavorite = !!userWishList.restaurants.find(
+        (r: { id: string }) => r.id === id
+      );
+    }
 
     const restaurant: Restaurant | null = await Restaurants.findById(id);
     if (!restaurant)
@@ -60,6 +76,7 @@ const getRestaurant = async (
         contact: restaurant.contact,
         address: addressModelToAddressMap(restaurant.address),
       },
+      isFavorite,
     });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });

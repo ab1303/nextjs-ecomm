@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { signIn, SignInResponse } from 'next-auth/react';
 import { FormEvent, useRef } from 'react';
+import { toast } from 'react-toastify';
 
 import UnstyledLink from '@/components/links/UnstyledLink';
 
@@ -29,7 +30,12 @@ const Login = () => {
       }
     );
 
-    if (!!result && result.ok) {
+    if (result) {
+      if (!result.ok) {
+        toast.error(`Could not log you in. Please check your credentials`);
+        return;
+      }
+
       router.push('/home');
     }
   }
@@ -50,7 +56,7 @@ const Login = () => {
             Sign in
           </h2>
           <p className='mt-2 text-center text-sm text-gray-600 max-w'>
-            New to Food App? &nbsp;
+            New to Favorite Restaurant App? &nbsp;
             <UnstyledLink
               href='/auth/register'
               className='font-medium text-orange-600 hover:text-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500'

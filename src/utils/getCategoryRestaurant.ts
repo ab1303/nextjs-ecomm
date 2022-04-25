@@ -49,7 +49,7 @@ export const getCategoryCards = (
   for (const restaurant of categoryRestaurant.restaurants) {
     const card: CardData = {
       title: restaurant.name,
-      url: '',
+      url: `/restaurants/${restaurant._id}`,
       image: restaurant.image,
     };
 

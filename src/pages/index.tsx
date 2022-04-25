@@ -84,9 +84,9 @@ export default function LandingPage({ categoryRestaurants }: LandingPageProps) {
 
   const data = {
     hero: {
-      appType: 'Food app',
-      tagLine: 'Why stay hungry when you can order',
-      description: 'Your favorite restaurants to order from',
+      appType: 'Favorite Restaurant app',
+      tagLine: 'Why stay hungry',
+      description: 'select your favorite restaurants',
       mainActionText: 'Sign in',
       extraActionText: 'Sign up',
       showActionButtons: true,

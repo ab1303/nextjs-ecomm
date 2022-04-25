@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 export interface Wishlist {
   _id: number;
   userId: number;
-  restaurants: string[];
+  restaurants: Array<{ id: string }>;
 }
 
 const wishlistSchema = new mongoose.Schema({
@@ -13,11 +13,14 @@ const wishlistSchema = new mongoose.Schema({
     trim: true,
   },
 
-  restaurants: {
-    type: [{ type: String }],
-    required: true,
-    trim: true,
-  },
+  restaurants: [
+    {
+      id: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 const Dataset =

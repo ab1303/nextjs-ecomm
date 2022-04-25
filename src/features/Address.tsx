@@ -33,6 +33,10 @@ export default function AddressComponent({
     initOnMount: false,
   });
 
+  React.useEffect(() => {
+    if (window.google && window.google.maps) initialiseGoogleMap();
+  }, [initialiseGoogleMap]);
+
   const {
     register,
     control,

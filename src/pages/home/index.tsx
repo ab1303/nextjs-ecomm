@@ -81,6 +81,6 @@ export async function getStaticProps() {
       time: new Date().toISOString(),
       categoryRestaurants: categoryRestaurants,
     },
-    revalidate: 30,
+    revalidate: 10,
   };
 }

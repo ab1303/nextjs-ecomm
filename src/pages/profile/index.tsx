@@ -1,18 +1,16 @@
 import clsx from 'clsx';
-import Link from 'next/link';
 import { User } from 'next-auth';
 import React, { ReactElement } from 'react';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
-import Select from 'react-select';
+import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import Card from '@/components/card';
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
 
+import TelInput from '@/features/TelInput';
 import { postData } from '@/utils/fetchHttpClient';
 
 import { Notify, ProfileData } from '@/types';
-import { CountryMap } from '@/types/maps';
 
 type ProfileFormData = ProfileData;
 
@@ -27,14 +25,12 @@ export default function ProfilePage({ user }: ProfilePageProps) {
       firstname: user.firstName,
       lastname: user.lastName,
       email: user.email,
-      phone: '0123 4567',
-      country: 'AU (+61)',
+      phone: user.phone,
     },
   });
 
   const {
     register,
-    control,
     formState: { errors },
     handleSubmit,
   } = formMethods;
@@ -133,38 +129,7 @@ export default function ProfilePage({ user }: ProfilePageProps) {
                 </div>
 
                 <div className='flex'>
-                  <div className='w-1/2 '>
-                    <label
-                      className={clsx(
-                        'block text-sm font-medium ',
-                        errors.phone ? 'text-orange-700' : 'text-gray-700'
-                      )}
-                    >
-                      Country
-                    </label>
-                    <div className='mt-1'>
-                      <Controller
-                        name='country'
-                        control={control}
-                        rules={{
-                          required: true,
-                        }}
-                        render={({ field: { onChange, value } }) => (
-                          <Select
-                            value={{ label: value }}
-                            options={Object.keys(CountryMap).map((k) => ({
-                              label: k,
-                            }))}
-                            getOptionValue={({ label }) => label}
-                            onChange={(option) => {
-                              onChange(option?.label || null);
-                            }}
-                          />
-                        )}
-                      />
-                    </div>
-                  </div>
-                  <div className='w-1/2 ml-3'>
+                  <div>
                     <label
                       className={clsx(
                         'block text-sm font-medium ',
@@ -174,18 +139,13 @@ export default function ProfilePage({ user }: ProfilePageProps) {
                       Phone
                     </label>
                     <div className='mt-1'>
-                      <input
-                        type='text'
-                        className={clsx(
-                          errors.phone && 'text-orange-700 border-orange-700'
-                        )}
-                        {...register('phone', { required: false })}
-                      />
+                      <TelInput propertyName='phone' />
                     </div>
                   </div>
                 </div>
 
-                <div>
+                {/* TODO */}
+                {/* <div>
                   <Link href='#'>
                     <a
                       className={clsx(
@@ -195,7 +155,7 @@ export default function ProfilePage({ user }: ProfilePageProps) {
                       Reset your password
                     </a>
                   </Link>
-                </div>
+                </div> */}
 
                 <div>
                   <button

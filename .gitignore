@@ -40,3 +40,4 @@ app-variables.env
 # next-sitemap
 robots.txt
 sitemap.xml
+docker-compose.env

@@ -38,10 +38,12 @@ const getUserWishlist = async (req: NextApiRequest, res: NextApiResponse) => {
       userId: user.id,
     });
 
-    if (!userWishList)
-      return res
-        .status(400)
-        .json({ error: 'No favourites added for the user.' });
+    if (!userWishList) {
+      res.json({
+        restaurants: [],
+      });
+      return;
+    }
 
     const favRestaurants: Restaurant[] = [];
     for (const restaurantItem of userWishList.restaurants) {

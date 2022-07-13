@@ -56,7 +56,7 @@ export default function HomePage({ categoryRestaurants, time }: HomePageProps) {
       <Hero
         appType={data.hero.appType}
         tagLine={data.hero.tagLine}
-        description={`${data.hero.description} - ${time}`}
+        description={`${data.hero.description}`}
         showActionButtons={data.hero.showActionButtons}
         mainActionText=''
         extraActionText=''
@@ -80,6 +80,7 @@ export async function getStaticProps() {
     props: {
       time: new Date().toISOString(),
       categoryRestaurants: categoryRestaurants,
+      // categoryRestaurants: [],
     },
     revalidate: 10,
   };

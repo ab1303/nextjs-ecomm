@@ -40,3 +40,5 @@ app-variables.env
 # next-sitemap
 robots.txt
 sitemap.xml
+k8s/nextjs-app/1-nextjs-secrets.yaml
+docker-compose.env

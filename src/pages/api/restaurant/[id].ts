@@ -56,9 +56,11 @@ const getRestaurant = async (
         userId: user.id,
       });
 
-      isFavorite = !!userWishList.restaurants.find(
-        (r: { id: string }) => r.id === id
-      );
+      if (userWishList) {
+        isFavorite = !!userWishList.restaurants.find(
+          (r: { id: string }) => r.id === id
+        );
+      }
     }
 
     const restaurant: Restaurant | null = await Restaurants.findById(id);

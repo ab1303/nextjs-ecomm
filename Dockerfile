@@ -14,8 +14,10 @@ COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 
 ARG NEXT_PUBLIC_BASE_URL
-
 ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
+
+ARG MONGODB_URL
+ENV MONGODB_URL=$MONGODB_URL
 
 RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 
@@ -25,8 +27,8 @@ RUN apk --no-cache add curl
 WORKDIR /app
 
 ARG NEXT_PUBLIC_BASE_URL
-
 ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
+
 ENV NODE_ENV production
 
 

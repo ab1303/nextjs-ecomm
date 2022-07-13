@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
-import dynamic from 'next/dynamic';
 import { SessionProvider } from 'next-auth/react';
 import { ReactElement, ReactNode } from 'react';
 import { ToastContainer } from 'react-toastify';

@@ -105,7 +105,7 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         },
       },
     ];
-  }, []);
+  }, [restaurants]);
 
   const hooks = [useRowSelect];
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -120,17 +120,16 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
   return (
     /* eslint-disable react/jsx-key */
     <div className='container min-w-full mx-auto'>
-      <Card>
-        <Card.Header>
-          <div className='flex justify-between text-left'>
-            <Card.Header.Title>
-              Favorite Restaurants - Total ({tableData.length || ''})
-            </Card.Header.Title>
-          </div>
-        </Card.Header>
-
-        <Card.Body>
-          {tableData.length > 0 ? (
+      {tableData.length > 0 ? (
+        <Card>
+          <Card.Header>
+            <div className='flex justify-between text-left'>
+              <Card.Header.Title>
+                Favorites - Total ({tableData.length || ''})
+              </Card.Header.Title>
+            </div>
+          </Card.Header>
+          <Card.Body>
             <Table {...getTableProps()}>
               <Table.THead>
                 {headerGroups.map((headerGroup) => (
@@ -160,14 +159,14 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
                 })}
               </Table.TBody>
             </Table>
-          ) : (
-            <div className='text-orange-400 mt-10 text-center text-lg font-bold'>
-              {' '}
-              No restaurant added to favorite list !
-            </div>
-          )}
-        </Card.Body>
-      </Card>
+          </Card.Body>
+        </Card>
+      ) : (
+        <div className='text-orange-400 mt-36 text-center text-lg font-bold'>
+          {' '}
+          No restaurant added to favorite list !
+        </div>
+      )}
     </div>
   );
 }

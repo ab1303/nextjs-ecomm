@@ -80,6 +80,7 @@ export async function getStaticProps() {
     props: {
       time: new Date().toISOString(),
       categoryRestaurants: categoryRestaurants,
+      // categoryRestaurants: [],
     },
     revalidate: 10,
   };

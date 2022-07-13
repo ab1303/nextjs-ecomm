@@ -1,6 +1,13 @@
 Dockerfile
 .dockerignore
 .next
+.husky
+.github
+.vscode
+.gitignore
+
+
+
 
 /node_modules
 

@@ -105,7 +105,7 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         },
       },
     ];
-  }, []);
+  }, [restaurants]);
 
   const hooks = [useRowSelect];
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =

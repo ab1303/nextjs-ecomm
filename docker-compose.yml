@@ -12,16 +12,30 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_BASE_URL: http://localhost:3000
         NODE_ENV: development
+        NEXT_PUBLIC_BASE_URL: http://localhost:3000
+        MONGODB_URL: mongodb://root:password123@host.docker.internal:27019/nextjs-ecomm?authSource=admin&retryWrites=true&w=majority&connectTimeoutMS=5000
     networks:
       - food-app
     ports:
       - '3000:3000'
 
+  # connecting to mongo db in docker compose won't work if nextjs is implementing SSG where it builds pages at compile time
+  # this is because perhaps container networking kicks in after container creation which is after image building;
+  # not at image build time and thus database endpoint is unreachable during build time
+  # even though each image layer is constructured in a container and there is --network option which can be passed to docker build
+  # So in order to use this compose file
+  # Build and run mongodb by
+  # docker-compose up -d mongodb
+  # docker-compose up foodapp --build
+
   mongodb:
-    image: mongo:latest
+    image: mongo:4.2.21
     container_name: food-app-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password123
+      MONGO_INITDB_DATABASE: nextjs-ecomm-app
     networks:
       - food-app
     volumes:

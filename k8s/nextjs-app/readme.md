@@ -10,24 +10,18 @@ mongodb-0.mongodb-headless.food-app.svc.cluster.local
 
 MONGODB_URL="mongodb://foodie:secretPassword123@mongodb-0.mongodb-headless.food-app.svc.cluster.local:27017/nextjs-ecomm?authSource=nextjs-ecomm&directConnection=true&connectTimeoutMS=5000&w=majority&readPreference=primary&retryWrites=true&ssl=false"
 
-# specify pod identity in namespace
-kubectl port-forward mongodb-0 27018:27017
+# Build docker image frontend
 
+## Port Forword to mongodb
+- kubectl port-forward mongodb-0 27018:27017
 
+## make sure the endpoint is set to host.docker.internal for build containers to reach this endpoint
 MONGODB_URL="mongodb://foodie:secretPassword123@host.docker.internal:27018/nextjs-ecomm?authSource=nextjs-ecomm&directConnection=true&connectTimeoutMS=5000&w=majority&readPreference=primary&retryWrites=true&ssl=false"
 
 echo $MONGODB_URL
 
 docker build \
--t nextjs/food-app:1.0.1 \
---network host \
---build-arg NEXT_PUBLIC_BASE_URL=http://localhost:30003 \
---build-arg MONGODB_URL=$MONGODB_URL \
---no-cache .
-
-
-docker build \
--t nextjs/food-app:1.0.2 \
+-t nextjs/food-app:1.0.3 \
 --network host \
 --build-arg NEXT_PUBLIC_BASE_URL=http://localhost:3000 \
 --build-arg MONGODB_URL=$MONGODB_URL \

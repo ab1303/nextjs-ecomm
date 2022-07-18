@@ -1,7 +1,16 @@
 # Set var in terminal
 
+
+# troubleshoot pod
+kubectl run -it --rm alpine --image=alpine:3.12 --restart=Never -- sh  
+ apk --update add curl
+
+kubectl run -it --rm busybox --image=busybox:1.28 --restart=Never -- sh
+
+mongodb+srv://nx-infinitum:nx-infinitum@cluster0.6jvvv.mongodb.net/nextjs-ecomm?authSource=admin&replicaSet=atlas-s0lf0r-shard-0&w=majority&readPreference=primary&retryWrites=true&ssl=true
+
 # local k8s cluster mongo db
-kubectl run -i --tty busybox --image=busybox:1.28 --restart=Never -- sh
+kubectl run -it --rm busybox --image=busybox:1.28 --restart=Never -- sh
 
 
 mongodb-0.mongodb-headless.food-app.svc.cluster.local

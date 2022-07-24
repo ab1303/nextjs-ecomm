@@ -37,16 +37,18 @@ docker build \
 
 
 
-# nextjs/food-app:1.0.0 build using connecting to infinitum db
+# nextjs/food-app:1.0.4 build using connecting to infinitum db
 MONGODB_URL="mongodb+srv://nx-infinitum:nx-infinitum@cluster0.6jvvv.mongodb.net/nextjs-ecomm?retryWrites=true&w=majority"
 
 echo $MONGODB_URL
 
 docker build \
--t nextjs/food-app:1.0.0 \
---build-arg NEXT_PUBLIC_BASE_URL=http://localhost:30003 \
+-t nextjs/food-app:1.0.4 \
+--build-arg NEXT_PUBLIC_BASE_URL=http://localhost:3000 \
 --build-arg MONGODB_URL=$MONGODB_URL \
 --no-cache .
+
+
 
 # port forward nextjs app
 

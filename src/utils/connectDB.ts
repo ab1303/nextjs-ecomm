@@ -6,18 +6,14 @@ const connectDB = () => {
     console.log('Already connected.');
     return;
   }
-  mongoose.connect(
-    process.env.MONGODB_URL!,
-    { directConnection: true },
-    (err: CallbackError) => {
-      if (err) {
-        console.log('trying to connect mongodb url', process.env.MONGODB_URL);
-        console.log('error reason', JSON.stringify(err, null, 2));
-        throw err;
-      }
-      console.log('Connected to mongodb.');
+  mongoose.connect(process.env.MONGODB_URL!, {}, (err: CallbackError) => {
+    if (err) {
+      console.log('trying to connect mongodb url', process.env.MONGODB_URL);
+      console.log('error reason', JSON.stringify(err, null, 2));
+      throw err;
     }
-  );
+    console.log('Connected to mongodb.');
+  });
 };
 
 export default connectDB;

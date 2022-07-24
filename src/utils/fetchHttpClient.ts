@@ -1,5 +1,8 @@
 const baseUrl = `${process.env.NEXT_PUBLIC_BASE_URL}`;
 
+// eslint-disable-next-line no-console
+console.log('NEXT_PUBLIC_BASE_URL:', baseUrl);
+
 export const getData = async (url: string, token?: string) => {
   const res = await fetch(`${baseUrl}/api/${url}`, {
     method: 'GET',

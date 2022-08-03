@@ -43,8 +43,8 @@ MONGODB_URL="mongodb+srv://nx-infinitum:nx-infinitum@cluster0.6jvvv.mongodb.net/
 echo $MONGODB_URL
 
 docker build \
--t nextjs/food-app:1.0.4 \
---build-arg NEXT_PUBLIC_BASE_URL=http://localhost:3000 \
+-t nextjs/food-app:1.0.5 \
+--build-arg NEXT_PUBLIC_BASE_URL=http://food-app.a4bird.com:3000 \
 --build-arg MONGODB_URL=$MONGODB_URL \
 --no-cache .
 

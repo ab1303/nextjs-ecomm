@@ -1,0 +1,39 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: aws-acme-issuer
+  namespace: kuard
+spec:
+  acme:
+    email: ab1303@gmail.com
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-key
+    solvers:
+      - selector:
+          dnsZones:
+            - 'a4bird.com'
+        dns01:
+          route53:
+            region: us-east-1
+            hostedZoneID: Z015892116BVCR1MZZ1B3
+            role: arn:aws:iam::989464300156:role/admin
+            accessKeyID: AKIA6MYFLBJ6GNO27I6V
+            secretAccessKeySecretRef:
+              name: route53-credentials-secret-serverless-admin
+              key: secret-access-key
+
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificate
+  namespace: kuard
+spec:
+  dnsNames:
+    - '*.a4bird.com'
+  secretName: kuard
+  issuerRef:
+    name: aws-acme-issuer
+    kind: ClusterIssuer

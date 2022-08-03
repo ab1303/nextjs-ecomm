@@ -46,3 +46,4 @@ robots.txt
 sitemap.xml
 k8s/nextjs-app/1-nextjs-secrets.yaml
 docker-compose.env
+k8s/kuard/route53-credentials-secret-serverless-admin.yaml

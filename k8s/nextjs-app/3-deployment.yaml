@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nextjs-food-app
-          image: nextjs/food-app:1.0.4
+          image: nextjs/food-app:1.0.5
           # image: terraformaksacr.azurecr.io/nextjs/food-app:1.0.4
           env:
             - name: NEXT_PUBLIC_CLOUDINARY_CLOUDNAME
@@ -72,11 +72,12 @@ spec:
             - name: K8S_SERVICE_NAME
               value: 'food-app-svc'
             - name: API_URL
-              value: 'http://$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local:3003'
-              # value: 'http://localhost:3000'
+              # value: 'http://$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local:3003'
+              value: 'http://localhost:3000'
             - name: NEXTAUTH_URL
               # value: 'http://$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local:3003' # This is read at runtime as its not baked into docker image
-              value: 'http://localhost:3000'
+              # value: 'http://localhost:3000'
+              value: 'https://food-app.a4bird.com'
           resources:
             limits:
               memory: '512Mi'

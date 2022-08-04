@@ -21,27 +21,9 @@ export default async function handleUserRequest(
   }
 }
 
-export type UserDTO = {
-  _id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
-  phone: number;
-  country: string;
-  active: boolean;
-};
-
-export type UsersResponse = {
-  users: Array<UserDTO>;
-};
-
-export type UserResponse = {
-  user: UserDTO;
-};
-
 const setUserStatus = async (
   req: NextApiRequest,
-  res: NextApiResponse<UserResponse | Notify>
+  res: NextApiResponse<Notify>
 ) => {
   try {
     const { id } = req.query;
@@ -53,7 +35,7 @@ const setUserStatus = async (
     const status = user.active ? 'enabled.' : 'disabled.';
 
     await user.save();
-    res.json({ success: 'User account successfully' + status });
+    res.json({ success: `User account successfully ${status}` });
   } catch (err: any) {
     return res.status(500).json({ error: err.message || err });
   }
@@ -61,7 +43,7 @@ const setUserStatus = async (
 
 const deleteUser = async (
   req: NextApiRequest,
-  res: NextApiResponse<UserResponse | Notify>
+  res: NextApiResponse<Notify>
 ) => {
   try {
     const { id } = req.query;

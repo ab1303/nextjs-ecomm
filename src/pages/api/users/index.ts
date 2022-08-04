@@ -68,10 +68,6 @@ export type UsersResponse = {
   users: Array<UserDTO>;
 };
 
-export type UserResponse = {
-  user: UserDTO;
-};
-
 const getUsers = async (
   req: NextApiRequest,
   res: NextApiResponse<UsersResponse | Notify>

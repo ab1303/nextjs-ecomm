@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import Select, { SingleValue } from 'react-select';
@@ -34,11 +35,15 @@ export default function CategoryDetails({
   const [linkedRestaurants, setLinkedRestaurants] =
     useState<CategoryRestaurants>([]);
 
+  const { publicRuntimeConfig } = getConfig();
+
   useEffect(() => {
     async function fetchCategoryDetails() {
       const categoryDetailsResult: (CategoryDetailsResponse | Notify) & {
         ok: boolean;
-      } = await getData(`categories/${selectedCategoryId}/restaurants`);
+      } = await getData(
+        `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/categories/${selectedCategoryId}/restaurants`
+      );
 
       const categoryRestaurants = (
         categoryDetailsResult as CategoryDetailsResponse
@@ -53,7 +58,11 @@ export default function CategoryDetails({
     }
 
     fetchCategoryDetails();
-  }, [restaurants, selectedCategoryId]);
+  }, [
+    publicRuntimeConfig.NEXT_PUBLIC_API_URL,
+    restaurants,
+    selectedCategoryId,
+  ]);
 
   const columns = React.useMemo<Column<CategoryRestaurantListDTO>[]>(() => {
     const handleUnLinkRestaurant = async (id: string) => {
@@ -64,7 +73,7 @@ export default function CategoryDetails({
       if (!restaurantToUnLink) return;
 
       const result: { ok: boolean } & Notify = await putData(
-        `categories/${selectedCategoryId}/restaurants`,
+        `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/categories/${selectedCategoryId}/restaurants`,
         {
           restaurantId: id,
           link: 'remove',

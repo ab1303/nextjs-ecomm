@@ -1,4 +1,5 @@
 import { GetServerSidePropsContext } from 'next';
+import getConfig from 'next/config';
 import Image from 'next/image';
 import { getSession } from 'next-auth/react';
 import * as React from 'react';
@@ -32,6 +33,8 @@ export default function ViewRestaurantPage({
   restaurant,
   isFavoriteRestaurant,
 }: ViewRestaurantPageProps) {
+  const { publicRuntimeConfig } = getConfig();
+
   const [isFavorite, setIsFavorite] =
     React.useState<boolean>(isFavoriteRestaurant);
 
@@ -40,7 +43,7 @@ export default function ViewRestaurantPage({
       const toggleState = isFavorite ? 'remove' : 'add';
 
       const result: { ok: boolean } & Notify = await postData(
-        `profile/wishlist`,
+        `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/profile/wishlist`,
         {
           restaurantId: restaurant._id,
           link: toggleState,
@@ -127,14 +130,16 @@ export default function ViewRestaurantPage({
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   // server side rendering
-
+  const { serverRuntimeConfig } = getConfig();
   const session = await getSession(context);
   const { query } = context;
   const id = query.id;
   const response: GetRestaurantResponse =
     session != null
-      ? await getData(`restaurant\\${id}?userEmail=${session.user.email}`)
-      : await getData(`restaurant\\${id}`);
+      ? await getData(
+          `${serverRuntimeConfig.API_URL}/api/restaurant/${id}?userEmail=${session.user.email}`
+        )
+      : await getData(`${serverRuntimeConfig.API_URL}/api/restaurant/${id}`);
 
   return {
     props: {

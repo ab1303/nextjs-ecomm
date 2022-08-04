@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import React from 'react';
@@ -24,6 +25,7 @@ type CreateRestaurantPageProps = {
 export default function CreateRestaurantPage({
   apiKey,
 }: CreateRestaurantPageProps) {
+  const { publicRuntimeConfig } = getConfig();
   const router = useRouter();
   const formMethods = useForm<CreateRestaurantFormData>({
     mode: 'onBlur',
@@ -48,11 +50,14 @@ export default function CreateRestaurantPage({
 
   const submitHandler = async (formData: RestaurantFormData) => {
     try {
-      const result: { ok: boolean } & Notify = await postData('restaurant', {
-        restaurantName: formData.restaurantName,
-        cuisine: formData.cuisine,
-        address: formData.address,
-      });
+      const result: { ok: boolean } & Notify = await postData(
+        `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/restaurant`,
+        {
+          restaurantName: formData.restaurantName,
+          cuisine: formData.cuisine,
+          address: formData.address,
+        }
+      );
 
       if (!result.ok) toast.error(result.error);
 

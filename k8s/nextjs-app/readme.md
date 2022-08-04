@@ -31,7 +31,7 @@ echo $MONGODB_URL
 docker build \
 -t nextjs/food-app:1.0.4 \
 --network host \
---build-arg NEXT_PUBLIC_BASE_URL=http://localhost:3000 \
+--build-arg NEXT_PUBLIC_API_URL=http://localhost:3000 \
 --build-arg MONGODB_URL=$MONGODB_URL \
 --no-cache .
 
@@ -44,7 +44,7 @@ echo $MONGODB_URL
 
 docker build \
 -t nextjs/food-app:1.0.5 \
---build-arg NEXT_PUBLIC_BASE_URL=https://food-app.a4bird.com \
+--build-arg NEXT_PUBLIC_API_URL=https://food-app.a4bird.com \
 --build-arg MONGODB_URL=$MONGODB_URL \
 --no-cache .
 

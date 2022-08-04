@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -20,6 +21,8 @@ export default function CategoriesModal({
   restaurantCategories,
   onClose,
 }: CategoriesModalProps) {
+  const { publicRuntimeConfig } = getConfig();
+
   const [linkedCategories, setLinkedCategories] =
     useState<Array<CategoryListDTO>>(restaurantCategories);
 
@@ -35,7 +38,7 @@ export default function CategoriesModal({
     if (!categoryToUnLink || !selectedRestaurantId) return;
 
     const result: { ok: boolean } & Notify = await putData(
-      `restaurant/${selectedRestaurantId}/categories`,
+      `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/restaurant/${selectedRestaurantId}/categories`,
       {
         categoryId: id,
       }

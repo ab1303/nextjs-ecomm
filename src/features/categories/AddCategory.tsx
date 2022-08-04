@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import getConfig from 'next/config';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -26,6 +27,8 @@ export default function AddCategory({
   categories,
   handleCategorySelect,
 }: AddCategoryProps) {
+  const { publicRuntimeConfig } = getConfig();
+
   const [categoryList, setCategoryList] =
     useState<CategoryListDTO[]>(categories);
 
@@ -45,7 +48,7 @@ export default function AddCategory({
   const submitHandler = async (formData: CategoryFormData) => {
     try {
       const result: { ok: boolean } & CreateCategoryResponse = await postData(
-        'categories',
+        `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/categories`,
         {
           categoryName: formData.categoryName,
         }
@@ -71,7 +74,9 @@ export default function AddCategory({
   const deleteCategory = async (categoryId: string) => {
     const result: Notify & {
       ok: boolean;
-    } = await deleteData(`categories/${categoryId}`);
+    } = await deleteData(
+      `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/categories/${categoryId}`
+    );
 
     if (!result.ok) {
       toast.error(result.error);

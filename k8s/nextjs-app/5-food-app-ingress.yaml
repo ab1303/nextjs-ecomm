@@ -25,6 +25,10 @@ metadata:
   namespace: food-app
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - food-app.a4bird.com
+      secretName: food-app-tls
   rules:
     - host: food-app.a4bird.com
       http:

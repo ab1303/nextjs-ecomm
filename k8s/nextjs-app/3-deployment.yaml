@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nextjs-food-app
-          image: nextjs/food-app:1.0.4
+          image: nextjs/food-app:1.0.5
           # image: terraformaksacr.azurecr.io/nextjs/food-app:1.0.4
           env:
             - name: NEXT_PUBLIC_CLOUDINARY_CLOUDNAME

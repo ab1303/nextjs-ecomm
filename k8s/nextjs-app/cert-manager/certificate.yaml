@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: food-app-tls
+  namespace: food-app
+spec:
+  dnsNames:
+    - 'food-app.a4bird.com'
+  secretName: food-app-tls
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer

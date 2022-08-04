@@ -18,6 +18,9 @@
 # production
 /build
 
+# local cert
+/cert
+
 # misc
 .DS_Store
 *.pem

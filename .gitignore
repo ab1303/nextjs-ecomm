@@ -21,6 +21,9 @@
 # local cert
 /cert
 
+# k8s secret files
+/k8s/secrets
+
 # misc
 .DS_Store
 *.pem

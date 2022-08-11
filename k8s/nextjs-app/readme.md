@@ -48,6 +48,17 @@ docker build \
 --build-arg MONGODB_URL=$MONGODB_URL \
 --no-cache .
 
+# AKS image
+## nextjs/food-app-javelins:1.0.5 build using connecting to infinitum db
+MONGODB_URL="mongodb+srv://nx-infinitum:nx-infinitum@cluster0.6jvvv.mongodb.net/nextjs-ecomm?retryWrites=true&w=majority"
+
+echo $MONGODB_URL
+
+docker build \
+-t nextjs/food-app-javelins:1.0.5 \
+--build-arg NEXT_PUBLIC_API_URL=https://food-app.javelins.online \
+--build-arg MONGODB_URL=$MONGODB_URL \
+--no-cache .
 
 
 # port forward nextjs app

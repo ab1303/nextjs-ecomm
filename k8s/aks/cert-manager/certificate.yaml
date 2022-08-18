@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: food-app-tls
+  namespace: food-app
+spec:
+  dnsNames:
+    - 'food-app.javelins.online'
+  secretName: food-app-tls
+  issuerRef:
+    name: azure-acme-issuer
+    kind: ClusterIssuer

@@ -47,10 +47,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - food-app.a4bird.com
+        - food-app.javelins.online
       secretName: food-app-tls
   rules:
-    - host: food-app.a4bird.com
+    - host: food-app.javelins.online
       http:
         paths:
           - path: /

@@ -15,3 +15,4 @@ spec:
   selector:
     app.kubernetes.io/name: mongodb
     app.kubernetes.io/component: mongodb
+

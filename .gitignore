@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# folders
+/notes
+
 # testing
 /coverage
 
@@ -15,6 +18,12 @@
 # production
 /build
 
+# local cert
+/cert
+
+# k8s secret files
+/k8s/secrets
+
 # misc
 .DS_Store
 *.pem
@@ -23,6 +32,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
 
 # local env files
 .env.local
@@ -42,3 +52,4 @@ robots.txt
 sitemap.xml
 k8s/nextjs-app/1-nextjs-secrets.yaml
 docker-compose.env
+k8s/kuard/route53-credentials-secret-serverless-admin.yaml

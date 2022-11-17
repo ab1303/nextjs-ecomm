@@ -1,0 +1,134 @@
+[{
+  "_id": {
+    "$oid": "6233d7394e92659a72548535"
+  },
+  "name": "Most Popular",
+  "createdAt": {
+    "$date": "2022-03-18T00:50:01.619Z"
+  },
+  "updatedAt": {
+    "$date": "2022-08-04T08:10:34.582Z"
+  },
+  "__v": 15,
+  "isActive": false,
+  "restaurants": [
+    {
+      "id": "61fc77437e2160ed86314082",
+      "_id": {
+        "$oid": "625e3e5de9d5b4352d5d4eb2"
+      }
+    },
+    {
+      "id": "61fc77437e2160ed86314088",
+      "_id": {
+        "$oid": "625e3e5fe9d5b4352d5d4eba"
+      }
+    },
+    {
+      "id": "61fc77437e2160ed86314097",
+      "_id": {
+        "$oid": "625e3ea2e9d5b4352d5d4f66"
+      }
+    },
+    {
+      "id": "61fc77437e2160ed8631408e",
+      "_id": {
+        "$oid": "625e3ea6e9d5b4352d5d4f71"
+      }
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "6233d7494e92659a72548537"
+  },
+  "name": "Try Something New",
+  "createdAt": {
+    "$date": "2022-03-18T00:50:17.888Z"
+  },
+  "updatedAt": {
+    "$date": "2022-04-29T01:58:01.689Z"
+  },
+  "__v": 10,
+  "isActive": false,
+  "restaurants": [
+    {
+      "id": "61fc77437e2160ed8631408b",
+      "_id": {
+        "$oid": "6266023470532c1fccd2d50a"
+      }
+    },
+    {
+      "id": "61fc77437e2160ed86314088",
+      "_id": {
+        "$oid": "626b36c2eb7d2982aeffc18c"
+      }
+    },
+    {
+      "id": "61fc77437e2160ed8631408e",
+      "_id": {
+        "$oid": "626b4341f51288a8d8d8b1aa"
+      }
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "6233d7564e92659a72548539"
+  },
+  "name": "Trending Right Now",
+  "createdAt": {
+    "$date": "2022-03-18T00:50:30.113Z"
+  },
+  "updatedAt": {
+    "$date": "2022-08-04T11:20:52.342Z"
+  },
+  "__v": 7,
+  "isActive": false,
+  "restaurants": []
+},{
+  "_id": {
+    "$oid": "6233d7f34e92659a7254853b"
+  },
+  "name": "Most Loved Restaurants",
+  "createdAt": {
+    "$date": "2022-03-18T00:53:07.378Z"
+  },
+  "updatedAt": {
+    "$date": "2022-04-19T04:45:46.355Z"
+  },
+  "__v": 4,
+  "isActive": false,
+  "restaurants": [
+    {
+      "id": "61fc77437e2160ed86314082",
+      "_id": {
+        "$oid": "625e3e6de9d5b4352d5d4ed5"
+      }
+    },
+    {
+      "id": "61fc77437e2160ed86314091",
+      "_id": {
+        "$oid": "625e3e75e9d5b4352d5d4edd"
+      }
+    },
+    {
+      "id": "61fc77437e2160ed86314085",
+      "_id": {
+        "$oid": "625e3e7ae9d5b4352d5d4ee6"
+      }
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "6233d8204e92659a7254853d"
+  },
+  "name": "Convenience and Groceries",
+  "createdAt": {
+    "$date": "2022-03-18T00:53:52.602Z"
+  },
+  "updatedAt": {
+    "$date": "2022-04-18T02:44:10.434Z"
+  },
+  "__v": 3,
+  "isActive": false,
+  "restaurants": []
+}]

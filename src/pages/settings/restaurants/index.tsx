@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -256,7 +257,10 @@ export async function getServerSideProps() {
   // const sort = query.sort || '';
   // const search = query.search || 'all';
 
-  const response: RestaurantsResponse = await getData(`restaurant`);
+  const { serverRuntimeConfig } = getConfig();
+  const response: RestaurantsResponse = await getData(
+    `${serverRuntimeConfig.API_URL}/api/restaurant`
+  );
 
   // server side rendering
   return {

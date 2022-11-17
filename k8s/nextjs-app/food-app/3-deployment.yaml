@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextjs-food-app
+  namespace: food-app
+spec:
+  selector:
+    matchLabels:
+      app: nextjs-food-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nextjs-food-app
+    spec:
+      containers:
+        - name: nextjs-food-app
+          image: nextjs/food-app:1.0.4 # mongodb k8s local
+          # image: nextjs/food-app:1.0.5 mongodb infinitum
+          env:
+            - name: NEXT_PUBLIC_CLOUDINARY_CLOUDNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: food-app-cm
+                  key: next-public-cloudinary-cloudname
+            - name: NEXT_PUBLIC_CLOUDINARY_UNSIGNED_UPLOAD_PRESET
+              valueFrom:
+                configMapKeyRef:
+                  name: food-app-cm
+                  key: next-public-cloudinary-unsigned-upload-preset
+            - name: NEXT_PUBLIC_CLOUD_UPLOAD_PRESET
+              valueFrom:
+                configMapKeyRef:
+                  name: food-app-cm
+                  key: next-public-cloud-upload-preset
+            # Secrets
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: food-app-secret
+                  key: google-api-key
+            - name: ACCESS_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: food-app-secret
+                  key: access-token-secret
+            - name: CLOUD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: food-app-secret
+                  key: cloud-api-key
+            - name: CLOUD_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: food-app-secret
+                  key: cloud-api-secret
+            - name: MONGODB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: food-app-secret
+                  key: mongodb-url
+            - name: FOOD_APP_SERVICE_NAME
+              value: 'food-app-svc'
+            - name: CLOUD_NAME
+              value: '$(NEXT_PUBLIC_CLOUDINARY_CLOUDNAME)'
+            - name: CLOUD_API
+              value: 'CLOUDINARY_URL=cloudinary://$(CLOUD_API_KEY):$(CLOUD_API_SECRET)@$(CLOUD_NAME)'
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: K8S_SERVICE_NAME
+              value: 'food-app-svc'
+            - name: API_URL
+              # value: 'http://$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local:3003'
+              value: 'http://localhost:3000'
+            - name: NEXTAUTH_URL
+              # value: 'http://$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local:3003' # This is read at runtime as its not baked into docker image
+              # value: 'http://localhost:3000'
+              value: 'https://food-app.a4bird.com'
+          resources:
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
+          ports:
+            - containerPort: 3000

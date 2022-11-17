@@ -1,4 +1,5 @@
 import { GetServerSidePropsContext } from 'next';
+import getConfig from 'next/config';
 import Image from 'next/image';
 import { getSession } from 'next-auth/react';
 import { ReactElement, useState } from 'react';
@@ -21,6 +22,8 @@ type RestaurantsPageProps = {
 };
 
 export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
+  const { publicRuntimeConfig } = getConfig();
+
   const [tableData, setTableData] =
     useState<Array<RestaurantListDTO>>(restaurants);
 
@@ -28,7 +31,7 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
     const handleRemoveFavorite = async (restaurantId: string) => {
       try {
         const result: { ok: boolean } & Notify = await postData(
-          `profile/wishlist`,
+          `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/profile/wishlist`,
           {
             restaurantId,
             link: 'remove',
@@ -105,7 +108,7 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
         },
       },
     ];
-  }, [restaurants]);
+  }, [publicRuntimeConfig.NEXT_PUBLIC_API_URL, restaurants]);
 
   const hooks = [useRowSelect];
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -173,13 +176,14 @@ export default function RestaurantsPage({ restaurants }: RestaurantsPageProps) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getSession(context);
+  const { serverRuntimeConfig } = getConfig();
 
   if (session == null) {
     throw new Error('Unexpected session null');
   }
 
   const response: RestaurantsResponse = await getData(
-    `profile/wishlist?userEmail=${session.user.email}`
+    `${serverRuntimeConfig.API_URL}/api/profile/wishlist?userEmail=${session.user.email}`
   );
 
   // server side rendering

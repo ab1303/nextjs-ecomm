@@ -1,0 +1,62 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: food-app-ingress-nodeport
+#   namespace: ingress-nginx
+# spec:
+#   selector:
+#     app.kubernetes.io/component: controller
+#     app.kubernetes.io/instance: ingress-nginx
+#     app.kubernetes.io/name: ingress-nginx
+#   type: NodePort
+#   ports:
+#     - name: food-app-ingress-http
+#       protocol: TCP
+#       port: 80
+#       nodePort: 30000
+
+---
+# without domain
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: food-app-ingress
+#   namespace: food-app
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#     - http:
+#         paths:
+#           - path: /
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: food-app-svc
+#                 port:
+#                   number: 3003
+
+---
+# https://kubernetes.io/docs/concepts/services-networking/ingress/#the-ingress-resource
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: food-app-ingress
+  namespace: food-app
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - food-app.javelins.online
+      secretName: food-app-tls
+  rules:
+    - host: food-app.javelins.online
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: food-app-svc
+                port:
+                  number: 3003

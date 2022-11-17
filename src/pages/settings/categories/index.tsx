@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import { ReactElement, useState } from 'react';
 
 import AuthorizedLayout from '@/components/layout/AuthorizedLayout';
@@ -68,8 +69,15 @@ export async function getServerSideProps() {
   // const search = query.search || 'all';
 
   // const response: CategoriesResponse = await getData(`categories`);
-  const restaurantResponse: RestaurantsResponse = await getData(`restaurant`);
-  const categoriesResponse: CategoriesResponse = await getData(`categories`);
+
+  const { serverRuntimeConfig } = getConfig();
+
+  const restaurantResponse: RestaurantsResponse = await getData(
+    `${serverRuntimeConfig.API_URL}/api/restaurant`
+  );
+  const categoriesResponse: CategoriesResponse = await getData(
+    `${serverRuntimeConfig.API_URL}/api/categories`
+  );
   // server side rendering
   return {
     props: {

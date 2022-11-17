@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
@@ -10,8 +11,9 @@ import { postData } from '@/utils/fetchHttpClient';
 import { Notify } from '@/types';
 
 const Register = () => {
-  const router = useRouter();
+  const { publicRuntimeConfig } = getConfig();
 
+  const router = useRouter();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -26,13 +28,16 @@ const Register = () => {
     }
 
     try {
-      const result: { ok: boolean } & Notify = await postData('auth/register', {
-        firstName,
-        lastName,
-        email,
-        password,
-        passwordConfirm,
-      });
+      const result: { ok: boolean } & Notify = await postData(
+        `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/auth/register`,
+        {
+          firstName,
+          lastName,
+          email,
+          password,
+          passwordConfirm,
+        }
+      );
 
       if (!result.ok) {
         toast.error(result.error);

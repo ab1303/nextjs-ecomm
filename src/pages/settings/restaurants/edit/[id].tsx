@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { GetServerSidePropsContext } from 'next';
+import getConfig from 'next/config';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -33,6 +34,7 @@ export default function EditRestaurantsPage({
   apiKey,
   restaurant,
 }: EditRestaurantPageProps) {
+  const { publicRuntimeConfig } = getConfig();
   const router = useRouter();
   const formMethods = useForm<EditRestaurantFormData>({
     mode: 'onBlur',
@@ -65,7 +67,7 @@ export default function EditRestaurantsPage({
   const submitHandler = async (formData: EditRestaurantFormData) => {
     try {
       const result: { ok: boolean } & Notify = await putData(
-        `restaurant\\${restaurant._id}`,
+        `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/restaurant/${restaurant._id}`,
         {
           restaurantName: formData.restaurantName,
           cuisine: formData.cuisine,
@@ -277,8 +279,11 @@ export default function EditRestaurantsPage({
 export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   // server side rendering
 
+  const { serverRuntimeConfig } = getConfig();
   const id = query.id;
-  const response: GetRestaurantResponse = await getData(`restaurant\\${id}`);
+  const response: GetRestaurantResponse = await getData(
+    `${serverRuntimeConfig.API_URL}/api/restaurant/${id}`
+  );
 
   return {
     props: {

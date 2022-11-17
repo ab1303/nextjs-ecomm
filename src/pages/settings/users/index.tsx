@@ -1,3 +1,4 @@
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
 import React from 'react';
@@ -19,13 +20,14 @@ type UsersPageProps = {
 };
 
 export default function UsersPage({ users }: UsersPageProps) {
+  const { publicRuntimeConfig } = getConfig();
   const router = useRouter();
 
   const columns = React.useMemo<Column<UserDTO>[]>(() => {
     const deleteHandler = async (user: UserDTO) => {
       try {
         const result: { ok: boolean } & Notify = await deleteData(
-          `users\\${user._id}`,
+          `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/users/${user._id}`,
           ''
         );
 
@@ -42,7 +44,7 @@ export default function UsersPage({ users }: UsersPageProps) {
     const statusHandler = async (user: UserDTO) => {
       try {
         const result: { ok: boolean } & Notify = await patchData(
-          `users\\${user._id}`,
+          `${publicRuntimeConfig.NEXT_PUBLIC_API_URL}/api/users/${user._id}`,
           {},
           ''
         );
@@ -107,7 +109,7 @@ export default function UsersPage({ users }: UsersPageProps) {
         },
       },
     ];
-  }, [router]);
+  }, [publicRuntimeConfig.NEXT_PUBLIC_API_URL, router]);
 
   const hooks = [useRowSelect];
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -168,7 +170,10 @@ export default function UsersPage({ users }: UsersPageProps) {
 }
 
 export async function getServerSideProps() {
-  const response: UsersResponse = await getData(`users`);
+  const { serverRuntimeConfig } = getConfig();
+  const response: UsersResponse = await getData(
+    `${serverRuntimeConfig.API_URL}/api/users`
+  );
   // server side rendering
   return {
     props: {

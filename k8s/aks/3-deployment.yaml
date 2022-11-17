@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: nextjs-food-app
-          image: nextjs/food-app:1.0.2
+          image: terraformaksacr.azurecr.io/nextjs/food-app-javelins:1.0.5
           env:
             - name: NEXT_PUBLIC_CLOUDINARY_CLOUDNAME
               valueFrom:
@@ -70,12 +70,13 @@ spec:
                   fieldPath: metadata.namespace
             - name: K8S_SERVICE_NAME
               value: 'food-app-svc'
-            - name: NEXT_PUBLIC_BASE_URL
-              value: 'http://$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local:3003'
-              # value: 'http://localhost:3000'
+            - name: API_URL
+              # value: 'http://$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local:3003'
+              value: 'http://localhost:3000'
             - name: NEXTAUTH_URL
-              value: 'http://$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local:3003' # This is read at runtime as its not baked into docker image
+              # value: 'http://$(K8S_SERVICE_NAME).$(MY_POD_NAMESPACE).svc.cluster.local:3003' # This is read at runtime as its not baked into docker image
               # value: 'http://localhost:3000'
+              value: 'https://food-app.javelins.online'
           resources:
             limits:
               memory: '512Mi'

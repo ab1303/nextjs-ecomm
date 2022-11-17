@@ -1,0 +1,172 @@
+[{
+  "_id": {
+    "$oid": "61ea28db76a6bc9d7f9028ba"
+  },
+  "firstName": "Sanath",
+  "lastName": "Chakkarayan",
+  "email": "schakkarayan@woolworths.com.au",
+  "password": "$2a$12$GRDJZR0mt06eGAThXZ2Ii.cKQeP2Ldw5kE/.gyzL67yYTbZjmqON2",
+  "role": "admin",
+  "root": false,
+  "avatar": "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
+  "createdAt": {
+    "$date": "2022-01-21T03:30:35.965Z"
+  },
+  "updatedAt": {
+    "$date": "2022-02-24T05:08:56.830Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "620f4ac1f357cc02dc21e0f8"
+  },
+  "firstName": "Rob",
+  "lastName": "Suner",
+  "email": "rsuner@woolworths.com.au",
+  "password": "$2a$12$3vesBdNSZCweaB.kOrn5W.c/raggOUAbuud4n755TCoKDuAf/Klnq",
+  "role": "admin",
+  "root": false,
+  "avatar": "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
+  "createdAt": {
+    "$date": "2022-02-18T07:29:05.557Z"
+  },
+  "updatedAt": {
+    "$date": "2022-03-04T09:35:56.082Z"
+  },
+  "__v": 0,
+  "active": true
+},{
+  "_id": {
+    "$oid": "6221d7030a23a1e02c3aac61"
+  },
+  "firstName": "Harry",
+  "lastName": "H",
+  "email": "harry@email.com",
+  "password": "$2a$12$1ojdbWNC2PdpNBe49ANdGeS/O8NQO1ZNJohWVO1iSw6A8pOfXcMa6",
+  "role": "user",
+  "root": false,
+  "avatar": "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
+  "active": true,
+  "createdAt": {
+    "$date": "2022-03-04T09:08:19.816Z"
+  },
+  "updatedAt": {
+    "$date": "2022-08-04T11:43:11.192Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "623d2537ab62a5bb515c75bf"
+  },
+  "firstName": "rob",
+  "lastName": "suner",
+  "email": "robertsuner2231@gmail.com",
+  "password": "$2a$12$tiHfhHGTvYU3lgoesm7fy.XLwrNfLwAjnGEBQIpnOXeBqL1w5dXbO",
+  "role": "admin",
+  "root": false,
+  "avatar": "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
+  "active": true,
+  "createdAt": {
+    "$date": "2022-03-25T02:13:11.685Z"
+  },
+  "updatedAt": {
+    "$date": "2022-03-25T02:13:11.685Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "625cc4e9d273f0cf9a09f51c"
+  },
+  "firstName": "Abdul",
+  "lastName": "Wahab",
+  "email": "abdul@test.com",
+  "password": "$2a$12$KwsRLqDUGcevZbGfdgqw9uR5IHAKnOcc502vCGVuSY7IUxndSBwR6",
+  "role": "admin",
+  "root": false,
+  "avatar": "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
+  "active": true,
+  "createdAt": {
+    "$date": "2022-04-18T01:54:49.509Z"
+  },
+  "updatedAt": {
+    "$date": "2022-04-25T00:26:29Z"
+  },
+  "__v": 0,
+  "phone": "610422758999"
+},{
+  "_id": {
+    "$oid": "626b2d552701fccf91c64c4e"
+  },
+  "firstName": "Guest",
+  "lastName": "one",
+  "email": "guest1@test.com",
+  "password": "$2a$12$PYTVFcFj3r9xVsdxPcgN9uvObO7SG.tOGl.E8WP39M5tRmZWFZ9qe",
+  "role": "user",
+  "root": false,
+  "avatar": "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
+  "active": true,
+  "createdAt": {
+    "$date": "2022-04-29T00:12:05.973Z"
+  },
+  "updatedAt": {
+    "$date": "2022-08-04T11:39:32.737Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "626b40a1eb7d2982aeffc2b9"
+  },
+  "firstName": "Guest",
+  "lastName": "User",
+  "email": "guest@test.com",
+  "password": "$2a$12$4srLTSnsH/1Tsu3fIj.mVueUaUu5S0RNCSdSaffJUeh/Ct5mXWg2.",
+  "role": "user",
+  "root": false,
+  "avatar": "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
+  "active": true,
+  "createdAt": {
+    "$date": "2022-04-29T01:34:25.065Z"
+  },
+  "updatedAt": {
+    "$date": "2022-04-29T01:34:25.065Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "626b48fd6cda0db2e27c2270"
+  },
+  "firstName": "Guest",
+  "lastName": "Two",
+  "email": "guest2@test.com",
+  "password": "$2a$12$thxwnKF1W0PsHygqHvUzF.YAb4mcvyoF.ErEM.mp91uqH82lQLgAy",
+  "role": "user",
+  "root": false,
+  "avatar": "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
+  "active": true,
+  "createdAt": {
+    "$date": "2022-04-29T02:10:05.534Z"
+  },
+  "updatedAt": {
+    "$date": "2022-04-29T02:10:05.534Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "626b499f1f2abcc92e8b7dc0"
+  },
+  "firstName": "Guest",
+  "lastName": "Three",
+  "email": "guest3@test.com",
+  "password": "$2a$12$iJ.ORxeFVNRqzZvpFfGBLu4FNVyPlFz1p/JAqs8w1gDmAS7iI/hvC",
+  "role": "user",
+  "root": false,
+  "avatar": "https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png",
+  "active": true,
+  "createdAt": {
+    "$date": "2022-04-29T02:12:47.090Z"
+  },
+  "updatedAt": {
+    "$date": "2022-04-29T02:12:47.090Z"
+  },
+  "__v": 0
+}]
